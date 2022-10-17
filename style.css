@@ -1,0 +1,5 @@
+.main-page-header-image {
+	width: 100%;
+	height: 50%;
+	background-image: linear-gradient(url("/assets/pedro_logo.png"), transparent);
+}
