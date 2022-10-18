@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ site.baseurl }}/css/cookieclicker.css">
+<div class="website-divider">
+	<div class="cookie-wrapper center"><div class="cookie" onclick="cookieClicked();"><img src="{{ site.baseurl }}/assets/cookieclicker/cookie.png" draggable="false"></div></div>
+	<div id="cookie-counter">0 cookies</div>
+</div>
+<div class="website-divider">
+	<button id="hire-worker" onclick="hireWorker();"><span id="hire-worker-text">Contratar funcionário por 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="worker-counter">0 funcionário</div>
+	<button id="upgrade-clicker" onclick="upgradeClicker();"><span id="upgrade-clicker-text">Melhorar cursor por 10</span>	 <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="clicker-level-counter">Cursor nível 1</div>
+</div>
+	<script src="{{ site.baseurl }}/js/cookieclicker.js"></script>

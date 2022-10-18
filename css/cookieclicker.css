@@ -7,6 +7,7 @@
 	height: 256px;
 	cursor: pointer;
 	user-select: none;
+	transition: width 0.1s, height 0.1s;
 }
 
 .cookie:hover {
@@ -21,6 +22,13 @@
 	margin-right: auto;
 	width: 250px;
 	height: 250px;
+}
+
+.cookie-icon {
+	image-rendering: pixelated;
+	width: 24px;
+	height: 24px;
+	vertical-align: middle;
 }
 
 .cookie img {

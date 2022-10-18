@@ -1,0 +1,242 @@
+:root {
+	--default-text-color: #000000;
+	--dark-mode-text-color: #ffffff;
+	--minor-text-color: #777777;
+	--dark-mode-minor-text-color: #777777;
+	--button-color: #777777;
+	--dark-mode-button-color: #777777;
+	--button-hover-color: #888888;
+	--dark-mode-button-hover-color: #888888;
+	--button-active-color: #000000;
+	--dark-mode-button-active-color: #000000;
+	--button-text-color: #ffffff;
+	--dark-mode-button-text-color: #ffffff;
+	--primary-background-color: #ffffff;
+	--dark-mode-primary-background-color: #171617;
+	--secondary-background-color: #eeeeee;
+	--dark-mode-secondary-background-color: #302f30;
+	--default-font-family: 'Atkinson Hyperlegible', sans-serif;
+	--default-font-size: 20px;
+	--social-link-color: #000000;
+	--social-link-hover-color: #ffffff;
+}
+
+@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	src: url("/assets/Atkinson-Hyperlegible-Font/EOT/Atkinson-Hyperlegible-Regular-102.eot?") format("embedded-opentype"),
+	     url("/assets/Atkinson-Hyperlegible-Font/TTF/Atkinson-Hyperlegible-Regular-102.ttf") format("truetype"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF/Atkinson-Hyperlegible-Regular-102.woff") format("woff"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF2/Atkinson-Hyperlegible-Regular-102.woff2") format("woff2"),
+		 url("/assets/Atkinson-Hyperlegible-Font/SVG/Atkinson-Hyperlegible-Regular-102.svg") format("svg");
+		 
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	src: url("/assets/Atkinson-Hyperlegible-Font/EOT/Atkinson-Hyperlegible-Bold-102.eot?") format("embedded-opentype"),
+	     url("/assets/Atkinson-Hyperlegible-Font/TTF/Atkinson-Hyperlegible-Bold-102.ttf") format("truetype"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF/Atkinson-Hyperlegible-Bold-102.woff") format("woff"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF2/Atkinson-Hyperlegible-Bold-102.woff2") format("woff2"),
+		 url("/assets/Atkinson-Hyperlegible-Font/SVG/Atkinson-Hyperlegible-Bold-102.svg") format("svg");
+		 
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	src: url("/assets/Atkinson-Hyperlegible-Font/EOT/Atkinson-Hyperlegible-BoldItalic-102.eot?") format("embedded-opentype"),
+	     url("/assets/Atkinson-Hyperlegible-Font/TTF/Atkinson-Hyperlegible-BoldItalic-102.ttf") format("truetype"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF/Atkinson-Hyperlegible-BoldItalic-102.woff") format("woff"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF2/Atkinson-Hyperlegible-BoldItalic-102.woff2") format("woff2"),
+		 url("/assets/Atkinson-Hyperlegible-Font/SVG/Atkinson-Hyperlegible-BoldItalic-102.svg") format("svg");
+		 
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	src: url("/assets/Atkinson-Hyperlegible-Font/EOT/Atkinson-Hyperlegible-Italic-102.eot?") format("embedded-opentype"),
+	     url("/assets/Atkinson-Hyperlegible-Font/TTF/Atkinson-Hyperlegible-Italic-102.ttf") format("truetype"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF/Atkinson-Hyperlegible-Italic-102.woff") format("woff"),
+		 url("/assets/Atkinson-Hyperlegible-Font/WOFF2/Atkinson-Hyperlegible-Italic-102.woff2") format("woff2"),
+		 url("/assets/Atkinson-Hyperlegible-Font/SVG/Atkinson-Hyperlegible-Italic-102.svg") format("svg");
+		 
+	font-weight: normal;
+	font-style: italic;
+}
+
+html {
+	min-height: 100%;
+	min-width: 100%;
+}
+
+body {
+	position: absolute;
+	min-height: 100%;
+	min-width: 100%;
+	margin: 0;
+	font-family: var(--default-font-family);
+	font-size: var(--default-font-size);
+}
+
+button {
+	font-family: inherit;
+	font-size: inherit;
+	background-color: var(--button-color);
+	border: none;
+	color: var(--button-text-color);
+	padding: 7px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.dark-mode button {
+	background-color: var(--dark-mode-button-color);
+	color: var(--dark-mode-button-text-color);
+}
+
+button:hover {
+	background-color: var(--button-hover-color);
+	transition: background-color 0.2s;
+}
+
+.dark-mode button:hover {
+	background-color: var(--dark-mode-button-hover-color);
+}
+
+button:active {
+	background-color: var(--button-active-color);
+}
+
+.dark-mode button:active {
+	background-color: var(--dark-mode-button-active-color);
+}
+
+.main-page-header-image {
+	height: 400px;
+	background-image: linear-gradient(transparent, 80%, #000), url('/assets/pedro-logo.png');
+	background-position: center;
+	background-size: auto 150%;
+	background-repeat: no-repeat;
+	text-align: center;
+	line-height: 400px;
+	text-shadow: 0 0 10px black;
+	color: #ffffff;
+}
+
+.dark-mode .main-page-header-image {
+	background-image: linear-gradient(transparent, var(--dark-mode-secondary-background-color)), url('/assets/pedro-logo.png');
+}
+
+.main-page-header-image h1 {
+	margin: 0;
+	line-height: 1.5;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.website-divider:nth-of-type(odd) {
+	background-color: var(--secondary-background-color);
+	min-height: 300px;
+}
+
+.website-divider {
+	background-color: var(--primary-background-color);
+	min-height: 300px;
+	text-align: center;
+	padding: 15px;
+}
+
+.dark-mode .website-divider:nth-of-type(odd) {
+	background-color: var(--dark-mode-secondary-background-color);
+}
+
+.dark-mode .website-divider {
+	background-color: var(--dark-mode-primary-background-color);
+}
+
+.minor {
+	color: var(--minor-text-color);
+	font-size: 15px;
+	font-style: italic;
+}
+
+.dark-mode .minor {
+	color: var(--dark-mode-minor-text-color);
+}
+
+.social-link {
+	display: inline-block;
+	height: 0;
+}
+
+.social-link svg {
+	fill: var(--social-link-color);
+	height: 40px;
+	cursor: pointer;
+}
+
+.social-link:hover svg {
+	fill: var(--social-link-hover-color);
+}
+
+.yt-social-link {
+	vertical-align: -6px;
+}
+
+.youtube-link-inside {
+	fill: var(--secondary-background-color);
+}
+
+.dark-mode .youtube-link-inside {
+	fill: var(--dark-mode-secondary-background-color);
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.main-page-link {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+}
+
+.main-page-link img {
+	width: 64px;
+}
+
+.main-page-link:hover img {
+	filter: invert(1);
+}
+
+.project-flexbox {
+	width: 517px;
+	max-width: fit-content;
+	display: flex;
+	flex-wrap: wrap;
+	flex: 256px 1;
+	justify-content: center;
+	gap: 5px;
+}
+
+.project-flexbox img {
+	border-radius: 5px;
+	width: 256px;
+	image-rendering: pixelated;
+	transition: filter 0.2s;
+}
+
+.project-flexbox img:hover {
+	filter: brightness(1.05);
+}
+
+.project-flexbox a {
+	height: 0;
+}
