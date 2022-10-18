@@ -128,6 +128,11 @@ body {
 	color: var(--dark-mode-minor-text-color);
 }
 
+.social-link {
+	display: inline-block;
+	height: 0;
+}
+
 .social-link svg {
 	fill: var(--social-link-color);
 	height: 40px;
@@ -136,6 +141,10 @@ body {
 
 .social-link:hover svg {
 	fill: var(--social-link-hover-color);
+}
+
+.yt-social-link {
+	vertical-align: -6px;
 }
 
 .youtube-link-inside {
