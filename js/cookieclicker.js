@@ -26,25 +26,25 @@ if (clickerCost == undefined) {
 	var clickerCost = 10;
 }
 
-function cookieClicked() {
-	cookieAmount = cookieAmount + clickerLevel;
-	if (cookieAmount == 1) {
-		cookieCounter.innerHTML = "1 cookie";
+function recountCookies() {
+	if (cookieAmount > -2 && cookieAmount < 2) {
+		cookieCounter.innerHTML = cookieAmount + " cookie";
 	} else {
 		cookieCounter.innerHTML = cookieAmount + " cookies";
 	}
 }
 
+function cookieClicked() {
+	cookieAmount = cookieAmount + clickerLevel;
+	recountCookies();
+}
+
 function hireWorker() {
 	if (cookieAmount >= workerCost) {
 		cookieAmount = cookieAmount - workerCost
-		if (cookieAmount == 1) {
-			cookieCounter.innerHTML = "1 cookie";
-		} else {
-			cookieCounter.innerHTML = cookieAmount + " cookies";
-		}
+		recountCookies();
 		workerAmount = workerAmount + 1;
-		if (workerAmount == 0 || workerAmount == 1) {
+		if (workerAmount > -2 && workerAmount < 2) {
 			workerCounter.innerHTML = workerAmount + " funcionário";
 		} else {
 			workerCounter.innerHTML = workerAmount + " funcionários";
@@ -57,11 +57,7 @@ function hireWorker() {
 function upgradeClicker() {
 	if (cookieAmount >= clickerCost) {
 		cookieAmount = cookieAmount - clickerCost
-		if (cookieAmount == 1) {
-			cookieCounter.innerHTML = "1 cookie";
-		} else {
-			cookieCounter.innerHTML = cookieAmount + " cookies";
-		}
+		recountCookies();
 		clickerLevel = clickerLevel + 1;
 		clickerLevelCounter.innerHTML = "Cursor nível " + clickerLevel;
 		
@@ -72,9 +68,5 @@ function upgradeClicker() {
 
 setInterval(function () {
 	cookieAmount = cookieAmount + workerAmount
-	if (cookieAmount == 1) {
-		cookieCounter.innerHTML = "1 cookie";
-	} else {
-		cookieCounter.innerHTML = cookieAmount + " cookies";
-	}
+	recountCookies();
 }, 1000);
