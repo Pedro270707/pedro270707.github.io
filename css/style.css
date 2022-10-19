@@ -3,6 +3,8 @@
 	--dark-mode-text-color: #ffffff;
 	--minor-text-color: #777777;
 	--dark-mode-minor-text-color: #777777;
+	--button-dark-mode-text-color: #ffffff;
+	--dark-mode-button-dark-mode-text-color: #777777;
 	--button-color: #777777;
 	--dark-mode-button-color: #777777;
 	--button-hover-color: #888888;
@@ -19,6 +21,8 @@
 	--default-font-size: 20px;
 	--social-link-color: #000000;
 	--social-link-hover-color: #ffffff;
+	--dark-mode-social-link-color: #ffffff;
+	--dark-mode-social-link-hover-color: #171617;
 }
 
 @font-face {
@@ -83,6 +87,11 @@ body {
 	font-size: var(--default-font-size);
 }
 
+.dark-mode {
+	color: var(--dark-mode-text-color);
+	background-color: var(--dark-mode-secondary-background-color);
+}
+
 button {
 	font-family: inherit;
 	font-size: inherit;
@@ -132,7 +141,7 @@ button:active {
 	background-image: linear-gradient(transparent, var(--dark-mode-secondary-background-color)), url('/assets/pedro-logo.png');
 }
 
-.main-page-header-image h1 {
+.main-page-header-text {
 	margin: 0;
 	line-height: 1.5;
 	display: inline-block;
@@ -159,7 +168,7 @@ button:active {
 	background-color: var(--dark-mode-primary-background-color);
 }
 
-.minor {
+.dark-mode-toggle, .minor {
 	color: var(--minor-text-color);
 	font-size: 15px;
 	font-style: italic;
@@ -167,6 +176,25 @@ button:active {
 
 .dark-mode .minor {
 	color: var(--dark-mode-minor-text-color);
+}
+
+.dark-mode-toggle {
+	display: inline-block;
+	color: var(--button-dark-mode-text-color);
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-radius: 5px;
+}
+
+.dark-mode .dark-mode-toggle {
+	color: var(--dark-mode-button-dark-mode-text-color);
+}
+
+.dark-mode-toggle:hover {
+	color: var(--dark-mode-button-dark-mode-text-color);
+	background-color: var(--dark-mode-primary-background-color);
 }
 
 .social-link {
@@ -182,6 +210,14 @@ button:active {
 
 .social-link:hover svg {
 	fill: var(--social-link-hover-color);
+}
+
+.dark-mode .social-link svg {
+	fill: var(--dark-mode-social-link-color);
+}
+
+.social-link:hover svg {
+	fill: var(--dark-mode-social-link-hover-color);
 }
 
 .yt-social-link {
