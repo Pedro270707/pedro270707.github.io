@@ -439,3 +439,9 @@
   border: 0.125em solid rgba(16,0,16,0.94);
   border-style: solid none;
 }
+
+input[type="text"] {
+	width: 500px;
+	height: 40px;
+	max-width: 95%;
+}
