@@ -150,12 +150,11 @@ button:active {
 
 .website-divider:nth-of-type(odd) {
 	background-color: var(--secondary-background-color);
-	min-height: 300px;
 }
 
 .website-divider {
 	background-color: var(--primary-background-color);
-	min-height: 300px;
+	min-height: 200px;
 	text-align: center;
 	padding: 15px;
 }
@@ -275,4 +274,8 @@ button:active {
 
 .project-flexbox a {
 	height: 0;
+}
+
+.hidden {
+	display: none !important;
 }

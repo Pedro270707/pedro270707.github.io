@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ site.baseurl }}/css/minecrafttooltips.css">
+<div id="minecraft-tip" class="minecraft-tip">Nomes de itens do Minecraft</div>
+<div class="website-divider">
+<p id="minecraft-text-output" class="minecraft-text-output center">Nomes de itens do Minecraft</p>
+<br>
+<div id="item-input" class="item-input">
+	<label for="item-input-upload">Enviar item (.png)
+	<input type="file" accept="image/*" id="item-input-upload" onchange="updateItem(event);" /></label>
+</div>
+<br>
+<div id="item-output" class="minecraft-item item-output" data-mctitle="Aaaaaaa">
+	<img src="{{ site.baseurl }}/assets/minecrafttooltips/minecraft_slot.png" class="output-slot">
+	<img id="output-item" class="output-item" />	
+	<div id="item-glow" class="item-glow minecraft-item"></div>
+</div>
+</div>
+<div class="website-divider">
+	<input type="text" placeholder="Nomes de itens do Minecraft" id="minecraft-text-input" />
+</div>
+<script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="{{ site.baseurl }}/js/minecraft-tip.js"></script>
