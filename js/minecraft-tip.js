@@ -4,6 +4,7 @@ var itemInput = document.getElementById("item-input");
 var outputItem = document.getElementById('output-item');
 var mcTip = document.getElementById("minecraft-tip");
 var itemGlow = document.getElementById("item-glow");
+var obfuscatedText = document.getElementById("c-k");
 
 var breakCount = 0
 
@@ -17,8 +18,6 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '<br class="break">');
 	textOutputFormatted = textOutputFormatted.replace(/&el/g, '<br><br>');
-	textOutputFormatted = textOutputFormatted.replace(/&br/g, '&br');
-	textOutputFormatted = textOutputFormatted.replace(/&el/g, '&el');
 	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
 	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
@@ -41,7 +40,8 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/§o/g, '<i class="c-o">');
 	textOutputFormatted = textOutputFormatted.replace(/§n/g, '<n class="c-n">');
 	textOutputFormatted = textOutputFormatted.replace(/§m/g, '<m class="c-m">');
-	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m>');
+	textOutputFormatted = textOutputFormatted.replace(/§k/g, '<k id="c-k">');
+	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m></k>');
 	textOutputFormatted = textOutputFormatted + "</span>"
 	if (textOutputFormatted == "" || textOutputFormatted == "</span>") {
 		textOutputFormatted = "Nomes de itens do Minecraft";
@@ -111,3 +111,4 @@ $(".minecraft-item").mousemove(function(event) {
 $(".minecraft-item").mouseout(function(event) {
   $(mcTip).css("display", "none");
 });
+
