@@ -3,12 +3,13 @@ layout: default
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}/css/minecrafttooltips.css">
-<div id="minecraft-tip" class="minecraft-tip">Nomes de itens do Minecraft</div>
+<k-manager class="k-manager" id="k-manager"></k-manager>
+<div id="minecraft-tip" class="minecraft-tip">Nomes de itens do Minecraft<span class='shadow'>Nomes de itens do Minecraft</span></div>
 <div class="website-divider">
-<p id="minecraft-text-output" class="minecraft-text-output center">Nomes de itens do Minecraft</p>
+<div id="minecraft-text-output" class="minecraft-text-output center"><p class="tip-line">Nomes de itens do Minecraft<span class='shadow'>Nomes de itens do Minecraft</span></p></div>
 <br>
 <div id="item-input" class="item-input">
-	<label for="item-input-upload">Enviar item (.png)
+	<label for="item-input-upload"><span id="item-input-text">Enviar item (.png)</span>
 	<input type="file" accept="image/*" id="item-input-upload" onchange="updateItem(event);" /></label>
 </div>
 <br>

@@ -1,23 +1,22 @@
 var textOutput = document.getElementById("minecraft-text-output");
 var textInput = document.getElementById("minecraft-text-input");
-var itemInput = document.getElementById("item-input");
+var itemInputText = document.getElementById("item-input-text");
 var outputItem = document.getElementById('output-item');
 var mcTip = document.getElementById("minecraft-tip");
 var itemGlow = document.getElementById("item-glow");
-var obfuscatedText = document.getElementById("c-k");
+var obfuscatedTextManager = document.getElementById("k-manager");
 
 var breakCount = 0
 
 function updateItem(event) {
-	itemInput.classList.add("hidden");
+	itemInputText.innerHTML = "Alterar item (.png)";
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
 textInput.onkeyup = function() {
 	textOutputFormatted = textInput.value.replace(/</gi, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
-	textOutputFormatted = textOutputFormatted.replace(/&br/g, '<br class="break">');
-	textOutputFormatted = textOutputFormatted.replace(/&el/g, '<br><br>');
+	// textOutputFormatted = textOutputFormatted.replace(/&el/g, '<br><br>');
 	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
 	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
@@ -40,19 +39,27 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/§o/g, '<i class="c-o">');
 	textOutputFormatted = textOutputFormatted.replace(/§n/g, '<n class="c-n">');
 	textOutputFormatted = textOutputFormatted.replace(/§m/g, '<m class="c-m">');
-	textOutputFormatted = textOutputFormatted.replace(/§k/g, '<k id="c-k">');
+	textOutputFormatted = textOutputFormatted.replace(/§k/g, '<k class="c-k">');
 	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m></k>');
-	textOutputFormatted = textOutputFormatted + "</span>"
-	if (textOutputFormatted == "" || textOutputFormatted == "</span>") {
-		textOutputFormatted = "Nomes de itens do Minecraft";
-	}
-	if (textOutputFormatted.match("<br") != null) {
-		breakCount = [...textOutputFormatted.matchAll("<br")].length;
-	} else {
-		breakCount = 0
-	}
-	textOutput.innerHTML = textOutputFormatted;
-	mcTip.innerHTML = textOutputFormatted;
+	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k id="c-k-manager">');
+	var textOutputArray = textOutputFormatted.split("&br");
+	
+	breakCount = textOutputArray.length - 1;
+
+	var textOutputReformatted = "";
+	textOutputArray.forEach(function(element, index, array) {
+		textOutputReformatted += "<p class='tip-line'>" + element + "</span></m><shadow class='shadow'>" + element + "</span></shadow></p>";
+		if (index + 1 != array.length) {
+			textOutputReformatted += "<br class='break'>";
+		}
+		if (textOutputReformatted != "<p class='tip-line'></span></m><shadow class='shadow'></span></shadow></p>") {
+			textOutput.innerHTML = textOutputReformatted;
+			mcTip.innerHTML = textOutputReformatted;
+		} else {
+			textOutput.innerHTML = "Nomes de itens do Minecraft";
+			mcTip.innerHTML = "Nomes de itens do Minecraft";
+		}
+	});
 }
 
 $('.slot-item').mouseover(function(event) {
@@ -112,3 +119,23 @@ $(".minecraft-item").mouseout(function(event) {
   $(mcTip).css("display", "none");
 });
 
+setInterval(function() {
+  $('.c-k').text(randomizeText($('#c-k-manager').text()));
+}, 50);
+
+function randomizeText(obftext) {
+	var length = obftext.length;
+	var result = "";
+	var largeCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyzÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ#$%&"*+-/0123456789<=>?@[\]^_`{}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■';
+	var smallCharacters = "i'!,.:;|¡";
+	
+	for (var i = 0; i < length; i++) {
+		if (smallCharacters.includes(obftext.charAt(i))) {
+			result += smallCharacters.charAt(Math.floor(Math.random() * 9));
+		} else {
+			result += largeCharacters.charAt(Math.floor(Math.random() * 246));
+		}
+	}
+	
+	return result;
+}

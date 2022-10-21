@@ -19,100 +19,86 @@
 	font-style: normal;
 }
 
+.shadow {
+	color: #3f3f3f;
+}
+
 .break {
   display: block;
   content: "";
   margin-top: 0.25em;
 }
 
-.c-0 {
+.shadow .c-0 {
   color: #000000;
-  text-shadow: 0.125em 0.125em #000000;
 }
 
-.c-1 {
-  color: #0000aa;
-  text-shadow: 0.125em 0.125em #00002a;
+.shadow .c-1 {
+  color: #00002a;
 }
 
-.c-2 {
-  color: #00aa00;
-  text-shadow: 0.125em 0.125em #002a00;
+.shadow .c-2 {
+  color: #002a00;
 }
 
-.c-3 {
-  color: #00aaaa;
-  text-shadow: 0.125em 0.125em #002a2a;
+.shadow .c-3 {
+  color: #002a2a;
 }
 
-.c-4 {
-  color: #aa0000;
-  text-shadow: 0.125em 0.125em #2a0000;
+.shadow .c-4 {
+  color: #2a0000;
 }
 
-.c-5 {
-  color: #aa00aa;
-  text-shadow: 0.125em 0.125em #2a002a;
+.shadow .c-5 {
+  color: #2a002a;
 }
 
-.c-6 {
-  color: #ffaa00;
-  text-shadow: 0.125em 0.125em #2a2a00;
+.shadow .c-6 {
+  color: #2a2a00;
 }
 
-.c-6-bedrock {
-  color: #ffaa00;
-  text-shadow: 0.125em 0.125em #402a00;
+.shadow .c-6-bedrock {
+  color: #402a00;
 }
 
-.c-7 {
-  color: #aaaaaa;
-  text-shadow: 0.125em 0.125em #2a2a2a;
+.shadow .c-7 {
+  color: #2a2a2a;
 }
 
-.c-8 {
-  color: #555555;
-  text-shadow: 0.125em 0.125em #151515;
+.shadow .c-8 {
+  color: #151515;
 }
 
-.c-9 {
-  color: #5555ff;
-  text-shadow: 0.125em 0.125em #15153f;
+.shadow .c-9 {
+  color: #15153f;
 }
 
-.c-a {
-  color: #55ff55;
-  text-shadow: 0.125em 0.125em #153f15;
+.shadow .c-a {
+  color: #153f15;
 }
 
-.c-b {
-  color: #55ffff;
-  text-shadow: 0.125em 0.125em #153f3f;
+.shadow .c-b {
+  color: #153f3f;
 }
 
-.c-c {
-  color: #ff5555;
-  text-shadow: 0.125em 0.125em #3f1515;
+.shadow .c-c {
+  color: #3f1515;
 }
 
-.c-d {
-  color: #ff55ff;
-  text-shadow: 0.125em 0.125em #3f153f;
+.shadow .c-d {
+  color: #3f153f;
 }
 
-.c-e {
-  color: #ffff55;
-  text-shadow: 0.125em 0.125em #3f3f15;
+.shadow .c-e {
+  color: #3f3f15;
 }
 
-.c-f {
-  color: #ffffff;
-  text-shadow: 0.125em 0.125em #3f3f3f;
+.shadow .c-f {
+  color: #3f3f3f;
 }
 
-.c-g {
-  color: #ddd605;
-  text-shadow: 0.125em 0.125em #373501;
+.shadow .c-g {
+  color: #373501;
 }
 
 .c-l {
@@ -123,183 +109,123 @@
   font-style: italic;
 }
 
-/* .c-m {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-	width: fit-content;
-    z-index: 2;
+.c-0 {
+  color: #000000;
 }
 
-.c-m::after, .c-m::before {
+.c-1 {
+  color: #0000aa;
+}
+
+.c-2 {
+  color: #00aa00;
+}
+
+.c-3 {
+  color: #00aaaa;
+}
+
+.c-4 {
+  color: #aa0000;
+}
+
+.c-5 {
+  color: #aa00aa;
+}
+
+.c-6 {
+  color: #ffaa00;
+}
+
+.c-6-bedrock {
+  color: #ffaa00;
+}
+
+.c-7 {
+  color: #aaaaaa;
+}
+
+.c-8 {
+  color: #555555;
+}
+
+.c-9 {
+  color: #5555ff;
+}
+
+.c-a {
+  color: #55ff55;
+}
+
+.c-b {
+  color: #55ffff;
+}
+
+.c-c {
+  color: #ff5555;
+}
+
+.c-d {
+  color: #ff55ff;
+}
+
+.c-e {
+  color: #ffff55;
+}
+
+.c-f {
+  color: #ffffff;
+}
+
+.c-g {
+  color: #ddd605;
+}
+
+.c-m {
+	position: relative;
+}
+
+.c-m:after {
     content: '';
+    display: block;
+    width: calc(100% + 0.125em);
+    height: 0;
+	margin-top: 0.925em;
     position: absolute;
-    right: 0;
-    height: 0.125em;
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+	z-index: 1;
 }
 
-.c-m::after {
+.shadow .c-m:after {
+    width: calc(100% + 0.125em);
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+}
+
+.c-m .c-0:after, .c-m .c-1:after, .c-m .c-2:after, .c-m .c-3:after, .c-m .c-4:after, .c-m .c-5:after, .c-m .c-6:after, .c-m .c-7:after, .c-m .c-8:after, .c-m .c-9:after, .c-m .c-a:after, .c-m .c-b:after, .c-m .c-c:after, .c-m .c-d:after, .c-m .c-e:after, .c-m .c-f:after, .c-m .c-g:after, .c-m .c-6-bedrock:after {
     content: '';
-	top: 59%;
-	left: 0;
-    background-color: white;
-    z-index: 1;
+    display: block;
+    width: calc(100% + 0.125em);
+    height: 0;
+	margin-top: 0.925em;
+    position: absolute;
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+	z-index: 2;
 }
 
-.c-m::before {
-    content: '';
-	top: 59%;
-	left: 0;
-    box-shadow: 0.125em 0.125em 0 black;
-    z-index: -1;
+.c-n {
+	position: relative;
+	text-decoration: underline 0.125em;
+	text-underline-offset: 0.125em;
 }
-
-.c-0 .c-m::after {
-  background-color: #000000;
-}
-
-.c-1 .c-m::after {
-  background-color: #0000aa;
-}
-
-.c-2 .c-m::after {
-  background-color: #00aa00;
-}
-
-.c-3 .c-m::after {
-  background-color: #00aaaa;
-}
-
-.c-4 .c-m::after {
-  background-color: #aa0000;
-}
-
-.c-5 .c-m::after {
-  background-color: #aa00aa;
-}
-
-.c-6 .c-m::after {
-  background-color: #ffaa00;
-}
-
-.c-6-bedrock .c-m::after {
-  background-color: #ffaa00;
-}
-
-.c-7 .c-m::after {
-  background-color: #aaaaaa;
-}
-
-.c-8 .c-m::after {
-  background-color: #555555;
-}
-
-.c-9 .c-m::after {
-  background-color: #5555ff;
-}
-
-.c-a .c-m::after {
-  background-color: #55ff55;
-}
-
-.c-b .c-m::after {
-  background-color: #55ffff;
-}
-
-.c-c .c-m::after {
-  background-color: #ff5555;
-}
-
-.c-d .c-m::after {
-  background-color: #ff55ff;
-}
-
-.c-e .c-m::after {
-  background-color: #ffff55;
-}
-
-.c-f .c-m::after {
-  background-color: #ffffff;
-}
-
-.c-g .c-m::after {
-  background-color: #ddd605;
-}
-
-.c-0 .c-m::before {
-  box-shadow: 0.125em 0.125em #000000;
-}
-
-.c-1 .c-m::before {
-  box-shadow: 0.125em 0.125em #00002a;
-}
-
-.c-2 .c-m::before {
-  box-shadow: 0.125em 0.125em #002a00;
-}
-
-.c-3 .c-m::before {
-  box-shadow: 0.125em 0.125em #002a2a;
-}
-
-.c-4 .c-m::before {
-  box-shadow: 0.125em 0.125em #2a0000;
-}
-
-.c-5 .c-m::before {
-  box-shadow: 0.125em 0.125em #2a002a;
-}
-
-.c-6 .c-m::before {
-  box-shadow: 0.125em 0.125em #2a2a00;
-}
-
-.c-6-bedrock .c-m::before {
-  box-shadow: 0.125em 0.125em #402a00;
-}
-
-.c-7 .c-m::before {
-  box-shadow: 0.125em 0.125em #2a2a2a;
-}
-
-.c-8 .c-m::before {
-  box-shadow: 0.125em 0.125em #151515;
-}
-
-.c-9 .c-m::before {
-  box-shadow: 0.125em 0.125em #15153f;
-}
-
-.c-a .c-m::before {
-  box-shadow: 0.125em 0.125em #153f15;
-}
-
-.c-b .c-m::before {
-  box-shadow: 0.125em 0.125em #153f3f;
-}
-
-.c-c .c-m::before {
-  box-shadow: 0.125em 0.125em #3f1515;
-}
-
-.c-d .c-m::before {
-  box-shadow: 0.125em 0.125em #3f153f;
-}
-
-.c-e .c-m::before {
-  box-shadow: 0.125em 0.125em #3f3f15;
-}
-
-.c-f .c-m::before {
-  box-shadow: 0.125em 0.125em #3f3f3f;
-}
-
-.c-g .c-m::before {
-  box-shadow: 0.125em 0.125em #373501;
-} */
 
 .c-1, .c-2, .c-3, .c-4, .c-5, .c-6, .c-7, .c-8, .c-9, .c-a, .c-b, .c-c, .c-d, .c-e, .c-f, .c-g, .c-h {
+	position: relative;
 	font-family: Minecraft;
 	font-size: initial;
 }
@@ -392,8 +318,6 @@
 	border-image: -webkit-linear-gradient(rgba(80,0,255,0.31),rgba(40,0,127,0.31)) 1;
 	border-image: linear-gradient(rgba(80,0,255,0.31),rgba(40,0,127,0.31)) 1;
 	background-color: rgba(16,0,16,0.94);
-	color: #ffffff;
-	text-shadow: 0.125em 0.125em 0 #3F3F3F;
 	padding: 0.375em;
 	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
 	word-spacing: 0.25em;
@@ -410,12 +334,14 @@
   position: fixed;
   z-index: 9999;
   display: none;
+  color: #ffffff;
 }
 
 .minecraft-text-output {
 	position: relative;
 	z-index: 10;
 	display: inline-block;
+	color: #ffffff;
 }
 
 .minecraft-text-output::before, .minecraft-tip::before {
@@ -444,4 +370,25 @@ input[type="text"] {
 	width: 500px;
 	height: 40px;
 	max-width: 95%;
+}
+
+.shadow {
+	position: absolute;
+    left: 0.125em;
+    top: 0.125em;
+    z-index: -1;
+}
+
+.c-m .shadow, .c-n .shadow {
+	top: 0.375em;
+}
+
+.tip-line {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+}
+
+.k-manager {
+	display: none;
 }
