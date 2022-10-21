@@ -119,23 +119,56 @@ $(".minecraft-item").mouseout(function(event) {
   $(mcTip).css("display", "none");
 });
 
-setInterval(function() {
-  $('.c-k').text(randomizeText($('#c-k-manager').text()));
+/* setInterval(function() {
+  randomizeText();
 }, 50);
 
 function randomizeText(obftext) {
-	var length = obftext.length;
-	var result = "";
-	var largeCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyzÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ#$%&"*+-/0123456789<=>?@[\]^_`{}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■';
-	var smallCharacters = "i'!,.:;|¡";
-	
-	for (var i = 0; i < length; i++) {
-		if (smallCharacters.includes(obftext.charAt(i))) {
-			result += smallCharacters.charAt(Math.floor(Math.random() * 9));
-		} else {
-			result += largeCharacters.charAt(Math.floor(Math.random() * 246));
+		for (var group = 0; group < document.querySelectorAll("k#c-k-manager").length; group++) {
+			var length = document.querySelectorAll("k#c-k-manager")[group].textContent.length;
+			var result = "";
+			var largeCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyzÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ#$%&"*+-/0123456789<=>?@[\]^_`{}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■';
+			var smallCharacters = "i'!,.:;|¡";
+			
+			for (var i = 0; i < length; i++) {
+				if (smallCharacters.includes(document.querySelectorAll("k#c-k-manager")[group].textContent.charAt(i))) {
+					result += smallCharacters.charAt(Math.floor(Math.random() * 9));
+				} else {
+					result += largeCharacters.charAt(Math.floor(Math.random() * 246));
+				}
+			}
+			
+		//if(document.querySelectorAll("k.c-k")[group].firstChild.nodeName == '#text') {
+		//	for (i = 0; i < document.getElementsByClassName("tip-line").length; i++) {
+		//		document.querySelectorAll("k.c-k")[group].firstChild.textContent = result;
+		//		document.querySelectorAll(".shadow")[group].firstChild.firstChild.textContent = result;
+		//	}
+		//} else if(document.querySelectorAll("k.c-k")[group].firstChild.firstChild.nodeName == '#text') {
+		//	for (i = 0; i < document.getElementsByClassName("tip-line").length; i++) {
+		//		document.querySelectorAll("k.c-k")[group].firstChild.firstChild.textContent = result;
+		//		document.querySelectorAll(".shadow")[group].firstChild.firstChild.textContent = result;
+		//	}
+		// }
+		
+		for (var i = 1; i <= document.querySelectorAll("k#c-k-manager").length * 4; i++) {
+			if(document.querySelectorAll("k.c-k")[group].firstChild.nodeName == '#text') {
+				document.querySelectorAll("k.c-k")[group].firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length].firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length * 2].firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length * 3].firstChild.textContent = result;
+			}
+			if(document.querySelectorAll("k.c-k")[group].children != ) {
+				document.querySelectorAll("k.c-k")[group].firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length].firstChild.firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length * 2].firstChild.firstChild.textContent = result;
+				document.querySelectorAll("k.c-k")[group + document.querySelectorAll("k#c-k-manager").length * 3].firstChild.firstChild.textContent = result;
+			}
 		}
+		
+		// if(document.querySelectorAll("k.c-k")[group].firstChild.nodeName == '#text') {
+			// document.querySelectorAll("k.c-k")[group].firstChild.textContent = result;
+		// } else if(document.querySelectorAll("k.c-k")[group].firstChild.firstChild.nodeName == '#text') {
+			// document.querySelectorAll("k.c-k")[group].firstChild.firstChild.textContent = result;
+		// }
 	}
-	
-	return result;
-}
+} */
