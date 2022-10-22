@@ -51,6 +51,11 @@ function hireWorker() {
 		}
 		workerCost = Math.ceil(Math.pow(workerCost / 1.3, 1.2));
 		workerButtonText.innerHTML = "Contratar funcionário por " + workerCost;
+		
+		setInterval(function () {
+			cookieAmount++
+			recountCookies();
+		}, 1000);
 	}
 }
 
@@ -65,8 +70,3 @@ function upgradeClicker() {
 		upgradeClickerButtonText.innerHTML = "Melhorar cursor por " + clickerCost;
 	}
 }
-
-setInterval(function () {
-	cookieAmount = cookieAmount + workerAmount
-	recountCookies();
-}, 1000);

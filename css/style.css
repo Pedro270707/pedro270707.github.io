@@ -241,6 +241,7 @@ button:active {
 	position: absolute;
 	top: 4px;
 	left: 4px;
+	z-index: 9999;
 }
 
 .main-page-link img {
