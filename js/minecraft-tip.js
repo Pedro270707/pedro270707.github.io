@@ -48,16 +48,16 @@ textInput.onkeyup = function() {
 
 	var textOutputReformatted = "";
 	textOutputArray.forEach(function(element, index, array) {
-		textOutputReformatted += "<p class='tip-line'>" + element + "</span></m><shadow class='shadow'>" + element + "</span></shadow></p>";
+		textOutputReformatted += "<p class='tip-line'>" + element + "</span></m></span></p><p class='tip-line shadow'>" + element + "</span></m></span></p>";
 		if (index + 1 != array.length) {
 			textOutputReformatted += "<br class='break'>";
 		}
-		if (textOutputReformatted != "<p class='tip-line'></span></m><shadow class='shadow'></span></shadow></p>") {
+		if (textOutputReformatted == "<p class='tip-line'></span></m></span></p><p class='tip-line shadow'></span></m></span></p>") {
+			textOutput.innerHTML = "<p class='tip-line'>Nomes de itens do Minecraft</p><p class='tip-line shadow'>Nomes de itens do Minecraft</p>";
+			mcTip.innerHTML = "<p class='tip-line'>Nomes de itens do Minecraft</p><p class='tip-line shadow'>Nomes de itens do Minecraft</p>";
+		} else {
 			textOutput.innerHTML = textOutputReformatted;
 			mcTip.innerHTML = textOutputReformatted;
-		} else {
-			textOutput.innerHTML = "Nomes de itens do Minecraft";
-			mcTip.innerHTML = "Nomes de itens do Minecraft";
 		}
 	});
 }

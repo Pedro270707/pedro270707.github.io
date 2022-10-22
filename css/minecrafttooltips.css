@@ -372,6 +372,12 @@ input[type="text"] {
 	max-width: 95%;
 }
 
+.tip-line {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+}
+
 .shadow {
 	position: absolute;
     left: 0.125em;
@@ -381,12 +387,6 @@ input[type="text"] {
 
 .c-m .shadow, .c-n .shadow {
 	top: 0.375em;
-}
-
-.tip-line {
-	display: inline-block;
-	position: relative;
-	margin: 0;
 }
 
 .k-manager {
