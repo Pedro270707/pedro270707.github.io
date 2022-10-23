@@ -12,7 +12,7 @@ var outputShadowLine = document.getElementById("output-shadow-line");
 var breakCount = 0
 
 function updateItem(event) {
-	itemInputText.innerHTML = "Alterar item (.png)";
+	itemInputText.innerHTML = "Alterar imagem do item";
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
