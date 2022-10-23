@@ -380,7 +380,7 @@ input[type="text"] {
 
 .shadow {
 	position: absolute;
-    left: 0.125em;
+    left: 0.5em;
     top: 0.125em;
     z-index: -1;
 }

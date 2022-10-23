@@ -279,6 +279,35 @@ button:active {
 	height: 0;
 }
 
+.blog-post-flexbox {
+	position: absolute;
+	width: 610px;
+	max-width: 95vw;
+	display: flex;
+	flex-wrap: wrap;
+	flex: 200px;
+	justify-content: center;
+	gap: 5px;
+}
+
+.blog-post {
+	position: relative;
+	width: 100%;
+	padding-top: 150px;
+	display: inline-block;
+	overflow: hidden;
+}
+
+.blog-post img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	image-rendering: pixelated;
+	object-fit: cover;
+}
+
 .hidden {
 	display: none !important;
 }
