@@ -4,16 +4,16 @@ layout: default
 
 <link rel="stylesheet" href="{{ site.baseurl }}/css/minecrafttooltips.css">
 <k-manager class="k-manager" id="k-manager"></k-manager>
-<div id="minecraft-tip" class="minecraft-tip"><p class="tip-line">Nomes de itens do Minecraft</p><p class="tip-line shadow">Nomes de itens do Minecraft</p></div>
+<div id="minecraft-tip" class="minecraft-tip"><div id="tip-text-line" class="text-line">Nomes de itens do Minecraft</div><div id="tip-shadow-line" class="shadow-line">Nomes de itens do Minecraft</div></div>
 <div class="website-divider">
-<div id="minecraft-text-output" class="minecraft-text-output center"><p class="tip-line">Nomes de itens do Minecraft</p><p class="tip-line shadow">Nomes de itens do Minecraft</p></div>
+<div id="minecraft-text-output" class="minecraft-text-output center"><div id="output-text-line" class="text-line">Nomes de itens do Minecraft</div><div id="output-shadow-line" class="shadow-line">Nomes de itens do Minecraft</div></div>
 <br>
 <div id="item-input" class="item-input">
 	<label for="item-input-upload"><span id="item-input-text">Enviar item (.png)</span>
 	<input type="file" accept="image/*" id="item-input-upload" onchange="updateItem(event);" /></label>
 </div>
 <br>
-<div id="item-output" class="minecraft-item item-output" data-mctitle="Aaaaaaa">
+<div id="item-output" class="minecraft-item item-output">
 	<img src="{{ site.baseurl }}/assets/minecrafttooltips/minecraft_slot.png" class="output-slot">
 	<img id="output-item" class="output-item" />	
 	<div id="item-glow" class="item-glow minecraft-item"></div>

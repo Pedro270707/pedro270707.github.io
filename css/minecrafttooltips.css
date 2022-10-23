@@ -19,8 +19,14 @@
 	font-style: normal;
 }
 
-.shadow {
+.shadow-line {
 	color: #3f3f3f;
+}
+
+.empty-line {
+  display: block;
+  content: "";
+  margin-top: 1.375em;
 }
 
 .break {
@@ -29,75 +35,75 @@
   margin-top: 0.25em;
 }
 
-.shadow .c-0 {
+.shadow-line .c-0 {
   color: #000000;
 }
 
-.shadow .c-1 {
+.shadow-line .c-1 {
   color: #00002a;
 }
 
-.shadow .c-2 {
+.shadow-line .c-2 {
   color: #002a00;
 }
 
-.shadow .c-3 {
+.shadow-line .c-3 {
   color: #002a2a;
 }
 
-.shadow .c-4 {
+.shadow-line .c-4 {
   color: #2a0000;
 }
 
-.shadow .c-5 {
+.shadow-line .c-5 {
   color: #2a002a;
 }
 
-.shadow .c-6 {
+.shadow-line .c-6 {
   color: #2a2a00;
 }
 
-.shadow .c-6-bedrock {
+.shadow-line .c-6-bedrock {
   color: #402a00;
 }
 
-.shadow .c-7 {
+.shadow-line .c-7 {
   color: #2a2a2a;
 }
 
-.shadow .c-8 {
+.shadow-line .c-8 {
   color: #151515;
 }
 
-.shadow .c-9 {
+.shadow-line .c-9 {
   color: #15153f;
 }
 
-.shadow .c-a {
+.shadow-line .c-a {
   color: #153f15;
 }
 
-.shadow .c-b {
+.shadow-line .c-b {
   color: #153f3f;
 }
 
-.shadow .c-c {
+.shadow-line .c-c {
   color: #3f1515;
 }
 
-.shadow .c-d {
+.shadow-line .c-d {
   color: #3f153f;
 }
 
-.shadow .c-e {
+.shadow-line .c-e {
   color: #3f3f15;
 }
 
-.shadow .c-f {
+.shadow-line .c-f {
   color: #3f3f3f;
 }
 
-.shadow .c-g {
+.shadow-line .c-g {
   color: #373501;
 }
 
@@ -198,7 +204,7 @@
 	z-index: 1;
 }
 
-.shadow .c-m:after {
+.shadow-line .c-m:after {
     width: calc(100% + 0.125em);
     top: 0;
     left: -0.125em;
@@ -222,6 +228,10 @@
 	position: relative;
 	text-decoration: underline 0.125em;
 	text-underline-offset: 0.125em;
+}
+
+.c-n .c-1, .c-n .c-2, .c-n .c-3, .c-n .c-4, .c-n .c-5, .c-n .c-6, .c-n .c-7, .c-n .c-8, .c-n .c-9, .c-n .c-a, .c-n .c-b, .c-n .c-c, .c-n .c-d, .c-n .c-e, .c-n .c-f, .c-n .c-g, .c-n .c-h {
+	text-decoration: underline 0.125em;
 }
 
 .c-1, .c-2, .c-3, .c-4, .c-5, .c-6, .c-7, .c-8, .c-9, .c-a, .c-b, .c-c, .c-d, .c-e, .c-f, .c-g, .c-h {
@@ -378,17 +388,29 @@ input[type="text"] {
 	margin: 0;
 }
 
-.shadow {
+.shadow-line {
 	position: absolute;
     left: 0.5em;
     top: 0.125em;
     z-index: -1;
 }
 
-.c-m .shadow, .c-n .shadow {
+.c-m .shadow, .c-n .shadow-line {
 	top: 0.375em;
 }
 
 .k-manager {
 	display: none;
+}
+
+.text-line {
+	position: relative;
+	display: inline-block;
+}
+
+.shadow-line {
+	position: absolute;
+	display: inline-block;
+	top: 0.125em;
+	left: 0.5em;
 }
