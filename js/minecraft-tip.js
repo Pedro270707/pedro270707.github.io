@@ -53,10 +53,17 @@ textInput.onkeyup = function() {
 		breakCount = 0;
 	}
 
-	tipTextLine.innerHTML = textOutputFormatted;
-	tipShadowLine.innerHTML = textOutputFormatted;
-	outputTextLine.innerHTML = textOutputFormatted;
-	outputShadowLine.innerHTML = textOutputFormatted;
+	if (textOutputFormatted == '') {
+		tipTextLine.innerHTML = "Nomes de itens do Minecraft";
+		tipShadowLine.innerHTML = "Nomes de itens do Minecraft";
+		outputTextLine.innerHTML = "Nomes de itens do Minecraft";
+		outputShadowLine.innerHTML = "Nomes de itens do Minecraft";
+	} else {
+		tipTextLine.innerHTML = textOutputFormatted;
+		tipShadowLine.innerHTML = textOutputFormatted;
+		outputTextLine.innerHTML = textOutputFormatted;
+		outputShadowLine.innerHTML = textOutputFormatted;
+	}
 }
 
 $('.slot-item').mouseover(function(event) {
