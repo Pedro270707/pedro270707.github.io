@@ -217,7 +217,7 @@ button:active {
 	fill: var(--dark-mode-social-link-color);
 }
 
-.social-link:hover svg {
+.dark-mode .social-link:hover svg {
 	fill: var(--dark-mode-social-link-hover-color);
 }
 
