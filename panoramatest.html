@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+<style>
+	.panorama {
+		background-image: url('https://lemsite.derpbox.xyz/assets/TU31.png');
+		width: calc(100vh / 144 * 2460);
+		background-size: cover;
+		background-attachment: fixed;
+		height: 100vh;
+		animation: panorama 180s linear infinite;
+		backdrop-filter: blur(10px);
+	}
+	
+	@keyframes panorama {
+		0% {
+			background-position: 0;
+		}
+		
+		100% {
+			background-position: calc(100vh / 144 * -2460);
+		}
+	}
+</style>
+</head>
+<body style="margin: 0; overflow: hidden; min-width: 100vw; min-height: 100vh;">
+	<div class="panorama"></div>
+</body>
