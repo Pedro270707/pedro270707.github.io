@@ -156,7 +156,9 @@ button:active {
 	background-color: var(--primary-background-color);
 	min-height: 200px;
 	text-align: center;
-	padding: 15px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	max-width: 100vw;
 }
 
 .dark-mode .website-divider:nth-of-type(odd) {

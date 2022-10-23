@@ -1,0 +1,17 @@
+.profile-picture-flexbox {
+	width: 615px;
+	max-width: 95vw;
+	display: flex;
+	flex-wrap: wrap;
+	flex: 150px;
+	justify-content: center;
+	gap: 5px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.profile-picture-flexbox img {
+	width: 150px;
+	height: 150px;
+	max-width: 90%;
+}
