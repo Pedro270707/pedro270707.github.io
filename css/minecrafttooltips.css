@@ -26,7 +26,7 @@
 .empty-line {
   display: block;
   content: "";
-  margin-top: 1.375em;
+  margin-top: 1.625em;
 }
 
 .break {
@@ -328,12 +328,14 @@
 	border-image: -webkit-linear-gradient(rgba(80,0,255,0.31),rgba(40,0,127,0.31)) 1;
 	border-image: linear-gradient(rgba(80,0,255,0.31),rgba(40,0,127,0.31)) 1;
 	background-color: rgba(16,0,16,0.94);
-	padding: 0.375em;
 	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
 	word-spacing: 0.25em;
 	margin: 0.125em 0.25em;
-	padding-top: 0;
+	padding-left: 0.375em;
 	padding-bottom: 0.375em;
+	padding-right: 0.25em;
+	padding-top: 0;
+	padding: 0 0.375em 0.375em 0.375em;
 	line-height: 1.125em;
 	white-space: nowrap;
 	font-size: initial;
@@ -413,4 +415,9 @@ input[type="text"] {
 	display: inline-block;
 	top: 0.125em;
 	left: 0.5em;
+}
+
+.no-break-space {
+	display: inline-block;
+	width: 0.75em;
 }

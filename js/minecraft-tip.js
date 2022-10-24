@@ -21,6 +21,7 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
 	textOutputFormatted = textOutputFormatted.replace(/&el/g, '§r<br class="empty-line">');
+	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
 	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
 	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
@@ -46,12 +47,6 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/§k/g, '<k class="c-k">');
 	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m></k>');
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
-	
-	if (textOutputFormatted.match(/<br class="break">/g) != null) {
-		breakCount = textOutputFormatted.match(/<br class="break">/g).length;
-	} else {
-		breakCount = 0;
-	}
 
 	if (textOutputFormatted == '') {
 		tipTextLine.innerHTML = "Nomes de itens do Minecraft";
@@ -87,16 +82,16 @@ $('.item-output').mouseout(function() {
 $(".minecraft-item").mouseover(function(event) {
   $(mcTip).css("display", "block");
   // Sets X position of the tip, considering possible overflow to the right
-  if (window.innerWidth - event.pageX - 17 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
+  if (window.innerWidth - event.pageX - 11 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
 	var x = event.pageX - event.pageX % 2 - $(mcTip).outerWidth(true);  
   } else {
-	var x = event.pageX + 9 - event.pageX % 2;
+	var x = event.pageX + 13 - event.pageX % 2;
   }
   // Sets Y position of the tip, considering possible overflow to the top
-  if (event.pageY - 28 - event.pageY % 2 - breakCount * 22 < $(document).scrollTop()) {
-	  var y = event.pageY + 20 - event.pageY % 2 - $(document).scrollTop();
+  if (event.pageY - 28 - event.pageY % 2 < $(document).scrollTop()) {
+	  var y = event.pageY + 17 - event.pageY % 2 - $(document).scrollTop();
   } else {
-	  var y = event.pageY - 28 - event.pageY % 2 - breakCount * 22 - $(document).scrollTop();
+	  var y = event.pageY - 31 - event.pageY % 2 - $(document).scrollTop();
   }
   $(mcTip).css("left", x);
   $(mcTip).css("top", y);
@@ -104,16 +99,16 @@ $(".minecraft-item").mouseover(function(event) {
 
 $(".minecraft-item").mousemove(function(event) {
   // Sets X position of the tip, considering possible overflow to the right
-  if (window.innerWidth - event.pageX - 17 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
+  if (window.innerWidth - event.pageX - 11 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
 	var x = event.pageX - event.pageX % 2 - $(mcTip).outerWidth(true);  
   } else {
-	var x = event.pageX + 9 - event.pageX % 2;
+	var x = event.pageX + 13 - event.pageX % 2;
   }
   // Sets Y position of the tip, considering possible overflow to the top
-  if (event.pageY - 28 - event.pageY % 2 - breakCount * 22 < $(document).scrollTop()) {
-	  var y = event.pageY + 20 - event.pageY % 2 - $(document).scrollTop();
+  if (event.pageY - 28 - event.pageY % 2 < $(document).scrollTop()) {
+	  var y = event.pageY + 17 - event.pageY % 2 - $(document).scrollTop();
   } else {
-	  var y = event.pageY - 28 - event.pageY % 2 - breakCount * 22 - $(document).scrollTop();
+	  var y = event.pageY - 31 - event.pageY % 2 - $(document).scrollTop();
   }
   $(mcTip).css("left", x);
   $(mcTip).css("top", y);
