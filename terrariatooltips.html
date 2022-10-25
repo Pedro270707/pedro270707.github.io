@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ site.baseurl }}/css/terrariatooltips.css">
+<div id="terraria-tip" class="terraria-tip"><div id="tip-text-line" class="text-line">Nomes de itens do Terraria</div><div id="tip-shadow-line" class="shadow-line">Nomes de itens do Terraria</div></div>
+<div class="website-divider">
+<div id="terraria-text-output" class="terraria-text-output center"><div id="output-text-line" class="text-line">Nomes de itens do Terraria</div><div id="output-shadow-line" class="shadow-line">Nomes de itens do Terraria</div></div>
+<br>
+<div id="item-input" class="item-input">
+	<label for="item-input-upload"><span id="item-input-text">Enviar imagem do item</span>
+	<input type="file" accept="image/*" id="item-input-upload" onchange="updateItem(event);" /></label>
+</div>
+<br>
+	<div id="item-output" class="terraria-item item-output">
+		<img id="output-item" class="output-item" />
+	</div>
+</div>
+<div class="website-divider">
+	<input type="text" placeholder="Nomes de itens do Minecraft" id="terraria-text-input" /><br><br>
+</div>
+<script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="{{ site.baseurl }}/js/terraria-tip.js"></script>

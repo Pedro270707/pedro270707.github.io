@@ -1,0 +1,328 @@
+@font-face {
+	font-family: 'Andy Bold';
+	src: url("/assets/Andy-Bold-Font/Andy-Bold.eot?") format("embedded-opentype"),
+	     url("/assets/Andy-Bold-Font/Andy-Bold.ttf") format("truetype"),
+		 url("/assets/Andy-Bold-Font/Andy-Bold.woff") format("woff"),
+		 url("/assets/Andy-Bold-Font/Andy-Bold.woff2") format("woff2");
+		
+	font-weight: normal;
+}
+
+.shadow-line {
+	color: #3f3f3f;
+}
+
+.empty-line {
+  display: block;
+  content: "";
+  margin-top: 1.625em;
+}
+
+.break {
+  display: block;
+  content: "";
+  margin-top: 0.25em;
+}
+
+.co {
+  font-style: italic;
+}
+
+.c-1 {
+  color: #6a6a68;
+}
+
+.c0 {
+  color: #f4f4f4;
+}
+
+.c1 {
+  color: #8686e5;
+}
+
+.c2 {
+  color: #92f892;
+}
+
+.c3 {
+  color: #e9b688;
+}
+
+.c4 {
+  color: #f49090;
+}
+
+.c5 {
+  color: #f892f8;
+}
+
+.c6 {
+  color: #be90e5;
+}
+
+.c7 {
+  color: #8cf10a;
+}
+
+.c8 {
+  color: #f9f909;
+}
+
+.c9 {
+  color: #04c3f9;
+}
+
+.c10 {
+  color: #ff2864;
+}
+
+.c11 {
+  color: #b227fd;
+}
+
+.c-11 {
+  color: #f1a500;
+}
+
+.c-12 {
+  animation: rainbow 2.7s linear infinite;
+}
+
+.c-13 {
+  animation: fieryred 1s linear infinite;
+}
+
+.item-input {
+	margin-top: 10px;
+	display: inline-block;
+}
+
+.item-input input {
+	position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.item-input label {
+	position: relative;
+	font-family: inherit;
+	font-size: inherit;
+	background-color: var(--button-color);
+	border: none;
+	color: var(--button-text-color);
+	padding: 7px;
+	border-radius: 5px;
+}
+
+.dark-mode .item-input label {
+	background-color: var(--dark-mode-button-color);
+	color: var(--dark-mode-button-text-color);
+}
+
+.item-input label:hover {
+	background-color: var(--button-hover-color);
+	transition: background-color 0.2s;
+}
+
+.dark-mode .item-input label:hover {
+	background-color: var(--dark-mode-button-hover-color);
+}
+
+.item-input label:active {
+	background-color: var(--button-active-color);
+}
+
+.dark-mode .item-input label:active {
+	background-color: var(--dark-mode-button-active-color);
+}
+
+.item-output {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	margin-top: 2em;
+	height: 52px;
+	width: 52px;
+	cursor: url("/assets/terrariatooltips/cursor_2.png"), auto;
+	background-image: url("/assets/terrariatooltips/slot.png");
+}
+
+.output-item {
+	position: relative;
+	max-width: 100%;
+	max-height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.output-item {
+	image-rendering: pixelated;
+}
+
+.terraria-tip, .terraria-text-output {
+	left: 0;
+	top: 0;
+	border: 8px solid;
+    border-image-source: url(/assets/terrariatooltips/tooltip.png);
+    border-image-slice: 8 fill;
+    image-rendering: pixelated;
+	font-family: 'Andy Bold','Comic Sans',sans-serif;
+	font-size: 20px;
+	margin: 0.125em 0.25em;
+	padding: 0 0.375em 0 0.375em;
+	line-height: 1.125em;
+	white-space: nowrap;
+	text-align: left;
+	color: #f4f4f4;
+}
+
+.terraria-tip {
+  position: fixed;
+  z-index: 9999;
+  display: none;
+  color: #ffffff;
+}
+
+.terraria-text-output {
+	position: relative;
+	z-index: 10;
+	display: inline-block;
+	color: #ffffff;
+}
+
+input[type="text"] {
+	width: 500px;
+	height: 40px;
+	max-width: 95%;
+}
+
+.tip-line {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+}
+
+.text-line {
+	position: relative;
+	display: inline-block;
+}
+
+.shadow-line {
+	position: absolute;
+	display: inline-block;
+	top: 0;
+    left: 0.375em;
+    -webkit-text-stroke: 3px black;
+	z-index: -1;
+}
+
+.no-break-space {
+	display: inline-block;
+	width: 0.75em;
+}
+
+@keyframes fieryred {
+	0% {
+		color: #ffc800;
+	}
+	
+	50% {
+		color: #ff0500;
+	}
+	
+	100% {
+		color: #ffc800;
+	}
+}
+
+@keyframes rainbow {
+	0% {
+		color: #70ff00;
+	}
+	3% {
+		color: #29ff00;
+	}
+	7% {
+		color: #00ff1b;
+	}
+	11% {
+		color: #00ff4f;
+	}
+	14% {
+		color: #00ff8d;
+	}
+	18% {
+		color: #01ffc3;
+	}
+	22% {
+		color: #00fffe;
+	}
+	25% {
+		color: #00c7ff;
+	}
+	29% {
+		color: #008fff;
+	}
+	33% {
+		color: #0057ff;
+	}
+	37% {
+		color: #191afe;
+	}
+	40% {
+		color: #3200fa;
+	}
+	44% {
+		color: #5600ff;
+	}
+	48% {
+		color: #8c00ff;
+	}
+	51% {
+		color: #c201ff;
+	}
+	55% {
+		color: #fe00ff;
+	}
+	59% {
+		color: #ff00c9;
+	}
+	62% {
+		color: #ff008e;
+	}
+	66% {
+		color: #ff0056;
+	}
+	70% {
+		color: #ff051a;
+	}
+	74% {
+		color: #ff0700;
+	}
+	77% {
+		color: #ff4e00;
+	}
+	81% {
+		color: #fe8500;
+	}
+	85% {
+		color: #ffbd00;
+	}
+	88% {
+		color: #fff405;
+	}
+	92% {
+		color: #ccff00;
+	}
+	96% {
+		color: #98ff04;
+	}
+	100% {
+		color: #70ff00;
+	}
+}
