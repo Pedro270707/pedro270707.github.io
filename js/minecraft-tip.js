@@ -1,15 +1,16 @@
-var textInput = document.getElementById("minecraft-text-input");
-var itemInputText = document.getElementById("item-input-text");
-var outputItem = document.getElementById('output-item');
-var mcTip = document.getElementById("minecraft-tip");
-var itemGlow = document.getElementById("item-glow");
-var obfuscatedTextManager = document.getElementById("k-manager");
-var tipTextLine = document.getElementById("tip-text-line");
-var tipShadowLine = document.getElementById("tip-shadow-line");
-var outputTextLine = document.getElementById("output-text-line");
-var outputShadowLine = document.getElementById("output-shadow-line");
-
-var breakCount = 0
+const textInput = document.getElementById("minecraft-text-input");
+const itemInputText = document.getElementById("item-input-text");
+const outputItem = document.getElementById("output-item");
+const mcTip = document.getElementById("minecraft-tip");
+const itemGlow = document.getElementById("item-glow");
+const obfuscatedTextManager = document.getElementById("k-manager");
+const tipTextLine = document.getElementById("tip-text-line");
+const tipShadowLine = document.getElementById("tip-shadow-line");
+const outputTextLine = document.getElementById("output-text-line");
+const outputShadowLine = document.getElementById("output-shadow-line");
+const limitKCheckbox = document.getElementById("k-limited");
+const numberKCheckbox = document.getElementById("k-numbers-only");
+const superSecretSettings = document.getElementById("super-secret-settings");
 
 function updateItem(event) {
 	itemInputText.innerHTML = "Alterar imagem do item";
@@ -22,6 +23,51 @@ textInput.onkeyup = function() {
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
 	textOutputFormatted = textOutputFormatted.replace(/&el/g, '§r<br class="empty-line">');
 	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
+	/* while (textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§0)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3")) {
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§0)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3");
+		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3");
+	} */
 	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
 	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
@@ -59,7 +105,27 @@ textInput.onkeyup = function() {
 		outputTextLine.innerHTML = textOutputFormatted;
 		outputShadowLine.innerHTML = textOutputFormatted;
 	}
+	
+	if (textOutputFormatted == 'supersecretsettings') {
+		superSecretSettings.style.display = "block";
+	}
 }
+
+limitKCheckbox.addEventListener('change', () => {
+  if (limitKCheckbox.checked) {
+    numberKCheckbox.disabled = true;
+  } else {
+    numberKCheckbox.disabled = false;
+  }
+});
+
+numberKCheckbox.addEventListener('change', () => {
+  if (numberKCheckbox.checked) {
+    limitKCheckbox.disabled = true;
+  } else {
+    limitKCheckbox.disabled = false;
+  }
+});
 
 $('.slot-item').mouseover(function(event) {
         var $PosTop = $(this).position().top;
@@ -126,14 +192,48 @@ function randomizeText(obftext) {
 	for (var group = 0; group < document.getElementsByClassName("c-k-manager").length; group++) {
 		var length = document.getElementsByClassName("c-k-manager")[group].textContent.length;
 		var result = "";
-		var largeCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyzÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ#$%&"*+-/0123456789<=>?@[\]^_`{}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■';
-		var smallCharacters = "i'!,.:;|¡l";
+		if (limitKCheckbox.checked) {
+			var widthNine = 'æÆ';
+			var widthSeven = 'øØ';
+			var widthSix = '@~«»';
+			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷';
+			var widthFour = 'fk<>°';
+			var widthThree = 'I[]{}()^î*ïîtÍ';
+			var widthTwo = 'íìl'
+			var widthOne = "ı'!,.:;|¡";
+		} else if (numberKCheckbox.checked) {
+			var largeCharacters = '0123456789';
+			var smallCharacters = "i'!,.:;|¡";
+		} else {
+			var largeCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjklmnopqrstuvwxyzÀÁÂÈÊËÍÓÔÕÚßãõğİıŒœŞşŴŵžȇ#$%&"*+-/0123456789<=>?@[\]^_`{}~ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αβΓπΣσμτΦΘΩδ∞∅∈∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■';
+			var smallCharacters = "i'!,.:;|¡";
+		}
 			
 		for (var i = 0; i < length; i++) {
-			if (smallCharacters.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
-				result += smallCharacters.charAt(Math.floor(Math.random() * 9));
+			if (limitKCheckbox.checked) {
+				if (widthNine.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthNine.charAt(Math.floor(Math.random() * widthNine.length));
+				} else if (widthSeven.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthSeven.charAt(Math.floor(Math.random() * widthSeven.length));
+				} else if (widthSix.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthSix.charAt(Math.floor(Math.random() * widthSix.length));
+				} else if (widthFour.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthFour.charAt(Math.floor(Math.random() * widthFour.length));
+				} else if (widthThree.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthThree.charAt(Math.floor(Math.random() * widthThree.length));
+				} else if (widthTwo.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthTwo.charAt(Math.floor(Math.random() * widthTwo.length));
+				} else if (widthOne.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthOne.charAt(Math.floor(Math.random() * widthOne.length));
+				} else {
+					result += widthFive.charAt(Math.floor(Math.random() * widthFive.length));
+				}
 			} else {
-				result += largeCharacters.charAt(Math.floor(Math.random() * 246));
+				if (smallCharacters.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += smallCharacters.charAt(Math.floor(Math.random() * smallCharacters.length));
+				} else {
+					result += largeCharacters.charAt(Math.floor(Math.random() * largeCharacters.length));
+				}
 			}
 		}
 		
