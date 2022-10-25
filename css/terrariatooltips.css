@@ -148,14 +148,15 @@
 	margin-top: 2em;
 	height: 52px;
 	width: 52px;
+	image-rendering: pixelated;
 	cursor: url("/assets/terrariatooltips/cursor_2.png"), auto;
 	background-image: url("/assets/terrariatooltips/slot.png");
 }
 
 .output-item {
 	position: relative;
-	max-width: 100%;
-	max-height: 100%;
+	max-width: 44px;
+	max-height: 44px;
 	top: 0;
 	left: 0;
 }
