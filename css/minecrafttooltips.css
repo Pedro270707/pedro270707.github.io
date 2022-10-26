@@ -421,3 +421,56 @@ input[type="text"] {
 	display: inline-block;
 	width: 0.75em;
 }
+
+.minecraft-background, .minecraft-landscape, .minecraft-background-glow {
+	width: 100%;
+	background-size: 480px;
+	image-rendering: pixelated;
+	z-index: -1;
+}
+
+.minecraft-background {
+	position: relative;
+	height: 100vh;
+	background-color: #bfa7d4;
+	background-image: url("/assets/minecrafttooltips/clouds.png");
+	animation: clouds 30s linear infinite;
+	text-align: center;
+	line-height: 100vh;
+}
+
+.minecraft-landscape {
+	position: absolute;
+	bottom: 0;
+	height: 480px;
+	background-image: url("/assets/minecrafttooltips/background.png");
+}
+
+.minecraft-background-glow {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-image: url("/assets/minecrafttooltips/background_glow.png");
+}
+
+.minecraft-background-text {
+	margin: 0;
+	line-height: 1.5;
+	display: inline-block;
+	vertical-align: middle;
+	color: #ffffff;
+	text-shadow: 0 0 5px #000;
+}
+
+.minecraft-background-text h1 {
+	margin: 0;
+}
+
+@keyframes clouds {
+	0% {
+		background-position: 0;
+	}
+	100% {
+		background-position: 480px;
+	}
+}

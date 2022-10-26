@@ -308,6 +308,13 @@ button:active {
 	object-fit: cover;
 }
 
+.footer {
+	position: relative;
+	bottom: 0;
+	text-align: center;
+	width: 100%;
+}
+
 .hidden {
 	display: none !important;
 }
