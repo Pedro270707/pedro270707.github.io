@@ -199,8 +199,8 @@ function randomizeText(obftext) {
 			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷';
 			var widthFour = 'fk<>°';
 			var widthThree = 'I[]{}()^î*ïîtÍ';
-			var widthTwo = 'íìl'
-			var widthOne = "ı'!,.:;|¡";
+			var widthTwo = 'íìl´`'
+			var widthOne = "ı'!,.:;|¡·";
 		} else if (numberKCheckbox.checked) {
 			var largeCharacters = '0123456789';
 			var smallCharacters = "i'!,.:;|¡";
