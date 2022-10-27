@@ -204,10 +204,12 @@
 	color: #ffffff;
 }
 
-input[type="text"] {
-	width: 500px;
-	height: 40px;
+.terraria-text-input {
+	min-width: 500px;
+	min-height: 80px;
 	max-width: 95%;
+	font-family: var(--default-font-family);
+	padding: 5px;
 }
 
 .tip-line {

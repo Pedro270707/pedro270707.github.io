@@ -18,7 +18,7 @@ function updateItem(event) {
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
-textInput.onkeyup = function() {
+$(document).on('input propertychange', textInput, function () {
 	textOutputFormatted = textInput.value.replace(/</g, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/>/g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
@@ -54,11 +54,11 @@ textInput.onkeyup = function() {
 		outputTextLine.innerHTML = textOutputFormatted;
 		outputShadowLine.innerHTML = textOutputFormatted;
 	}
-}
+});
 
-itemCountInput.onkeyup = function() {
+$(document).on('input propertychange', itemCountInput, function () {
 	itemCount.innerHTML = itemCountInput.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+});
 
 $('.slot-item').mouseover(function(event) {
         var $PosTop = $(this).position().top;

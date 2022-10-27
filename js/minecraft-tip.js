@@ -17,7 +17,7 @@ function updateItem(event) {
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
-textInput.onkeyup = function() {
+$(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
 	textOutputFormatted = textInput.value.replace(/</gi, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
@@ -109,7 +109,7 @@ textInput.onkeyup = function() {
 	if (textOutputFormatted == 'supersecretsettings') {
 		superSecretSettings.style.display = "block";
 	}
-}
+});
 
 limitKCheckbox.addEventListener('change', () => {
   if (limitKCheckbox.checked) {
