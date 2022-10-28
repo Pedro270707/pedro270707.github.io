@@ -8,6 +8,10 @@
 	font-weight: normal;
 }
 
+.terraria-tip, .terraria-text-output {
+	animation: textglow 2s linear infinite;
+}
+
 .shadow-line {
 	color: #3f3f3f;
 }
@@ -30,58 +34,72 @@
 
 .c-1 {
   color: #6a6a68;
+  animation: textglow 2s linear infinite;
 }
 
 .c0 {
   color: #f4f4f4;
+  animation: textglow 2s linear infinite;
 }
 
 .c1 {
   color: #8686e5;
+  animation: textglow 2s linear infinite;
 }
 
 .c2 {
   color: #92f892;
+  animation: textglow 2s linear infinite;
 }
 
 .c3 {
   color: #e9b688;
+  animation: textglow 2s linear infinite;
 }
 
 .c4 {
   color: #f49090;
+  animation: textglow 2s linear infinite;
 }
 
 .c5 {
   color: #f892f8;
+  animation: textglow 2s linear infinite;
 }
 
 .c6 {
   color: #be90e5;
+  animation: textglow 2s linear infinite;
 }
 
 .c7 {
   color: #8cf10a;
+  animation: textglow 2s linear infinite;
 }
 
 .c8 {
   color: #f9f909;
+  animation: textglow 2s linear infinite;
 }
 
 .c9 {
   color: #04c3f9;
+  animation: textglow 2s linear infinite;
 }
 
 .c10 {
   color: #ff2864;
+  animation: textglow 2s linear infinite;
 }
 
 .c11 {
   color: #b227fd;
+  animation: textglow 2s linear infinite;
 }
 
 .c-11 {
   color: #f1a500;
+  animation: textglow 2s linear infinite;
 }
 
 .c-12 {
@@ -181,7 +199,7 @@
     border-image-slice: 8 fill;
     image-rendering: pixelated;
 	font-family: 'Andy Bold','Comic Sans',sans-serif;
-	font-size: 20.5px;
+	font-size: 20px;
 	margin: 0.125em 0.25em;
 	padding: 0 0.375em 0 0.375em;
 	line-height: 1.125em;
@@ -347,5 +365,19 @@
 	}
 	100% {
 		color: #70ff00;
+	}
+}
+
+@keyframes textglow {
+	0% {
+		filter: none;
+	}
+	
+	50% {
+		filter: brightness(0.8);
+	}
+	
+	100% {
+		filter: none;
 	}
 }
