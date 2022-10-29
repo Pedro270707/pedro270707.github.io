@@ -18,7 +18,7 @@ function updateItem(event) {
 }
 
 // Function by Kyrptonaught
-// github.com/Kyrptonaught
+// github.com/kyrptonaught
 function replace(input, beginStr, endStr, match, replaceWith) {
 	let beginIndex = input.indexOf(beginStr);
 	let endIndex = input.indexOf(endStr, beginIndex);
@@ -92,7 +92,7 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m></k>');
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
 
-	if (textOutputFormatted == '') {
+	if (textOutputFormatted == '</span></b></i></n></m></k>') {
 		tipTextLine.innerHTML = "Nomes de itens do Minecraft";
 		tipShadowLine.innerHTML = "Nomes de itens do Minecraft";
 		outputTextLine.innerHTML = "Nomes de itens do Minecraft";
