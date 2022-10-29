@@ -104,7 +104,7 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 		outputShadowLine.innerHTML = textOutputFormatted;
 	}
 	
-	if (textOutputFormatted == 'supersecretsettings') {
+	if (textOutputFormatted == 'supersecretsettings</span></b></i></n></m></k>') {
 		superSecretSettings.style.display = "block";
 	}
 });
