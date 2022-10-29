@@ -17,8 +17,10 @@ function updateItem(event) {
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
-// Function by Kyrptonaught
-// github.com/kyrptonaught
+/*
+ * @author Kyrptonaught
+ * @link github.com/kyrptonaught
+ */
 function replace(input, beginStr, endStr, match, replaceWith) {
 	let beginIndex = input.indexOf(beginStr);
 	let endIndex = input.indexOf(endStr, beginIndex);
