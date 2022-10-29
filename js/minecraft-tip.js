@@ -17,57 +17,55 @@ function updateItem(event) {
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 }
 
+// Function by Kyrptonaught
+// github.com/Kyrptonaught
+function replace(input, beginStr, endStr, match, replaceWith) {
+	let beginIndex = input.indexOf(beginStr);
+	let endIndex = input.indexOf(endStr, beginIndex);
+
+	while (beginIndex > -1 && endIndex > -1) {
+		let matchIndex = input.indexOf(match, beginIndex);
+
+		while (matchIndex > beginIndex && matchIndex < endIndex) {
+			input = input.substring(0, matchIndex) + replaceWith + input.substring(matchIndex + match.length);
+
+			matchIndex = input.indexOf(match, beginIndex);
+		}
+
+
+		beginIndex = input.indexOf(beginStr, endIndex);
+		endIndex = input.indexOf(endStr, beginIndex);
+	}
+	return input;
+}
+	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
 	textOutputFormatted = textInput.value.replace(/</gi, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
 	textOutputFormatted = textOutputFormatted.replace(/&el/g, '§r<br class="empty-line">');
 	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
-	/* while (textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§0)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3") || textOutputFormatted != textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3")) {
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§0)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§1)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§2)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§3)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§4)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§5)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§6)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§7)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§8)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§9)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§a)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§b)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§c)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§d)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§e)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§f)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§g)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§h)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§l)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§m)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§n)(.+?§r)/g, "$1$3");
-		textOutputFormatted = textOutputFormatted.replaceAll(/(§k.+?)(§o)(.+?§r)/g, "$1$3");
-	} */
+	if (!textOutputFormatted.substring(textOutputFormatted.lastIndexOf("§k")).includes("§r")) {
+		textOutputFormatted += "§r"
+	}
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§0", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§1", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§2", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§3", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§4", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§5", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§6", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§7", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§8", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§9", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§a", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§b", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§c", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§d", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§e", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§f", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§g", "");
+	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§h", "");
 	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
 	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
