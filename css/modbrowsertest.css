@@ -1,0 +1,345 @@
+@font-face {
+	font-family: 'Minecraft';
+	src: url("/assets/Minecraft-Font/Minecraft.eot?") format("embedded-opentype"),
+	     url("/assets/Minecraft-Font/Minecraft.ttf") format("truetype"),
+		 url("/assets/Minecraft-Font/Minecraft.woff") format("woff"),
+		 url("/assets/Minecraft-Font/Minecraft.woff2") format("woff2");
+		
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: 'Minecraft';
+	src: url("/assets/Minecraft-Font/Minecraft-Bold.eot?") format("embedded-opentype"),
+	     url("/assets/Minecraft-Font/Minecraft-Bold.ttf") format("truetype"),
+		 url("/assets/Minecraft-Font/Minecraft-Bold.woff") format("woff"),
+		 url("/assets/Minecraft-Font/Minecraft-Bold.woff2") format("woff2");
+		
+	font-weight: bold;
+	font-style: normal;
+}
+
+body {
+	margin: 0;
+	height: 100vh;
+	width: 100vw;
+	position: relative;
+	color: #ffffff;
+	background-color: #000000;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("/assets/modbrowsertest/options_background.png");
+}
+
+body, .top-dirt, .bottom-dirt, .middle-dirt {
+	background-size: 64px;
+	image-rendering: pixelated;
+}
+
+.c-1, .c-2, .c-3, .c-4, .c-5, .c-6, .c-7, .c-8, .c-9, .c-a, .c-b, .c-c, .c-d, .c-e, .c-f, .c-g, .c-h {
+	position: relative;
+	font-family: Minecraft;
+	font-size: initial;
+}
+
+.top-dirt {
+	height: 88px;
+	padding-top: 8px;
+}
+
+.top-dirt p {
+	margin: 0;
+}
+
+.bottom-dirt, .top-dirt {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/assets/modbrowsertest/options_background.png");
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: initial;
+	text-align: center;
+	box-shadow: 0 0 10px #000000;
+}
+
+.bottom-dirt {
+	position: absolute;
+	height: 72px;
+	width: 100vw;
+	bottom: 0;
+	padding-top: 56px;
+	text-align: center;
+}
+
+.bottom-dirt div {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.middle-dirt {
+	position: relative;
+	width: 100vw;
+	height: calc(100vh - 216px);
+	background-image: inherit;
+	padding-top: 4px;
+	overflow: hidden;
+}
+
+.mod {
+	position: relative;
+	width: 90vw;
+	height: 64px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 4px;
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: initial;
+}
+
+.mod, .mod * {
+	user-select: none;
+}
+
+.mod:hover {
+	box-shadow: 0 0 0 2px #9b9b9c inset;
+	background-color: #000000;
+}
+
+.mod img {
+	image-rendering: pixelated;
+	height: 64px;
+	float: left;
+}
+
+.mod-text {
+	display: inline-block;
+	height: 100%;
+	width: calc(100% - 72px);
+	margin-left: 8px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	line-height: 14px;
+}
+
+.mod-text br {
+	display: block;
+    content: '';
+    margin-top: 4px;
+}
+
+.search-box {
+	width: 388px;
+    height: 44px;
+    background-color: #000;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 0 2px #9b9b9c inset;
+    margin-top: 8px;
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: initial;
+	color: #fff;
+	padding-left: 8px;
+	padding-right: 8px;
+	border: none;
+}
+
+.tag-red {
+	background-color: #9c3031;
+	box-shadow: 3px 2px 0 #6e2021, 3px -2px 0 #6e2021, -3px 2px 0 #6e2021, -3px -2px 0 #6e2021;
+}
+
+.tag-green {
+	background-color: #107335;
+	box-shadow: 3px 2px 0 #025339, 3px -2px 0 #025339, -3px 2px 0 #025339, -3px -2px 0 #025339;
+}
+
+.tag-blue {
+	background-color: #2c4b7e;
+	box-shadow: 3px 2px 0 #1f3457, 3px -2px 0 #1f3457, -3px 2px 0 #1f3457, -3px -2px 0 #1f3457;
+}
+
+.tag-red, .tag-green, .tag-blue {
+	text-shadow: none;
+	display: inline-block;
+	height: 18px;
+	padding-left: 8px;
+	padding-right: 8px;
+	margin-right: 8px;
+	margin-top: 2px;
+}
+
+.tag-red span, .tag-green span, .tag-blue span {
+	display: block;
+	margin-top: 0;
+}
+
+.button-small {
+	position: relative;
+	display: inline-block;
+	width: 192px;
+	height: 36px;
+	text-align: center;
+	background-image: url("/assets/modbrowsertest/button_small.png");
+	image-rendering: pixelated;
+	background-size: 192px;
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: initial;
+	padding-top: 4px;
+	user-select: none;
+}
+
+.button-small:hover {
+	background-image: url("/assets/modbrowsertest/button_small_hover.png");
+}
+
+.button-large {
+	position: relative;
+	display: inline-block;
+	width: 288px;
+	height: 36px;
+	text-align: center;
+	background-image: url("/assets/modbrowsertest/button_large.png");
+	image-rendering: pixelated;
+	background-size: 288px;
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: initial;
+	padding-top: 4px;
+	user-select: none;
+}
+
+.button-large:hover {
+	background-image: url("/assets/modbrowsertest/button_large_hover.png");
+}
+
+.c-l {
+  font-weight: bold;
+}
+
+.c-o {
+  font-style: italic;
+}
+
+.c-0 {
+  color: #000000;
+}
+
+.c-1 {
+  color: #0000aa;
+}
+
+.c-2 {
+  color: #00aa00;
+}
+
+.c-3 {
+  color: #00aaaa;
+}
+
+.c-4 {
+  color: #aa0000;
+}
+
+.c-5 {
+  color: #aa00aa;
+}
+
+.c-6 {
+  color: #ffaa00;
+}
+
+.c-6-bedrock {
+  color: #ffaa00;
+}
+
+.c-7 {
+  color: #aaaaaa;
+  text-shadow: 0.125em 0.125em 0 #2a2a2a;
+}
+
+.c-8 {
+  color: #555555;
+}
+
+.c-9 {
+  color: #5555ff;
+}
+
+.c-a {
+  color: #55ff55;
+}
+
+.c-b {
+  color: #55ffff;
+}
+
+.c-c {
+  color: #ff5555;
+}
+
+.c-d {
+  color: #ff55ff;
+}
+
+.c-e {
+  color: #ffff55;
+}
+
+.c-f {
+  color: #ffffff;
+}
+
+.c-g {
+  color: #ddd605;
+}
+
+.c-m {
+	position: relative;
+}
+
+.c-m:after {
+    content: '';
+    display: block;
+    width: calc(100% + 0.125em);
+    height: 0;
+	margin-top: 0.925em;
+    position: absolute;
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+	z-index: 1;
+}
+
+.shadow-line .c-m:after {
+    width: calc(100% + 0.125em);
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+}
+
+.c-m .c-0:after, .c-m .c-1:after, .c-m .c-2:after, .c-m .c-3:after, .c-m .c-4:after, .c-m .c-5:after, .c-m .c-6:after, .c-m .c-7:after, .c-m .c-8:after, .c-m .c-9:after, .c-m .c-a:after, .c-m .c-b:after, .c-m .c-c:after, .c-m .c-d:after, .c-m .c-e:after, .c-m .c-f:after, .c-m .c-g:after, .c-m .c-6-bedrock:after {
+    content: '';
+    display: block;
+    width: calc(100% + 0.125em);
+    height: 0;
+	margin-top: 0.925em;
+    position: absolute;
+    top: 0;
+    left: -0.125em;
+    border-bottom: 0.125em solid;
+	z-index: 2;
+}
+
+.c-n {
+	position: relative;
+	text-decoration: underline 0.125em;
+	text-underline-offset: 0.125em;
+}
+
+.c-n .c-1, .c-n .c-2, .c-n .c-3, .c-n .c-4, .c-n .c-5, .c-n .c-6, .c-n .c-7, .c-n .c-8, .c-n .c-9, .c-n .c-a, .c-n .c-b, .c-n .c-c, .c-n .c-d, .c-n .c-e, .c-n .c-f, .c-n .c-g, .c-n .c-h {
+	text-decoration: underline 0.125em;
+}
+
+.footer {
+	display: none !important;
+}
