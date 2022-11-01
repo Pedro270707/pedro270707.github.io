@@ -49,6 +49,7 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 	textOutputFormatted = textOutputFormatted.replace(/\\/g, '');
 	textOutputFormatted = textOutputFormatted.replace(/&el/g, '§r<br class="empty-line">');
 	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
+	textOutputFormatted = textOutputFormatted.replace(/&/g, '&amp;');
 	if (!textOutputFormatted.substring(textOutputFormatted.lastIndexOf("§k")).includes("§r")) {
 		textOutputFormatted += "§r"
 	}
