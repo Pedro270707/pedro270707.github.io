@@ -1,0 +1,302 @@
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybook.otf?") format("opentype");
+		
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybookitalic.otf?") format("opentype");
+		
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybold.otf?") format("opentype");
+		
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneysemibold.otf?") format("opentype");
+		
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneysemibolditalic.otf?") format("opentype");
+		
+	font-weight: 500;
+	font-style: italic;
+}
+
+body {
+	background-color: #2f3136;
+}
+
+.nitro-background {
+	background-image: linear-gradient(41.27deg,hsl(269,calc(var(--saturation-factor, 1)*52.7%),52.7%) 20.01%,hsl(296,calc(var(--saturation-factor, 1)*50%),51.4%) 56.27%,hsl(325,calc(var(--saturation-factor, 1)*31.7%),51.8%) 92.19%);
+	height: 117px;
+	position: relative;
+	text-align: center;
+}
+
+.nitro-background * {
+	position: absolute;
+}
+
+.nitro-window {
+	position: relative;
+	width: 440px;
+	max-width: 95vw;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	border-radius: 5px;
+	background-color: #36393f;
+	border: 1px solid #171a23;
+	user-select: none;
+}
+
+.nitro-logo {
+	position: absolute;
+	top: 12px;
+	left: 0;
+	height: 20px;
+}
+
+.background-clouds {
+    opacity: .2;
+    background-image: url(https://discord.com/assets/8d2cc61d9f06d4b1fb0e3b15b36b2817.svg);
+	height: 100%;
+	width: 100%;
+}
+
+.clouds {
+    height: 100%;
+	bottom: 0;
+	width: 100%;
+	z-index: 1;
+}
+
+.clouds svg {
+	height: 100%;
+	transform: translateX(-50%);
+}
+
+.background-clouds svg {
+	height: 100%;
+	fill: none;
+	transform: translateX(-50%);
+}
+
+.wumpus {
+	z-index: 1;
+}
+
+.text-block {
+	background-color: inherit;
+	color: inherit; /* hsl(210,2.9%,86.7%); */
+	font-family: inherit;
+	font-weight: normal;
+	font-size: inherit;
+}
+
+.text-block b {
+	font-weight: 500;
+}
+
+button {
+	border: none;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 400;
+	color: inherit;
+	vertical-align: baseline;
+	-webkit-transition: background-color .17s ease,color .17s ease;
+    transition: background-color .17s ease,color .17s ease;
+	border-radius: 3px;
+	cursor: pointer;
+	text-align: center;
+	padding: 0 16px;
+}
+
+.small-button {
+	min-width: 96px;
+    min-height: 38px;
+}
+
+.blue-button {
+	background-color: hsl(234,85%,64%);
+}
+
+.blue-button:hover {
+	background-color: hsl(235,51.4%,52.4%);
+}
+
+.blue-button:active {
+	background-color: #3c45a5;
+}
+
+.blue-button:disabled {
+	background-color: #474f98;
+	color: #9a9c9f;
+	cursor: not-allowed;
+}
+
+.button-red {
+	background-color: #d83c3e;
+}
+
+.button-red:hover {
+	background-color: #a12d2f;
+}
+
+.button-red:active {
+	background-color: hsl(359,56.4%,35.1%);
+}
+
+.button-red:disabled {
+	background-color: #873a3e;
+	color: #9a9c9f;
+	cursor: not-allowed;
+}
+
+.divider {
+	background-color: #42464d;
+	height: 1px;
+    margin: 16px 16px;
+}
+
+.container {
+	padding: 0;
+	font-family: "Whitney","Helvetica Neue","Helvetica","Arial",sans-serif;
+	color: #fff;
+	font-size: 16px;
+}
+
+.container-item > * {
+	padding: 16px;
+}
+
+.link {
+	color: hsl(197,100%,47.8%);
+	text-decoration: none;
+}
+
+.link:hover {
+	text-decoration: underline;
+}
+
+.comment {
+	display: block;
+	color: #b9bbbe;
+	margin-top: 10px;
+	margin-bottom: 8px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.text {
+	user-select: none;
+}
+
+.name {
+	padding: 10px;
+    height: 40px;
+	font-size: 16px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 3px;
+    color: #dcddde;
+    background-color: #202222;
+    border: none;
+    -webkit-transition: border-color .2s ease-in-out;
+    transition: border-color .2s ease-in-out;
+	outline: 0;
+	font-family: inherit;
+}
+
+.name::placeholder {
+	color: #87898c;
+}
+
+.bottom {
+	margin-top: 16px;
+	font-size: inherit;
+	font-family: inherit;
+	color: inherit;
+	background-color: #2f3136;
+}
+
+.creeper-grid {
+	display: grid;
+	position: relative;
+	width: fit-content;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 5px;
+}
+
+.checkbox-container {
+	position: relative;
+	display: block;
+	width: 26px;
+	height: 26px;
+	border-radius: 5px;
+	outline: 0;
+	background-color: #36393f;
+	box-shadow: inset 0 0 0 1px #72767d;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	overflow: hidden;
+}
+
+.checkbox-container input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 24px;
+	width: 24px;
+	margin: 0;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+	opacity: 1;
+}
+
+.checkbox-container input[type="checkbox"]:checked:before {
+	content: '';
+	display: block;
+	opacity: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 26px;
+	height: 26px;
+	border-radius: 5px;
+	background-color: #5865f2;
+	box-shadow: inset 0 0 0 1px #7983f5;
+	background-image: url("/assets/freenitro/checkmark.svg");
+	background-repeat: no-repeat;
+    background-position: 4px;
+}
+
+.align-right {
+	display: block;
+	margin-left: auto;
+}
+
+.hidden {
+	display: none;
+}
