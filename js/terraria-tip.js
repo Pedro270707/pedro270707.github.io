@@ -19,11 +19,14 @@ function updateItem(event) {
 }
 
 $(document).on('input propertychange', textInput, function () {
-	textOutputFormatted = textInput.value.replace(/</g, "&lt;");
-	textOutputFormatted = textOutputFormatted.replace(/>/g, "&gt;");
-	textOutputFormatted = textOutputFormatted.replace(/&br/g, '§r<br class="break">');
-	textOutputFormatted = textOutputFormatted.replace(/&el/g, '§r<br class="empty-line">');
+	textOutputFormatted = textInput.value.replace(/&el/g, '§r<br class="empty-line">');
 	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
+	textOutputFormatted = textOutputFormatted.replace(/&/g, '&amp;');
+	textOutputFormatted = textOutputFormatted.replace(/</gi, "&lt;");
+	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
+	textOutputFormatted = textOutputFormatted.replace(/\\\\/g, '&#92;');
+	textOutputFormatted = textOutputFormatted.replace(/\\n/g, '§r<br class="break">');
+	textOutputFormatted = textOutputFormatted.replace(/\\/g, '');
 	textOutputFormatted = textOutputFormatted.replace(/§a/g, '</span><span class="c-1">');
 	textOutputFormatted = textOutputFormatted.replace(/§b/g, '</span><span class="c0">');
 	textOutputFormatted = textOutputFormatted.replace(/§c/g, '</span><span class="c1">');
