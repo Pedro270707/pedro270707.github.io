@@ -43,10 +43,10 @@ function replace(input, beginStr, endStr, match, replaceWith) {
 	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
 	textOutputFormatted = textInput.value.replace(/&el/g, '§r<br class="empty-line">');
-	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
-	textOutputFormatted = textOutputFormatted.replace(/&/g, '&amp;');
 	textOutputFormatted = textOutputFormatted.replace(/</gi, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
+	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
+	textOutputFormatted = textOutputFormatted.replace(/&/g, '&amp;');
 	textOutputFormatted = textOutputFormatted.replace(/\\\\/g, '&#92;');
 	textOutputFormatted = textOutputFormatted.replace(/\\n/g, '§r<br class="break">');
 	textOutputFormatted = textOutputFormatted.replace(/\\/g, '');
