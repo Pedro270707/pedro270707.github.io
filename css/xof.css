@@ -1,0 +1,100 @@
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybook.otf?") format("opentype");
+		
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybookitalic.otf?") format("opentype");
+		
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneybold.otf?") format("opentype");
+		
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneysemibold.otf?") format("opentype");
+		
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Whitney';
+	src: url("/assets/Whitney-Font/whitneysemibolditalic.otf?") format("opentype");
+		
+	font-weight: 500;
+	font-style: italic;
+}
+
+body {
+	background-color: #2f3136;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.xof-container {
+	position: relative;
+	width: 170px;
+	max-width: 100vw;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	border-radius: 5px;
+	background-color: #36393f;
+	border: 1px solid #171a23;
+	user-select: none;
+	margin: 10px auto;
+	padding: 5px 5px 10px 5px;
+	font-family: "Whitney","Helvetica Neue","Helvetica","Arial",sans-serif;
+	color: #fff;
+	font-size: 16px;
+}
+
+button {
+	border: none;
+	font-family: 'Whitney','Helvetica Neue','Helvetica','Arial',sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	color: #fff;
+	vertical-align: baseline;
+	-webkit-transition: background-color .17s ease,color .17s ease;
+    transition: background-color .17s ease,color .17s ease;
+	border-radius: 3px;
+	cursor: pointer;
+	text-align: center;
+	padding: 0 16px;
+}
+
+.small-button {
+	min-width: 96px;
+    min-height: 38px;
+}
+
+.blue-button {
+	background-color: hsl(234,85%,64%);
+}
+
+.blue-button:hover {
+	background-color: hsl(235,51.4%,52.4%);
+}
+
+.blue-button:active {
+	background-color: #3c45a5;
+}
+
+.blue-button:disabled {
+	background-color: #474f98;
+	color: #9a9c9f;
+	cursor: not-allowed;
+}
