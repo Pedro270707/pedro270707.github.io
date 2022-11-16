@@ -2,7 +2,7 @@ var iterationNumber = 1;
 
 const generateNewXof = function() {
 	iterationNumber += 1;
-	if (iterationNumber != 11 && iterationNumber != 12 && iterationNumber != 13) {
+	if (iterationNumber.slice(-2) != 11 && iterationNumber.slice(-2) != 12 && iterationNumber.slice(-2) != 13) {
 		switch (iterationNumber % 10) {
 			case 1:
 				var iterationOrdinal = "st";
