@@ -5,7 +5,7 @@ if (localStorage.iterationnumber == undefined) {
 	localStorage.iterationnumber = "1";
 }
 
-const generateXof = function(iterationNumber) {
+const generateXof = function(iterationNumber, disableLastButton) {
 	if (iterationNumber.toString().slice(-2) != "11" && iterationNumber.toString().slice(-2) != "12" && iterationNumber.toString().slice(-2) != "13") {
 		switch (parseInt(iterationNumber, 10) % 10) {
 			case 1:
@@ -23,8 +23,10 @@ const generateXof = function(iterationNumber) {
 	} else {
 		var iterationOrdinal = "th";
 	}
-	document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].disabled = true;
-	document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].setAttribute( "onclick", "" );
+	if (disableLastButton) {
+		document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].disabled = true;
+		document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].setAttribute( "onclick", "" );
+	}
 	var newXof = document.createElement("div");
 	newXof.classList.add("xof-container");
 	if (parseInt(iterationNumber, 10) % goldenXof == 0) {
@@ -46,9 +48,13 @@ const generateXof = function(iterationNumber) {
 
 const generateNewXof = function() {
 	localStorage.iterationnumber = String(parseInt(localStorage.iterationnumber, 10) + 1);
-	generateXof(localStorage.iterationnumber);
+	generateXof(localStorage.iterationnumber, true);
 }
 
-for (i = 2; i <= parseInt(localStorage.iterationnumber, 10); i++) {
-	generateXof(i);
+if (parseInt(localStorage.iterationnumber, 10) < 2000) {
+	for (i = 1; i <= parseInt(localStorage.iterationnumber, 10); i++) {
+		generateXof(i);
+	}
+} else {
+	generateXof(parseInt(localStorage.iterationnumber, 10));
 }
