@@ -1,9 +1,13 @@
-var iterationNumber = 1;
+const goldenXof = 5000;
+const arcticXof = 1000;
 
-const generateNewXof = function() {
-	iterationNumber += 1;
+if (localStorage.iterationnumber == undefined) {
+	localStorage.iterationnumber = "1";
+}
+
+const generateXof = function(iterationNumber) {
 	if (iterationNumber.toString().slice(-2) != "11" && iterationNumber.toString().slice(-2) != "12" && iterationNumber.toString().slice(-2) != "13") {
-		switch (iterationNumber % 10) {
+		switch (parseInt(iterationNumber, 10) % 10) {
 			case 1:
 				var iterationOrdinal = "st";
 				break;
@@ -21,6 +25,16 @@ const generateNewXof = function() {
 	}
 	document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].disabled = true;
 	document.getElementsByClassName("xof-button")[document.getElementsByClassName("xof-button").length - 1].setAttribute( "onclick", "" );
+	var newXof = document.createElement("div");
+	newXof.classList.add("xof-container");
+	if (parseInt(iterationNumber, 10) % goldenXof == 0) {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/golden-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
+	} else if (parseInt(iterationNumber, 10) >= arcticXof) {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/arctic-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
+	} else {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration"
+	}
+	document.body.appendChild(newXof);
 	var newButton = document.createElement("button");
 	newButton.classList.add("small-button");
 	newButton.classList.add("blue-button");
@@ -28,8 +42,13 @@ const generateNewXof = function() {
 	newButton.setAttribute( "onClick", "javascript: generateNewXof();" );
 	newButton.innerHTML = "xof";
 	document.body.appendChild(newButton);
-	var newXof = document.createElement("div");
-	newXof.classList.add("xof-container");
-	newXof.innerHTML="<img src=\"/assets/xof/xof.gif\"> The " + iterationNumber + iterationOrdinal + " Iteration"
-	document.body.appendChild(newXof);
+}
+
+const generateNewXof = function() {
+	localStorage.iterationnumber = String(parseInt(localStorage.iterationnumber, 10) + 1);
+	generateXof(localStorage.iterationnumber);
+}
+
+for (i = 2; i <= parseInt(localStorage.iterationnumber, 10); i++) {
+	generateXof(i);
 }

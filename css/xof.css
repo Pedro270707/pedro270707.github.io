@@ -61,6 +61,18 @@ body {
 	font-size: 16px;
 }
 
+.xof-image {
+	width: 160px;
+	height: 160px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.xof-image img {
+	width: 160px;
+	height: auto;
+}
+
 button {
 	border: none;
 	font-family: 'Whitney','Helvetica Neue','Helvetica','Arial',sans-serif;
