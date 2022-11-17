@@ -1,5 +1,8 @@
 const goldenXof = 5000;
-const arcticXof = 1000;
+const redXof = 1000;
+const blueXof = 5000;
+const purpleXof = 10000;
+const arcticXof = 20000;
 
 if (localStorage.iterationnumber == undefined) {
 	localStorage.iterationnumber = "1";
@@ -33,6 +36,12 @@ const generateXof = function(iterationNumber, disableLastButton, disableThisButt
 		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/golden-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
 	} else if (parseInt(iterationNumber, 10) >= arcticXof) {
 		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/arctic-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
+	} else if (parseInt(iterationNumber, 10) >= purpleXof) {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/purple-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
+	} else if (parseInt(iterationNumber, 10) >= blueXof) {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/blue-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
+	} else if (parseInt(iterationNumber, 10) >= redXof) {
+		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/red-xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration";
 	} else {
 		newXof.innerHTML="<div class=\"xof-image\"><img src=\"/assets/xof/xof.gif\"></div> The " + iterationNumber + iterationOrdinal + " Iteration"
 	}
