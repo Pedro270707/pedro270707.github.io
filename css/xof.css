@@ -110,3 +110,30 @@ button {
 	color: #9a9c9f;
 	cursor: not-allowed;
 }
+
+.golden-button {
+	background-color: #f5cc27;
+	background-image: linear-gradient(45deg, transparent 25%, #fffd90 25%, #fffd90 50%, transparent 50%);
+    background-position: -175px;
+	background-repeat: no-repeat;
+    background-size: 230px;
+}
+
+.golden-button:hover {
+	background-color: #f9bd23;
+	animation: buttonshine 0.45s linear 1;
+}
+
+.golden-button:active {
+	background-color: #d39632;
+}
+
+@keyframes buttonshine {
+	0% {
+		background-position: -175px;
+	}
+	
+	100% {
+		background-position: 150px;
+	}
+}

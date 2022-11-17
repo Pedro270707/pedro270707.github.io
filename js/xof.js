@@ -39,7 +39,11 @@ const generateXof = function(iterationNumber, disableLastButton) {
 	document.body.appendChild(newXof);
 	var newButton = document.createElement("button");
 	newButton.classList.add("small-button");
-	newButton.classList.add("blue-button");
+	if (parseInt(iterationNumber, 10) % goldenXof == 0) {
+		newButton.classList.add("golden-button");
+	} else {
+		newButton.classList.add("blue-button");
+	}
 	newButton.classList.add("xof-button");
 	newButton.setAttribute( "onClick", "javascript: generateNewXof();" );
 	newButton.innerHTML = "xof";
