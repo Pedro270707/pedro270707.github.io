@@ -1,3 +1,5 @@
+import html2canvas from "/modules/html2canvas.esm.js";
+
 const textInput = document.getElementById("minecraft-text-input");
 const itemInputText = document.getElementById("item-input-text");
 const outputItem = document.getElementById("output-item");
@@ -42,7 +44,7 @@ function replace(input, beginStr, endStr, match, replaceWith) {
 }
 	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
-	textOutputFormatted = textInput.value.replace(/&el/g, '§r<br class="empty-line">');
+	var textOutputFormatted = textInput.value.replace(/&el/g, '§r<br class="empty-line">');
 	textOutputFormatted = textOutputFormatted.replace(/</gi, "&lt;");
 	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
 	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
@@ -245,4 +247,13 @@ function randomizeText(obftext) {
 		outputTextLine.getElementsByClassName("c-k")[group].innerHTML = result;
 		outputShadowLine.getElementsByClassName("c-k")[group].innerHTML = result;
 	}
+}
+
+document.getElementById('download-tooltip').onclick = function() {
+	html2canvas(document.getElementById('minecraft-text-output-container'), {backgroundColor: null,}).then(function(canvas) {
+		var link = document.createElement('a');
+		link.download = 'Nome do Minecraft.png';
+		link.href = canvas.toDataURL()
+		link.click();
+	});
 }

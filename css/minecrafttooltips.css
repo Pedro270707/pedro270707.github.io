@@ -240,7 +240,7 @@
 	font-size: initial;
 }
 
-.item-input {
+.item-input, .download-tooltip {
 	margin-top: 10px;
 	display: inline-block;
 }
@@ -429,6 +429,11 @@
 
 .minecraft-background-text h1 {
 	margin: 0;
+}
+
+.minecraft-text-output-container {
+	background: none;
+	display: inline-block;
 }
 
 @keyframes clouds {
