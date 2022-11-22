@@ -44,17 +44,19 @@ function replace(input, beginStr, endStr, match, replaceWith) {
 }
 	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
-	var textOutputFormatted = textInput.value.replace(/&el/g, '§r<br class="empty-line">');
-	textOutputFormatted = textOutputFormatted.replace(/</gi, "&lt;");
-	textOutputFormatted = textOutputFormatted.replace(/</g, "&gt;");
-	textOutputFormatted = textOutputFormatted.replace(/&nbsp/g, '§r<div class="no-break-space"></div>');
-	textOutputFormatted = textOutputFormatted.replace(/&/g, '&amp;');
-	textOutputFormatted = textOutputFormatted.replace(/\\\\/g, '&#92;');
-	textOutputFormatted = textOutputFormatted.replace(/\\n/g, '§r<br class="break">');
-	textOutputFormatted = textOutputFormatted.replace(/\\/g, '');
+	var textOutputFormatted = textInput.value.replace(/</gi, "&lt;")
+		.replace(/</g, "&gt;")
+		.replace(/&el/g, '§r<br class="empty-line">')
+		.replace(/&nbsp/g, '§r<div class="no-break-space"></div>')
+		.replace(/&/g, '&amp;')
+		.replace(/\\\\/g, '&#92;')
+		.replace(/\\n/g, '§r<br class="break">')
+		.replace(/\\/g, '');
+	
 	if (!textOutputFormatted.substring(textOutputFormatted.lastIndexOf("§k")).includes("§r")) {
 		textOutputFormatted += "§r"
 	}
+	
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§0", "");
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§1", "");
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§2", "");
@@ -73,30 +75,32 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§f", "");
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§g", "");
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§h", "");
-	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">');
-	textOutputFormatted = textOutputFormatted.replace(/§1/g, '</span><span class="c-1">');
-	textOutputFormatted = textOutputFormatted.replace(/§2/g, '</span><span class="c-2">');
-	textOutputFormatted = textOutputFormatted.replace(/§3/g, '</span><span class="c-3">');
-	textOutputFormatted = textOutputFormatted.replace(/§4/g, '</span><span class="c-4">');
-	textOutputFormatted = textOutputFormatted.replace(/§5/g, '</span><span class="c-5">');
-	textOutputFormatted = textOutputFormatted.replace(/§6/g, '</span><span class="c-6">');
-	textOutputFormatted = textOutputFormatted.replace(/§7/g, '</span><span class="c-7">');
-	textOutputFormatted = textOutputFormatted.replace(/§8/g, '</span><span class="c-8">');
-	textOutputFormatted = textOutputFormatted.replace(/§9/g, '</span><span class="c-9">');
-	textOutputFormatted = textOutputFormatted.replace(/§a/g, '</span><span class="c-a">');
-	textOutputFormatted = textOutputFormatted.replace(/§b/g, '</span><span class="c-b">');
-	textOutputFormatted = textOutputFormatted.replace(/§c/g, '</span><span class="c-c">');
-	textOutputFormatted = textOutputFormatted.replace(/§d/g, '</span><span class="c-d">');
-	textOutputFormatted = textOutputFormatted.replace(/§e/g, '</span><span class="c-e">');
-	textOutputFormatted = textOutputFormatted.replace(/§f/g, '</span><span class="c-f">');
-	textOutputFormatted = textOutputFormatted.replace(/§g/g, '</span><span class="c-g">');
-	textOutputFormatted = textOutputFormatted.replace(/§h/g, '</span><span class="c-6-bedrock">');
-	textOutputFormatted = textOutputFormatted.replace(/§l/g, '<b class="c-l">');
-	textOutputFormatted = textOutputFormatted.replace(/§o/g, '<i class="c-o">');
-	textOutputFormatted = textOutputFormatted.replace(/§n/g, '<n class="c-n">');
-	textOutputFormatted = textOutputFormatted.replace(/§m/g, '<m class="c-m">');
-	textOutputFormatted = textOutputFormatted.replace(/§k/g, '<k class="c-k">');
-	textOutputFormatted = textOutputFormatted.replace(/§r/g, '</span></b></i></n></m></k>');
+	
+	textOutputFormatted = textOutputFormatted.replace(/§0/g, '</span><span class="c-0">')
+		.replace(/§1/g, '</span><span class="c-1">')
+		.replace(/§2/g, '</span><span class="c-2">')
+		.replace(/§3/g, '</span><span class="c-3">')
+		.replace(/§4/g, '</span><span class="c-4">')
+		.replace(/§5/g, '</span><span class="c-5">')
+		.replace(/§6/g, '</span><span class="c-6">')
+		.replace(/§7/g, '</span><span class="c-7">')
+		.replace(/§8/g, '</span><span class="c-8">')
+		.replace(/§9/g, '</span><span class="c-9">')
+		.replace(/§a/g, '</span><span class="c-a">')
+		.replace(/§b/g, '</span><span class="c-b">')
+		.replace(/§c/g, '</span><span class="c-c">')
+		.replace(/§d/g, '</span><span class="c-d">')
+		.replace(/§e/g, '</span><span class="c-e">')
+		.replace(/§f/g, '</span><span class="c-f">')
+		.replace(/§g/g, '</span><span class="c-g">')
+		.replace(/§h/g, '</span><span class="c-6-bedrock">')
+		.replace(/§l/g, '<b class="c-l">')
+		.replace(/§o/g, '<i class="c-o">')
+		.replace(/§n/g, '<n class="c-n">')
+		.replace(/§m/g, '<m class="c-m">')
+		.replace(/§k/g, '<k class="c-k">')
+		.replace(/§r/g, '</span></b></i></n></m></k>');
+	
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
 
 	if (textOutputFormatted == '</span></b></i></n></m></k>') {
@@ -251,9 +255,9 @@ function randomizeText(obftext) {
 
 document.getElementById('download-tooltip').onclick = function() {
 	html2canvas(document.getElementById('minecraft-text-output-container'), {backgroundColor: null,}).then(function(canvas) {
-		var link = document.createElement('a');
+		let link = document.createElement('a');
 		link.download = 'Nome do Minecraft.png';
-		link.href = canvas.toDataURL()
+		link.href = canvas.toDataURL();
 		link.click();
 	});
 }
