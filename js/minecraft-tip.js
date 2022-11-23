@@ -1,9 +1,8 @@
-import html2canvas from "/modules/html2canvas.esm.js";
-
 const textInput = document.getElementById("minecraft-text-input");
 const itemInputText = document.getElementById("item-input-text");
 const outputItem = document.getElementById("output-item");
-const mcTip = document.getElementById("minecraft-tip");
+const mcTip = document.getElementById("minecraft-tip-container");
+// const mcTip = document.getElementById("minecraft-tip");
 const itemGlow = document.getElementById("item-glow");
 const obfuscatedTextManager = document.getElementById("k-manager");
 const tipTextLine = document.getElementById("tip-text-line");
@@ -105,18 +104,20 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
 
 	if (textOutputFormatted == '</span></b></i></n></m></k>') {
-		tipTextLine.innerHTML = "Nomes de itens do Minecraft";
-		tipShadowLine.innerHTML = "Nomes de itens do Minecraft";
-		outputTextLine.innerHTML = "Nomes de itens do Minecraft";
-		outputShadowLine.innerHTML = "Nomes de itens do Minecraft";
+		tipTextLine.innerHTML
+		= tipShadowLine.innerHTML
+		= outputTextLine.innerHTML
+		= outputShadowLine.innerHTML
+		= "Nomes de itens do Minecraft";
 	} else {
-		tipTextLine.innerHTML = textOutputFormatted;
-		tipShadowLine.innerHTML = textOutputFormatted;
-		outputTextLine.innerHTML = textOutputFormatted;
-		outputShadowLine.innerHTML = textOutputFormatted;
+		tipTextLine.innerHTML
+		= tipShadowLine.innerHTML
+		= outputTextLine.innerHTML
+		= outputShadowLine.innerHTML
+		= textOutputFormatted;
 	}
 	
-	if (textOutputFormatted == 'supersecretsettings</span></b></i></n></m></k>') {
+	if (textInput.value.trim() == 'supersecretsettings') {
 		superSecretSettings.style.display = "block";
 	}
 });
@@ -255,13 +256,20 @@ function randomizeText(obftext) {
 }
 
 function downloadTooltip(canvasScale = 1) {
-	html2canvas(document.getElementById('minecraft-text-output-container'), {backgroundColor: null, scale: canvasScale}).then(function(canvas) {
-		let link = document.createElement('a');
-		var today = new Date();
+	$('#minecraft-output-border').css("left", "calc(" + (canvasScale - 1) * 50 + "% + 2px)");
+	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * canvasScale, height: document.getElementById('minecraft-text-output-container').clientHeight * canvasScale, style: {transform: 'scale(' + canvasScale + ')', transformOrigin: 'top center'}, quality: 1.0})
+    .then(function (dataUrl) {
+        let link = document.createElement('a');
+		let today = new Date();
 		link.download = 'Nome do Minecraft ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-		link.href = canvas.toDataURL();
+		link.href = dataUrl;
 		link.click();
-	});
+		$('#minecraft-output-border').css("left", "2px");
+    })
+    .catch(function (error) {
+        console.error('Algo deu errado na geração da imagem', error);
+		$('#minecraft-output-border').css("left", "2px");
+    });
 }
 
 document.getElementById('download-tooltip').onclick = function() {
@@ -270,5 +278,6 @@ document.getElementById('download-tooltip').onclick = function() {
 	} else if (parseInt(tooltipResolution.value, 10) > 50) {
 		tooltipResolution.value = 50;
 	}
+	downloadTooltip(Math.round(document.getElementById('tooltip-resolution').value));
 	downloadTooltip(document.getElementById('tooltip-resolution').value);
 }
