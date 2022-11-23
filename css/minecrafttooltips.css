@@ -444,3 +444,23 @@
 		background-position: 480px;
 	}
 }
+
+.tooltip-resolution, .tooltip-resolution-fake {
+	display: inline-block;
+}
+
+.tooltip-resolution-fake {
+	width: 40px;
+}
+
+.tooltip-resolution {
+	position: absolute;
+	right: 30px;
+	top: 40%;
+	width: 30px;
+}
+
+.download-tooltip-wrapper {
+	position: relative;
+	display: inline-block;
+}

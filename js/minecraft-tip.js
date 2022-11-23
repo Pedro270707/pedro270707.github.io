@@ -13,6 +13,7 @@ const outputShadowLine = document.getElementById("output-shadow-line");
 const limitKCheckbox = document.getElementById("k-limited");
 const numberKCheckbox = document.getElementById("k-numbers-only");
 const superSecretSettings = document.getElementById("super-secret-settings");
+const tooltipResolution = document.getElementById('tooltip-resolution');
 
 function updateItem(event) {
 	itemInputText.innerHTML = "Alterar imagem do item";
@@ -253,11 +254,21 @@ function randomizeText(obftext) {
 	}
 }
 
-document.getElementById('download-tooltip').onclick = function() {
-	html2canvas(document.getElementById('minecraft-text-output-container'), {backgroundColor: null,}).then(function(canvas) {
+function downloadTooltip(canvasScale = 1) {
+	html2canvas(document.getElementById('minecraft-text-output-container'), {backgroundColor: null, scale: canvasScale}).then(function(canvas) {
 		let link = document.createElement('a');
-		link.download = 'Nome do Minecraft.png';
+		var today = new Date();
+		link.download = 'Nome do Minecraft ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
 		link.href = canvas.toDataURL();
 		link.click();
 	});
+}
+
+document.getElementById('download-tooltip').onclick = function() {
+	if (tooltipResolution.value == '' || parseInt(tooltipResolution.value, 10) < 1) {
+		tooltipResolution.value = 1;
+	} else if (parseInt(tooltipResolution.value, 10) > 50) {
+		tooltipResolution.value = 50;
+	}
+	downloadTooltip(document.getElementById('tooltip-resolution').value);
 }
