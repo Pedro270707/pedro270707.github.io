@@ -21,7 +21,11 @@
 	<body>
 		{{ content }}
 		<div class="footer">
-			<p class="minor">[criado por Pedro270707]</p>
+			<div class="footer-language-select">
+				<a href="#" onclick="localStorage.language = 'en'; reloadLanguage();">English</a> 
+				<a href="#" onclick="localStorage.language = 'pt'; reloadLanguage();">Português</a>
+			</div>
+			<p class="minor" data-string="footer-text">[criado por Pedro270707]</p>
 		</div>
 	</body>
 	<script src="{{ site.baseurl }}/js/dark-mode.js"></script>

@@ -343,6 +343,10 @@ body {
 	width: 100%;
 }
 
+.footer-language-select {
+	margin-top: 10px;
+}
+
 @media (any-pointer: coarse) {
 	:root {
 		--default-font-size: 5vw;

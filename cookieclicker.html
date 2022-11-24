@@ -13,12 +13,23 @@ title: "Cookie Clicker"
 </div>
 <div class="website-divider">
 	<div class="cookie-wrapper center"><div class="cookie" onclick="cookieClicked();"><img src="{{ site.baseurl }}/assets/cookieclicker/cookie.png" draggable="false"></div></div>
-	<div id="cookie-counter">0 cookie</div>
+	<div id="cookie-counter">0 <span id="cookie-counter-word" data-string="cookieclicker-zerocookies">cookie</span></div>
 </div>
 <div class="website-divider">
-	<button id="hire-worker" onclick="hireWorker();" class="button"><span id="hire-worker-text">Contratar funcionário por 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<button id="hire-worker" onclick="hireWorker();" class="button"><span id="hire-worker-text"><span data-string="cookieclicker-hireworkerbutton">Contratar funcionário por</span> 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
 	<div id="worker-counter">0 funcionário</div>
-	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text">Melhorar cursor por 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
-	<div id="clicker-level-counter">Cursor nível 1</div>
+	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text"><span data-string="cookieclicker-clickerlevelbutton">Melhorar cursor por</span> 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="clicker-level-counter"><span data-string="cookieclicker-clickerlevelbefore"></span>1<span data-string="cookieclicker-clickerlevelafter"></span></div>
 </div>
-	<script src="{{ site.baseurl }}/js/cookieclicker.js"></script>
+<script src="{{ site.baseurl }}/js/translate.js"></script>
+<script src="{{ site.baseurl }}/js/cookieclicker.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(e) {
+    var translate = new Translate();
+    var currentLng = localStorage.language;
+    var attributeName = 'data-string';
+	var placeholderAttributeName = 'data-placeholder';
+    translate.init(attributeName, placeholderAttributeName, currentLng);
+    translate.process(); 
+});
+</script>

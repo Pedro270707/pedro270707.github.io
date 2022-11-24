@@ -298,6 +298,7 @@
 	font-size: 16px;
 	user-select: none;
 	line-height: 0;
+	white-space: nowrap;
 }
 
 .minecraft-tip, .minecraft-text-output {
