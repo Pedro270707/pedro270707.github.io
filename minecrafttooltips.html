@@ -20,10 +20,6 @@ title: "Itens do Minecraft"
 <div id="minecraft-text-output-container" class="minecraft-text-output-container center">
 	<div id="minecraft-text-output" class="minecraft-text-output center"><div id="output-text-line" class="text-line">Nomes de itens do Minecraft</div><div id="output-shadow-line" class="shadow-line">Nomes de itens do Minecraft</div></div>
 	<div class="minecraft-output-border center" id="minecraft-output-border"></div>
-	<!--<div class="minecraft-output-border-left"></div>
-	<div class="minecraft-output-border-bottom"></div>
-	<div class="minecraft-output-border-top"></div>
-	<div class="minecraft-output-border-right"></div>-->
 </div>
 <br>
 <div class="download-tooltip-wrapper">
@@ -50,18 +46,20 @@ title: "Itens do Minecraft"
 		C92.859,147.631,111.855,147.631,123.57,135.915z"/>
 </g>
 </svg> Enviar imagem do item</span>
-	<input type="file" accept="image/*" id="item-input-upload" onchange="updateItem(event);" /></label>
+	<input type="file" accept="image/*" id="item-input-upload" /></label>
 </div>
 <br>
 	<div id="item-output" class="minecraft-item item-output">
 		<img src="{{ site.baseurl }}/assets/minecrafttooltips/minecraft_slot.png" class="output-slot">
 		<img id="output-item" class="output-item" />	
 		<div id="item-glow" class="item-glow minecraft-item"></div>
+		<div id="item-count" class="item-count minecraft-item"></div>
 	</div><br>
 	<span class="checkbox-container"><input type="checkbox" id="k-limited" name="k-limited" value="k-limited" /></span><label for="k-limited"> Usar somente caracteres de mesma largura no §k</label>
 </div>
 <div class="website-divider">
-	<textarea placeholder="Nomes de itens do Minecraft" id="minecraft-text-input" name="Texto do Minecraft" class="minecraft-text-input"></textarea><br><br>
+	<textarea placeholder="Nomes de itens do Minecraft" id="minecraft-text-input" name="Texto do Minecraft" class="minecraft-text-input"></textarea><br>
+	<textarea placeholder="Número de itens" id="item-count-input" name="Número de itens" class="minecraft-text-input"></textarea><br><br>
 	<div id="super-secret-settings" class="center" style="display: none;">
 		<span class="checkbox-container"><input type="checkbox" id="k-numbers-only" name="k-numbers-only" value="k-numbers-only" /></span><label for="k-numbers-only"> Usar somente números no §k</label>
 	</div>

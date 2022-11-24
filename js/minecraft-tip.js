@@ -1,8 +1,9 @@
 const textInput = document.getElementById("minecraft-text-input");
+const itemCountInput = document.getElementById("item-count-input");
 const itemInputText = document.getElementById("item-input-text");
 const outputItem = document.getElementById("output-item");
 const mcTip = document.getElementById("minecraft-tip-container");
-// const mcTip = document.getElementById("minecraft-tip");
+const itemCount = document.getElementById("item-count");
 const itemGlow = document.getElementById("item-glow");
 const obfuscatedTextManager = document.getElementById("k-manager");
 const tipTextLine = document.getElementById("tip-text-line");
@@ -14,10 +15,10 @@ const numberKCheckbox = document.getElementById("k-numbers-only");
 const superSecretSettings = document.getElementById("super-secret-settings");
 const tooltipResolution = document.getElementById('tooltip-resolution');
 
-function updateItem(event) {
+document.getElementById("item-input-upload").addEventListener('change', function(event) {
 	itemInputText.innerHTML = "Alterar imagem do item";
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
-}
+});
 
 /*
  * @author Kyrptonaught
@@ -120,6 +121,12 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 	if (textInput.value.trim() == 'supersecretsettings') {
 		superSecretSettings.style.display = "block";
 	}
+});
+
+$(document).on('input propertychange', "textarea[name='Número de itens']", function () {
+	itemCount.innerHTML = itemCountInput.value.replace(/</gi, "&lt;")
+		.replace(/</g, "&gt;")
+		.replace(/&/g, "&amp;");
 });
 
 limitKCheckbox.addEventListener('change', () => {
@@ -281,3 +288,4 @@ document.getElementById('download-tooltip').onclick = function() {
 	downloadTooltip(Math.round(document.getElementById('tooltip-resolution').value));
 	downloadTooltip(document.getElementById('tooltip-resolution').value);
 }
+

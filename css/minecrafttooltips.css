@@ -237,7 +237,7 @@
 .c-1, .c-2, .c-3, .c-4, .c-5, .c-6, .c-7, .c-8, .c-9, .c-a, .c-b, .c-c, .c-d, .c-e, .c-f, .c-g, .c-h {
 	position: relative;
 	font-family: Minecraft;
-	font-size: initial;
+	font-size: 16px;
 }
 
 .item-input, .download-tooltip {
@@ -288,6 +288,18 @@
 	z-index: 2;
 }
 
+.item-count {
+	position: absolute;
+	right: 0;
+	bottom: 0.7em;
+	font-family: Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif;
+	color: #ffffff;
+	text-shadow: 0.125em 0.125em 0 #3f3f3f;
+	font-size: 16px;
+	user-select: none;
+	line-height: 0;
+}
+
 .minecraft-tip, .minecraft-text-output {
 	left: 0;
 	top: 0;
@@ -299,7 +311,7 @@
 	padding: 0 0.375em 0.375em 0.375em;
 	line-height: 1.125em;
 	white-space: nowrap;
-	font-size: initial;
+	font-size: 16px;
 	text-align: left;
 }
 
