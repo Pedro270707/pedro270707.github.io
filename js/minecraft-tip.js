@@ -14,9 +14,10 @@ const limitKCheckbox = document.getElementById("k-limited");
 const numberKCheckbox = document.getElementById("k-numbers-only");
 const superSecretSettings = document.getElementById("super-secret-settings");
 const tooltipResolution = document.getElementById('tooltip-resolution');
+const itemResolution = document.getElementById('item-resolution');
 
 document.getElementById("item-input-upload").addEventListener('change', function(event) {
-	itemInputText.innerHTML = "Alterar imagem do item";
+	itemInputText.innerHTML = "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 374.116 374.116\" style=\"enable-background:new 0 0 374.116 374.116; fill: currentColor; width: 16px; vertical-align: -2px;\" xml:space=\"preserve\"><g><path d=\"M344.058,207.506c-16.568,0-30,13.432-30,30v76.609h-254v-76.609c0-16.568-13.432-30-30-30c-16.568,0-30,13.432-30,30v106.609c0,16.568,13.432,30,30,30h314c16.568,0,30-13.432,30-30V237.506C374.058,220.938,360.626,207.506,344.058,207.506z\"/><path d=\"M123.57,135.915l33.488-33.488v111.775c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30V102.426l33.488,33.488c5.857,5.858,13.535,8.787,21.213,8.787c7.678,0,15.355-2.929,21.213-8.787c11.716-11.716,11.716-30.71,0-42.426L208.271,8.788c-11.715-11.717-30.711-11.717-42.426,0L81.144,93.489c-11.716,11.716-11.716,30.71,0,42.426C92.859,147.631,111.855,147.631,123.57,135.915z\"/></g></svg> Alterar imagem do item";
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 });
 
@@ -279,12 +280,42 @@ function downloadTooltip(canvasScale = 1) {
     });
 }
 
-document.getElementById('download-tooltip').onclick = function() {
-	if (tooltipResolution.value == '' || parseInt(tooltipResolution.value, 10) < 1) {
-		tooltipResolution.value = 1;
-	} else if (parseInt(tooltipResolution.value, 10) > 50) {
-		tooltipResolution.value = 50;
+function downloadItem(canvasScale = 1) {
+	$('#output-item').css("left", "calc(" + (canvasScale - 1) * 50 + "% + 2px)");
+	/*$('#item-count').css("transform", "translateX(calc(" + (canvasScale - 1) * 50 + "% + 2px))");*/
+	$('#item-count').css("right", "calc(-" + (canvasScale - 1) * 50 + "%");
+	domtoimage.toPng(document.getElementById('item-output'), {width: document.getElementById('item-output').clientWidth * canvasScale, height: document.getElementById('item-output').clientHeight * canvasScale, style: {transform: 'scale(' + canvasScale + ')', transformOrigin: 'top center', marginTop: '0'}, quality: 1.0})
+    .then(function (dataUrl) {
+        let link = document.createElement('a');
+		let today = new Date();
+		link.download = 'Item do Minecraft ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+		link.href = dataUrl;
+		link.click();
+		$('#output-item').css("left", "2px");
+		$('#item-count').css("right", "0");
+    })
+    .catch(function (error) {
+        console.error('Algo deu errado na geração da imagem', error);
+		$('#output-item').css("left", "2px");
+		$('#item-count').css("right", "0");
+    });
+}
+
+var fixResolution = function(resolution) {
+	if (resolution.value == '' || parseInt(resolution.value, 10) < 1) {
+		resolution.value = 1;
+	} else if (parseInt(resolution.value, 10) > 50) {
+		resolution.value = 50;
 	}
-	downloadTooltip(Math.round(document.getElementById('tooltip-resolution').value));
+}
+
+document.getElementById('download-tooltip').onclick = function() {
+	fixResolution(tooltipResolution);
+	downloadTooltip(Math.round(tooltipResolution.value));
+}
+
+document.getElementById('download-item').onclick = function() {
+	fixResolution(itemResolution);
+	downloadItem(Math.round(itemResolution.value));
 }
 
