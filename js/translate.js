@@ -1,9 +1,12 @@
 const urlParams = new URLSearchParams(window.location.search);
 switch (urlParams.get('lang')) {
+	case 'en-us':
+	case 'en-uk':
 	case 'en':
 		localStorage.language = 'en';
 		break;
 	case 'br':
+	case 'pt-br':
 	case 'pt':
 		localStorage.language = 'pt';
 		break;
