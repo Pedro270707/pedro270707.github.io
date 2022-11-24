@@ -57,7 +57,7 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 		.replace(/\\/g, '');
 	
 	if (!textOutputFormatted.substring(textOutputFormatted.lastIndexOf("§k")).includes("§r")) {
-		textOutputFormatted += "§r"
+		textOutputFormatted += "§r";
 	}
 	
 	textOutputFormatted = replace(textOutputFormatted, "§k", "§r", "§0", "");
@@ -111,7 +111,7 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 		= tipShadowLine.innerHTML
 		= outputTextLine.innerHTML
 		= outputShadowLine.innerHTML
-		= translate.getKey('minecrafttooltips-defaulttooltip');
+		= "<span data-string=\"minecrafttooltips-defaulttooltip\">" + translate.getKey('minecrafttooltips-defaulttooltip') + "</span>";
 	} else {
 		tipTextLine.innerHTML
 		= tipShadowLine.innerHTML
@@ -208,7 +208,7 @@ setInterval(function() {
   randomizeText();
 }, 50);
 
-function randomizeText(obftext) {
+function randomizeText() {
 	for (var group = 0; group < document.getElementsByClassName("c-k-manager").length; group++) {
 		var length = document.getElementsByClassName("c-k-manager")[group].textContent.length;
 		var result = "";
@@ -257,10 +257,11 @@ function randomizeText(obftext) {
 			}
 		}
 		
-		tipTextLine.getElementsByClassName("c-k")[group].innerHTML = result;
-		tipShadowLine.getElementsByClassName("c-k")[group].innerHTML = result;
-		outputTextLine.getElementsByClassName("c-k")[group].innerHTML = result;
-		outputShadowLine.getElementsByClassName("c-k")[group].innerHTML = result;
+		tipTextLine.getElementsByClassName("c-k")[group].innerHTML
+		= tipShadowLine.getElementsByClassName("c-k")[group].innerHTML
+		= outputTextLine.getElementsByClassName("c-k")[group].innerHTML
+		= outputShadowLine.getElementsByClassName("c-k")[group].innerHTML
+		= result;
 	}
 }
 
@@ -283,7 +284,6 @@ function downloadTooltip(canvasScale = 1) {
 
 function downloadItem(canvasScale = 1) {
 	$('#output-item').css("left", "calc(" + (canvasScale - 1) * 50 + "% + 2px)");
-	/*$('#item-count').css("transform", "translateX(calc(" + (canvasScale - 1) * 50 + "% + 2px))");*/
 	$('#item-count').css("right", "calc(-" + (canvasScale - 1) * 50 + "%");
 	domtoimage.toPng(document.getElementById('item-output'), {width: document.getElementById('item-output').clientWidth * canvasScale, height: document.getElementById('item-output').clientHeight * canvasScale, style: {transform: 'scale(' + canvasScale + ')', transformOrigin: 'top center', marginTop: '0'}, quality: 1.0})
     .then(function (dataUrl) {
