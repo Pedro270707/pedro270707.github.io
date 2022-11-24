@@ -76,6 +76,10 @@ function Translate() {
 	}
 }
 
+function getKeyWrapped(key) {
+	return "<span data-string=\"" + key + "\">" + new Translate().getKey(key) + "</span>";
+}
+
 function reloadLanguage() {
 	var translate = new Translate();
     var currentLng = localStorage.language;
