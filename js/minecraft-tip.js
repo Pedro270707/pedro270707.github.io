@@ -286,6 +286,5 @@ document.getElementById('download-tooltip').onclick = function() {
 		tooltipResolution.value = 50;
 	}
 	downloadTooltip(Math.round(document.getElementById('tooltip-resolution').value));
-	downloadTooltip(document.getElementById('tooltip-resolution').value);
 }
 
