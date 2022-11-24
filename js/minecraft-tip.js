@@ -213,7 +213,7 @@ function randomizeText(obftext) {
 		var result = "";
 		if (limitKCheckbox.checked) {
 			var widthNine = 'æÆ';
-			var widthSeven = 'øØ';
+			var widthSeven = 'øØ∞';
 			var widthSix = '@~«»';
 			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷';
 			var widthFour = 'fk<>°';
