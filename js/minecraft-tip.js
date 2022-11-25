@@ -47,11 +47,11 @@ function replace(input, beginStr, endStr, match, replaceWith) {
 }
 	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
-	var textOutputFormatted = textInput.value.replace(/</gi, "&lt;")
-		.replace(/</g, "&gt;")
-		.replace(/&el/g, '§r<br class="empty-line">')
-		.replace(/&nbsp/g, '§r<div class="no-break-space"></div>')
-		.replace(/&/g, '&amp;')
+	var textOutputFormatted = textInput.value.replace(/&/g, '&amp;')
+		.replace(/</gi, "&lt;")
+		.replace(/>/gi, "&gt;")
+		.replace(/&amp;el/g, '§r<br class="empty-line">')
+		.replace(/&amp;nbsp/g, '§r<div class="no-break-space"></div>')
 		.replace(/\\\\/g, '&#92;')
 		.replace(/\\n/g, '§r<br class="break">')
 		.replace(/\\/g, '');
@@ -204,7 +204,7 @@ $(".minecraft-item").mouseout(function(event) {
   $(mcTip).css("display", "none");
 });
 
-setInterval(function() {
+var randomizeTextInterval = setInterval(function() {
   randomizeText();
 }, 50);
 
@@ -214,11 +214,12 @@ function randomizeText() {
 		var result = "";
 		if (limitKCheckbox.checked) {
 			var widthNine = 'æÆ';
-			var widthSeven = 'øØ∞';
-			var widthSix = '@~«»';
-			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷';
-			var widthFour = 'fk<>°';
-			var widthThree = '¨I[]{}()^î*ïîtÍ';
+			var widthEight = '░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀'
+			var widthSeven = 'øØ∞∅⌠⌡∙';
+			var widthSix = '@~«»≡≈√';
+			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷∈≥≤';
+			var widthFour = 'fk<>°ⁿ⁰²³⁴⁵⁶⁷⁸⁹';
+			var widthThree = '¨I[]{}()^î*ïîtÍ¹';
 			var widthTwo = 'íìl´`'
 			var widthOne = "iı'!,.:;|¡·";
 		} else if (numberKCheckbox.checked) {
@@ -313,6 +314,7 @@ var resize = function(img,scale,id){
 }
 
 function downloadTooltip(canvasScale = 1) {
+	clearInterval(randomizeTextInterval);
 	$('#minecraft-output-border').css("left", "calc(1200% + 2px)");
 	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * 25, height: document.getElementById('minecraft-text-output-container').clientHeight * 25, style: {transform: 'scale(25)', transformOrigin: 'top center'}, quality: 1.0})
     .then(function (dataUrl) {
@@ -327,10 +329,16 @@ function downloadTooltip(canvasScale = 1) {
 		}
 		img.src = dataUrl;
 		$('#minecraft-output-border').css("left", "2px");
+		randomizeTextInterval = setInterval(function() {
+			randomizeText();
+		}, 50);
     })
     .catch(function (error) {
         console.error('Algo deu errado na geração da imagem', error);
 		$('#minecraft-output-border').css("left", "2px");
+		randomizeTextInterval = setInterval(function() {
+			randomizeText();
+		}, 50);
     });
 }
 
