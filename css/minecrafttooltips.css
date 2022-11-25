@@ -314,6 +314,18 @@
 	white-space: nowrap;
 	font-size: 16px;
 	text-align: left;
+	font-smooth: never;
+	-webkit-font-smoothing: none;
+	filter: url(#crispify);
+}
+
+.offscreen {
+    position: absolute;
+    left: -100000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
 .minecraft-tip-container {
@@ -371,6 +383,10 @@
     left: 0.5em;
     top: 0.125em;
     z-index: -1;
+}
+
+.text-line, .shadow-line, .item-count {
+	filter: url(#crispify);
 }
 
 .c-m .shadow, .c-n .shadow-line {
