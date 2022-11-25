@@ -315,12 +315,12 @@ var resize = function(img,scale,id){
 
 function downloadTooltip(canvasScale = 1) {
 	clearInterval(randomizeTextInterval);
-	$('#minecraft-output-border').css("left", "calc(1200% + 2px)");
-	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * 25, height: document.getElementById('minecraft-text-output-container').clientHeight * 25, style: {transform: 'scale(25)', transformOrigin: 'top center'}, quality: 1.0})
+	$('#minecraft-output-border').css("left", "calc(950% + 2px)");
+	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * 20, height: document.getElementById('minecraft-text-output-container').clientHeight * 20, style: {transform: 'scale(20)', transformOrigin: 'top center'}, quality: 1.0})
     .then(function (dataUrl) {
 		var img = new Image;
 		img.onload = function() {
-			let resizedImg = resize(resize(img, 0.04, 'canvasResized'), canvasScale, 'canvasResized');
+			let resizedImg = resize(resize(img, 0.05, 'canvasResized'), canvasScale, 'canvasResized');
 			let link = document.createElement('a');
 			let today = new Date();
 			link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';

@@ -10,6 +10,9 @@ switch (urlParams.get('lang')) {
 	case 'pt':
 		localStorage.language = 'pt';
 		break;
+	case 'sl':
+		localStorage.language = 'sl';
+		break;
 }
 
 if (localStorage.language == undefined) {
