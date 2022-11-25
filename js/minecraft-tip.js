@@ -265,15 +265,67 @@ function randomizeText() {
 	}
 }
 
+var resize = function(img,scale,id){
+
+  var zoom=parseInt(img.zoom*scale);
+  if(zoom<1){
+    console.log('Cannot recale image to less than original size');
+    return;
+  }
+
+  // get the pixels from the original img using a canvas
+  var c1=document.createElement('canvas');
+  var cw1=c1.width=img.width;
+  var ch1=c1.height=img.height;
+  var ctx1=c1.getContext('2d');
+  ctx1.drawImage(img,0,0);
+  var imgData1=ctx1.getImageData(0,0,cw1,ch1);
+  var data1=imgData1.data;
+
+  // create a canvas to hold the resized pixels
+  var c2=document.createElement('canvas');
+  c2.id=id;
+  c2.zoom=zoom;
+  var cw2=c2.width=cw1*scale;
+  var ch2=c2.height=ch1*scale;
+  var ctx2=c2.getContext('2d');
+  var imgData2=ctx2.getImageData(0,0,cw2,ch2);
+  var data2=imgData2.data;
+
+  // copy each source pixel from c1's data1 into the c2's data2
+  for(var y = 0; y/2<ch2; y += 2) {
+    for(var x = 0; x/2<cw2; x += 2) {
+      var i1=(Math.floor(((y+1)/scale)/2)*cw1+Math.floor(((x+1)/scale)/2))*4;
+      var i2 =((y/2)*cw2+(x/2))*4;            
+      data2[i2]   = data1[i1];
+      data2[i2+1] = data1[i1+1];
+      data2[i2+2] = data1[i1+2];
+      data2[i2+3] = data1[i1+3];
+	  console.log(x + " " + y);
+    }
+  }
+
+  // put the modified pixels back onto c2
+  ctx2.putImageData(imgData2,0,0);
+
+  // return the canvas with the zoomed pixels
+  return(c2);
+}
+
 function downloadTooltip(canvasScale = 1) {
-	$('#minecraft-output-border').css("left", "calc(" + (canvasScale - 1) * 50 + "% + 2px)");
-	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * canvasScale, height: document.getElementById('minecraft-text-output-container').clientHeight * canvasScale, style: {transform: 'scale(' + canvasScale + ')', transformOrigin: 'top center'}, quality: 1.0})
+	$('#minecraft-output-border').css("left", "calc(1200% + 2px)");
+	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * 25, height: document.getElementById('minecraft-text-output-container').clientHeight * 25, style: {transform: 'scale(25)', transformOrigin: 'top center'}, quality: 1.0})
     .then(function (dataUrl) {
-        let link = document.createElement('a');
-		let today = new Date();
-		link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-		link.href = dataUrl;
-		link.click();
+		var img = new Image;
+		img.onload = function() {
+			let resizedImg = resize(resize(img, 0.04, 'canvasResized'), canvasScale, 'canvasResized');
+			let link = document.createElement('a');
+			let today = new Date();
+			link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+			link.href = resizedImg.toDataURL();
+			link.click();
+		}
+		img.src = dataUrl;
 		$('#minecraft-output-border').css("left", "2px");
     })
     .catch(function (error) {
