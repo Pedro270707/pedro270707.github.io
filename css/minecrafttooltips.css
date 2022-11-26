@@ -306,6 +306,7 @@
 	user-select: none;
 	line-height: 0;
 	white-space: nowrap;
+	word-spacing: 0.25em;
 }
 
 .minecraft-tip, .minecraft-text-output {
@@ -373,10 +374,39 @@
 
 .minecraft-text-input {
 	min-width: 500px;
-	min-height: 80px;
-	max-width: 95%;
+    min-height: 32px;
+    max-width: 95%;
+    font-family: var(--default-font-family);
+    background-color: var(--text-input-color);
+	border: 2px solid var(--text-input-color);
+    padding: 5px;
+    outline: none;
+    border-radius: 32px;
+    color: var(--default-text-color);
+	transition: background-color 0.2s;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.dark-mode .minecraft-text-input {
 	font-family: var(--default-font-family);
-	padding: 5px;
+    background-color: var(--dark-mode-text-input-color);
+	border: 2px solid var(--dark-mode-text-input-color);
+	color: var(--dark-mode-text-color);
+}
+
+.minecraft-text-input:focus {
+	background-color: var(--text-input-active-color);
+}
+
+.dark-mode .minecraft-text-input:focus {
+	background-color: var(--dark-mode-text-input-active-color);
+}
+
+.text-input-wrapper {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 5px;
 }
 
 .tip-line {
