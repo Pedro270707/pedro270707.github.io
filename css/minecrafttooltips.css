@@ -554,6 +554,7 @@
 	text-align: left;
 	z-index: 9999;
 	box-shadow: 0 0 5px #000;
+	padding: 6px;
 }
 
 .dark-mode .download-overlay-window {
@@ -569,6 +570,7 @@
   background: var(--secondary-background-color);
   outline: none;
   opacity: 0.7;
+  margin: 0;
   -webkit-transition: .2s;
   transition: opacity .2s;
 }
