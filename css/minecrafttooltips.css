@@ -464,21 +464,6 @@
 	position: relative;
 }
 
-.tooltip-resolution, .tooltip-resolution-fake {
-	display: inline-block;
-}
-
-.tooltip-resolution-fake {
-	width: 40px;
-}
-
-.tooltip-resolution {
-	position: absolute;
-	right: 30px;
-	top: 40%;
-	width: 30px;
-}
-
 .download-tooltip-wrapper {
 	position: relative;
 	display: inline-block;
@@ -497,6 +482,146 @@
 	background-origin: border-box;
 	background-repeat: no-repeat;
 	clip-path: polygon(0% 0%, 0% 100%, 2px 100%, 2px 2px, calc(100% - 2px) 2px, calc(100% - 2px) calc(100% - 2px), 2px calc(100% - 2px), 2px 100%, 100% 100%, 100% 0%);
+}
+
+.download-overlay {
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	display: none;
+}
+
+.download-overlay-background {
+	position: absolute;
+	z-index: 9998;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.download-overlay-window {
+	position: relative;
+	background-color: var(--primary-background-color);
+	border-radius: 3px;
+	padding: 5px;
+	text-align: left;
+	z-index: 9999;
+	box-shadow: 0 0 5px #000;
+}
+
+.dark-mode .download-overlay-window {
+	background-color: var(--dark-mode-primary-background-color);
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 400px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--secondary-background-color);
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.dark-mode .slider {
+	background: var(--dark-mode-secondary-background-color)
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 24px;
+  background: var(--tertiary-background-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dark-mode .slider::-webkit-slider-thumb {
+	background: var(--dark-mode-tertiary-background-color);
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: var(--tertiary-background-color);
+  cursor: pointer;
+}
+
+.dark-mode .slider::-moz-range-thumb {
+	background: var(--dark-mode-tertiary-background-color);
+}
+
+.icon-button {
+	display: inline-flex;
+	width: 35px;
+	height: 35px;
+	background-color: var(--button-color);
+	border: 1px solid var(--button-border-color);
+	color: var(--button-text-color);
+	border-radius: 100%;
+	text-decoration: none;
+	transition: border-color 0.2s, background-color 0.2s;
+	cursor: pointer;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+}
+
+.dark-mode .icon-button {
+	background-color: var(--dark-mode-button-color);
+	color: var(--dark-mode-button-text-color);
+	border-color: var(--dark-mode-button-border-color);
+}
+
+.icon-button:hover {
+	background-color: var(--button-hover-color);
+	border-color: var(--button-hover-border-color);
+}
+
+.dark-mode .icon-button:hover {
+	background-color: var(--dark-mode-button-hover-color);
+	border-color: var(--dark-mode-button-hover-border-color);
+}
+
+.icon-button:active {
+	background-color: var(--button-active-color);
+	border-color: var(--button-active-border-color);
+	color: var(--button-active-text-color);
+}
+
+.dark-mode .icon-button:active {
+	background-color: var(--dark-mode-button-active-color);
+	border-color: var(--dark-mode-button-active-border-color);
+	color: var(--dark-mode-button-active-text-color);
+}
+
+.download-button {
+	background-size: 16px;
+	background-repeat: no-repeat;
+	background-position: 8px;
+}
+
+.warning {
+	color: red;
+	font-weight: 600;
+	font-size: 15px;
+	display: none;
 }
 
 @keyframes clouds {

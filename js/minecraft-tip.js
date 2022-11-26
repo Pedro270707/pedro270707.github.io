@@ -1,4 +1,5 @@
 const textInput = document.getElementById("minecraft-text-input");
+const textOutputContainer = document.getElementById('minecraft-text-output-container');
 const itemCountInput = document.getElementById("item-count-input");
 const itemInputText = document.getElementById("item-input-text");
 const outputItem = document.getElementById("output-item");
@@ -13,8 +14,8 @@ const outputShadowLine = document.getElementById("output-shadow-line");
 const limitKCheckbox = document.getElementById("k-limited");
 const numberKCheckbox = document.getElementById("k-numbers-only");
 const superSecretSettings = document.getElementById("super-secret-settings");
-const tooltipResolution = document.getElementById('tooltip-resolution');
-const itemResolution = document.getElementById('item-resolution');
+const resolutionSlider = document.getElementById('resolution-slider');
+const downloadOverlay = document.getElementById('download-overlay');
 var translate = new Translate();
 
 document.getElementById("item-input-upload").addEventListener('change', function(event) {
@@ -48,8 +49,8 @@ function replace(input, beginStr, endStr, match, replaceWith) {
 	
 $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", function () {
 	var textOutputFormatted = textInput.value.replace(/&/g, '&amp;')
-		.replace(/</gi, "&lt;")
-		.replace(/>/gi, "&gt;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
 		.replace(/&amp;el/g, '§r<br class="empty-line">')
 		.replace(/&amp;nbsp/g, '§r<div class="no-break-space"></div>')
 		.replace(/\\\\/g, '&#92;')
@@ -126,25 +127,25 @@ $(document).on('input propertychange', "textarea[name='Texto do Minecraft']", fu
 });
 
 $(document).on('input propertychange', "textarea[name='Número de itens']", function () {
-	itemCount.innerHTML = itemCountInput.value.replace(/</gi, "&lt;")
-		.replace(/</g, "&gt;")
-		.replace(/&/g, "&amp;");
+	itemCount.innerHTML = itemCountInput.value.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;");
 });
 
 limitKCheckbox.addEventListener('change', () => {
-  if (limitKCheckbox.checked) {
-    numberKCheckbox.disabled = true;
-  } else {
+  if (!limitKCheckbox.checked) {
     numberKCheckbox.disabled = false;
+	return;
   }
+  numberKCheckbox.disabled = true;
 });
 
 numberKCheckbox.addEventListener('change', () => {
-  if (numberKCheckbox.checked) {
-    limitKCheckbox.disabled = true;
-  } else {
+  if (!numberKCheckbox.checked) {
     limitKCheckbox.disabled = false;
+	return;
   }
+  limitKCheckbox.disabled = true;
 });
 
 $('.slot-item').mouseover(function(event) {
@@ -234,6 +235,8 @@ function randomizeText() {
 			if (limitKCheckbox.checked) {
 				if (widthNine.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
 					result += widthNine.charAt(Math.floor(Math.random() * widthNine.length));
+				} else if (widthEight.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
+					result += widthEight.charAt(Math.floor(Math.random() * widthEight.length));
 				} else if (widthSeven.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
 					result += widthSeven.charAt(Math.floor(Math.random() * widthSeven.length));
 				} else if (widthSix.includes(document.getElementsByClassName("c-k-manager")[group].textContent.charAt(i))) {
@@ -266,7 +269,7 @@ function randomizeText() {
 	}
 }
 
-var resize = function(img,scale,id){
+var resize = function(img, scale, id) {
 
   var zoom=parseInt(img.zoom*scale);
   if(zoom<1){
@@ -316,50 +319,53 @@ var resize = function(img,scale,id){
 function downloadTooltip(canvasScale = 1) {
 	clearInterval(randomizeTextInterval);
 	$('#minecraft-output-border').css("left", "calc(950% + 2px)");
-	domtoimage.toPng(document.getElementById('minecraft-text-output-container'), {width: document.getElementById('minecraft-text-output-container').clientWidth * 20, height: document.getElementById('minecraft-text-output-container').clientHeight * 20, style: {transform: 'scale(20)', transformOrigin: 'top center'}, quality: 1.0})
-    .then(function (dataUrl) {
-		var img = new Image;
-		img.onload = function() {
-			let resizedImg = resize(resize(img, 0.05, 'canvasResized'), canvasScale, 'canvasResized');
-			let link = document.createElement('a');
-			let today = new Date();
-			link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-			link.href = resizedImg.toDataURL();
-			link.click();
-		}
-		img.src = dataUrl;
-		$('#minecraft-output-border').css("left", "2px");
-		randomizeTextInterval = setInterval(function() {
-			randomizeText();
-		}, 50);
-    })
-    .catch(function (error) {
-        console.error('Algo deu errado na geração da imagem', error);
-		$('#minecraft-output-border').css("left", "2px");
-		randomizeTextInterval = setInterval(function() {
-			randomizeText();
-		}, 50);
-    });
+	
+	domtoimage.toPng(textOutputContainer, {width: textOutputContainer.clientWidth * 20, height: textOutputContainer.clientHeight * 20, style: {transform: 'scale(20)', transformOrigin: 'top center'}})
+		.then(function (dataUrl) {
+			var img = new Image;
+			img.onload = function() {
+				let resizedImg = resize(resize(img, 0.05, 'canvasResized'), canvasScale, 'canvasResized');
+				let link = document.createElement('a');
+				let today = new Date();
+				link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+				link.href = resizedImg.toDataURL();
+				link.click();
+			}
+			img.src = dataUrl;
+			
+			$('#minecraft-output-border').css("left", "2px");
+			randomizeTextInterval = setInterval(function() {
+				randomizeText();
+			}, 50);
+		})
+		.catch(function (error) {
+			console.error('Algo deu errado na geração da imagem', error);
+			
+			$('#minecraft-output-border').css("left", "2px");
+			randomizeTextInterval = setInterval(function() {
+				randomizeText();
+			}, 50);
+		});
 }
 
 function downloadItem(canvasScale = 1) {
 	$('#output-item').css("left", "calc(" + (canvasScale - 1) * 50 + "% + 2px)");
 	$('#item-count').css("right", "calc(-" + (canvasScale - 1) * 50 + "%");
 	domtoimage.toPng(document.getElementById('item-output'), {width: document.getElementById('item-output').clientWidth * canvasScale, height: document.getElementById('item-output').clientHeight * canvasScale, style: {transform: 'scale(' + canvasScale + ')', transformOrigin: 'top center', marginTop: '0'}, quality: 1.0})
-    .then(function (dataUrl) {
-        let link = document.createElement('a');
-		let today = new Date();
-		link.download = translate.getKey('minecrafttooltips-itemfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-		link.href = dataUrl;
-		link.click();
-		$('#output-item').css("left", "2px");
-		$('#item-count').css("right", "0");
-    })
-    .catch(function (error) {
-        console.error('Algo deu errado na geração da imagem', error);
-		$('#output-item').css("left", "2px");
-		$('#item-count').css("right", "0");
-    });
+		.then(function (dataUrl) {
+			let link = document.createElement('a');
+			let today = new Date();
+			link.download = translate.getKey('minecrafttooltips-itemfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+			link.href = dataUrl;
+			link.click();
+			$('#output-item').css("left", "2px");
+			$('#item-count').css("right", "0");
+		})
+		.catch(function (error) {
+			console.error('Algo deu errado na geração da imagem', error);
+			$('#output-item').css("left", "2px");
+			$('#item-count').css("right", "0");
+		});
 }
 
 var fixResolution = function(resolution) {
@@ -371,12 +377,33 @@ var fixResolution = function(resolution) {
 }
 
 document.getElementById('download-tooltip').onclick = function() {
-	fixResolution(tooltipResolution);
-	downloadTooltip(Math.round(tooltipResolution.value));
+	downloadOverlay.style.display = 'flex';
+	document.getElementById('download-overlay-download-button').onclick = function() {
+		downloadOverlay.style.display = 'none';
+		fixResolution(resolutionSlider);
+		downloadTooltip(Math.round(resolutionSlider.value));
+	}
 }
 
 document.getElementById('download-item').onclick = function() {
-	fixResolution(itemResolution);
-	downloadItem(Math.round(itemResolution.value));
+	downloadOverlay.style.display = 'flex';
+	fixResolution(resolutionSlider);
+	document.getElementById('download-overlay-download-button').onclick = function() {
+		downloadOverlay.style.display = 'none';
+		fixResolution(resolutionSlider);
+		downloadItem(Math.round(resolutionSlider.value));
+	}
 }
 
+document.getElementById('download-overlay-background').onclick = function() {
+	downloadOverlay.style.display = 'none';
+}
+
+resolutionSlider.oninput = function() {
+	document.getElementById('image-resolution').innerHTML = resolutionSlider.value;
+	if (resolutionSlider.value > 10) {
+		document.getElementById('resolution-warning').style.display = 'inline';
+	} else {
+		document.getElementById('resolution-warning').style.display = 'none';
+	}
+}

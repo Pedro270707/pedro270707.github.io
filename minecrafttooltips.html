@@ -41,7 +41,6 @@ title: "Itens do Minecraft"
 		s-15.4,2.9-21.2,8.8c-11.7,11.7-11.7,30.7,0,42.4l84.7,84.7c11.7,11.7,30.7,11.7,42.4,0l84.7-84.7c11.7-11.7,11.7-30.7,0-42.4
 		C281.3,96.6,262.3,96.6,250.5,108.3z"/></svg> <span data-string="minecrafttooltips-downloadtooltip"></span>
 	</button>
-	<input type="number" id="tooltip-resolution" class="tooltip-resolution" min=1 max=50 placeholder=1>
 </div>
 <div class="minor" data-string="minecrafttooltips-resolutionwarning">resoluções maiores demorarão mais para gerar</div>
 <div id="item-input" class="item-input">
@@ -75,9 +74,9 @@ title: "Itens do Minecraft"
 			s-15.4,2.9-21.2,8.8c-11.7,11.7-11.7,30.7,0,42.4l84.7,84.7c11.7,11.7,30.7,11.7,42.4,0l84.7-84.7c11.7-11.7,11.7-30.7,0-42.4
 			C281.3,96.6,262.3,96.6,250.5,108.3z"/></svg> <span data-string="minecrafttooltips-downloaditem"></span>
 		</button>
-		<input type="number" id="item-resolution" class="tooltip-resolution" min=1 max=50 placeholder=1>
 	</div>
 	<div class="minor" data-string="minecrafttooltips-resolutionwarning">resoluções maiores demorarão mais para gerar</div>
+	
 	<br>
 	<span class="checkbox-container"><input type="checkbox" id="k-limited" name="k-limited" value="k-limited" /></span><label for="k-limited" data-string="minecrafttooltips-samewidthk"></label>
 </div>
@@ -88,6 +87,22 @@ title: "Itens do Minecraft"
 		<span class="checkbox-container"><input type="checkbox" id="k-numbers-only" name="k-numbers-only" value="k-numbers-only" /></span><label for="k-numbers-only" data-string="minecrafttooltips-numbersonlyk"> Usar somente números no §k</label>
 	</div>
 </div>
+
+<div class="download-overlay" id="download-overlay">
+	<div class="download-overlay-background" id="download-overlay-background"></div>
+	<div class="download-overlay-window">
+		<span class="minor"><span data-string="minecrafttooltips-imageresolution">resolução da imagem:</span> <span id="image-resolution">1</span>x</span><span class="warning" id="resolution-warning"> !</span><br>
+		<input type="range" min="1" max="50" value="1" class="slider" id="resolution-slider"><br>
+		<button class="icon-button download-button" id="download-overlay-download-button"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+		viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 16px;" xml:space="preserve">
+	<path d="M344.1,207.5c-16.6,0-30,13.4-30,30v76.6h-254v-76.6c0-16.6-13.4-30-30-30s-30,13.4-30,30v106.6c0,16.6,13.4,30,30,30h314
+		c16.6,0,30-13.4,30-30V237.5C374.1,220.9,360.6,207.5,344.1,207.5z"/>
+	<path d="M250.5,108.3l-33.5,33.5V30c0-16.6-13.4-30-30-30s-30,13.4-30,30v111.8l-33.5-33.5c-5.9-5.9-13.5-8.8-21.2-8.8
+		s-15.4,2.9-21.2,8.8c-11.7,11.7-11.7,30.7,0,42.4l84.7,84.7c11.7,11.7,30.7,11.7,42.4,0l84.7-84.7c11.7-11.7,11.7-30.7,0-42.4
+		C281.3,96.6,262.3,96.6,250.5,108.3z"/></svg></button>
+	</div>
+</div>
+
 <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
 <script type="module" src="{{ site.baseurl }}/js/minecraft-tip.js"></script>
 <script src="{{ site.baseurl }}/js/translate.js"></script>
