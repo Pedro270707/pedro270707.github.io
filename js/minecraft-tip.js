@@ -218,8 +218,8 @@ function randomizeText() {
 			var widthEight = '░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀'
 			var widthSeven = 'øØ∞∅⌠⌡∙';
 			var widthSix = '@~«»≡≈√';
-			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷∈≥≤';
-			var widthFour = 'fk<>°ⁿ⁰²³⁴⁵⁶⁷⁸⁹';
+			var widthFive = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyzÀÁÂÈÊËÓÔÕÚßãõ0123456789#$%&-=_+\\/?ÇüéâäàåçêëèÄÅÉôöòûùÖÜ£×áóúñÑ¿®¬±÷∈≥≤π';
+			var widthFour = 'fk<>°ⁿ⁰²³⁴⁵⁶⁷⁸⁹ªº';
 			var widthThree = '¨I[]{}()^î*ïîtÍ¹';
 			var widthTwo = 'íìl´`'
 			var widthOne = "iı'!,.:;|¡·";
@@ -299,13 +299,12 @@ var resize = function(img, scale, id) {
   // copy each source pixel from c1's data1 into the c2's data2
   for(var y = 0; y/2<ch2; y += 2) {
     for(var x = 0; x/2<cw2; x += 2) {
-      var i1=(Math.floor(((y+1)/scale)/2)*cw1+Math.floor(((x+1)/scale)/2))*4;
-      var i2 =((y/2)*cw2+(x/2))*4;            
+      var i1=(Math.floor((y+1)/(2 * scale))*cw1+Math.floor((x+1)/(2 * scale)))*4;
+      var i2 =(y*cw2+x)*2;            
       data2[i2]   = data1[i1];
       data2[i2+1] = data1[i1+1];
       data2[i2+2] = data1[i1+2];
       data2[i2+3] = data1[i1+3];
-	  console.log(x + " " + y);
     }
   }
 
@@ -401,7 +400,7 @@ document.getElementById('download-overlay-background').onclick = function() {
 
 resolutionSlider.oninput = function() {
 	document.getElementById('image-resolution').innerHTML = resolutionSlider.value;
-	if (resolutionSlider.value > 10) {
+	if (resolutionSlider.value > 5) {
 		document.getElementById('resolution-warning').style.display = 'inline';
 	} else {
 		document.getElementById('resolution-warning').style.display = 'none';

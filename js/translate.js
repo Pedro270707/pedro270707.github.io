@@ -21,10 +21,11 @@ if (localStorage.language == undefined) {
 
 function Translate() { 
     //initialization
-    this.init =  function(attribute, placeholderAttribute, lng){
+    this.init =  function(attribute, placeholderAttribute, ariaLabelAttribute, lng){
         this.attribute = attribute;
         this.lng = lng;    
 		this.placeholderAttribute = placeholderAttribute;
+		this.ariaLabelAttribute = ariaLabelAttribute;
     }
     //translate 
     this.process = function(){
@@ -45,13 +46,19 @@ function Translate() {
                                 var elem = allDom[i];
                                 var key = elem.getAttribute(_self.attribute);
 								var placeholderKey = elem.getAttribute(_self.placeholderAttribute);
+								var ariaLabelKey = elem.getAttribute(_self.ariaLabelAttribute);
                                  
                                 if(key != null) {
                                     console.log(key);
                                     elem.innerHTML = LngObject[key]  ;
-                                } else if(placeholderKey != null) {
+                                }
+								if(placeholderKey != null) {
 									console.log(placeholderKey);
                                     elem.placeholder = LngObject[placeholderKey]  ;
+								}
+								if(ariaLabelKey != null) {
+									console.log(ariaLabelKey);
+                                    elem.ariaLabel = LngObject[ariaLabelKey]  ;
 								}
                             }
                      
@@ -91,6 +98,7 @@ function reloadLanguage() {
     var currentLng = localStorage.language;
     var attributeName = 'data-string';
 	var placeholderAttributeName = 'data-placeholder';
-    translate.init(attributeName, placeholderAttributeName, currentLng);
+	var ariaLabelAttributeName = 'data-aria-label';
+    translate.init(attributeName, placeholderAttributeName, ariaLabelAttributeName, currentLng);
     translate.process(); 
 }

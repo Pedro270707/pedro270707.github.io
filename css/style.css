@@ -107,7 +107,7 @@ body {
 	background-color: var(--dark-mode-secondary-background-color);
 }
 
-.button, .item-input label {
+.button {
 	font-family: inherit;
 	font-size: inherit;
 	background-color: var(--button-color);
@@ -120,11 +120,6 @@ body {
 }
 
 .button {
-	cursor: pointer;
-}
-
-.item-input label {
-	position: relative;
 	cursor: pointer;
 }
 

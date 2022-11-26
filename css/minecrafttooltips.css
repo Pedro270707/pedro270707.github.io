@@ -19,6 +19,10 @@
 	font-style: normal;
 }
 
+.info-bubble {
+	position: relative;
+}
+
 .shadow-line {
 	color: #3f3f3f;
 }
@@ -240,8 +244,11 @@
 	font-size: 16px;
 }
 
-.item-input, .download-tooltip {
+.download-tooltip {
 	margin-top: 10px;
+}
+
+.item-input, .download-tooltip {
 	display: inline-block;
 }
 
@@ -258,7 +265,7 @@
 .item-output {
 	display: inline-block;
 	position: relative;
-	margin-top: 2em;
+	margin-top: 15px;
 	height: 36px;
 }
 
@@ -464,9 +471,13 @@
 	position: relative;
 }
 
-.download-tooltip-wrapper {
+.download-tooltip-wrapper, .download-item-wrapper {
 	position: relative;
 	display: inline-block;
+}
+
+.download-tooltip-wrapper {
+	margin-top: 5px;
 }
 
 .minecraft-output-border, .minecraft-tip-border {
@@ -549,7 +560,7 @@
   height: 24px;
   background: var(--tertiary-background-color);
   border-radius: 4px;
-  cursor: pointer;
+  cursor: ew-resize;
 }
 
 .dark-mode .slider::-webkit-slider-thumb {
@@ -567,7 +578,7 @@
 	background: var(--dark-mode-tertiary-background-color);
 }
 
-.icon-button {
+.icon-button, .item-input label {
 	display: inline-flex;
 	width: 35px;
 	height: 35px;
@@ -581,40 +592,40 @@
 	text-align: center;
 	justify-content: center;
 	align-items: center;
+	box-sizing: border-box;
 }
 
-.dark-mode .icon-button {
+.item-input label {
+	position: relative;
+	cursor: pointer;
+}
+
+.dark-mode .icon-button, .dark-mode .item-input label {
 	background-color: var(--dark-mode-button-color);
 	color: var(--dark-mode-button-text-color);
 	border-color: var(--dark-mode-button-border-color);
 }
 
-.icon-button:hover {
+.icon-button:hover, .item-input label:hover {
 	background-color: var(--button-hover-color);
 	border-color: var(--button-hover-border-color);
 }
 
-.dark-mode .icon-button:hover {
+.dark-mode .icon-button:hover, .dark-mode .item-input label:hover {
 	background-color: var(--dark-mode-button-hover-color);
 	border-color: var(--dark-mode-button-hover-border-color);
 }
 
-.icon-button:active {
+.icon-button:active, .item-input label:active {
 	background-color: var(--button-active-color);
 	border-color: var(--button-active-border-color);
 	color: var(--button-active-text-color);
 }
 
-.dark-mode .icon-button:active {
+.dark-mode .icon-button:active, .dark-mode .item-input label:active {
 	background-color: var(--dark-mode-button-active-color);
 	border-color: var(--dark-mode-button-active-border-color);
 	color: var(--dark-mode-button-active-text-color);
-}
-
-.download-button {
-	background-size: 16px;
-	background-repeat: no-repeat;
-	background-position: 8px;
 }
 
 .warning {
@@ -622,6 +633,71 @@
 	font-weight: 600;
 	font-size: 15px;
 	display: none;
+	cursor: help;
+}
+
+.item-flex {
+	display: inline-flex;
+	gap: 3px;
+}
+
+.info-bubble::after {
+	content: attr(aria-label);
+	display: block;
+	position: absolute;
+    font-size: 16px;
+	font-family: var(--default-font-family);
+	font-weight: 400;
+	color: var(--default-text-color);
+    width: max-content;
+    left: 50%;
+    transform: translate(-50%, 4px);
+    background-color: var(--primary-background-color);
+	box-shadow: 0 0 5px #000;
+	padding: 3px 5px;
+	user-select: none;
+	pointer-events: none;
+	opacity: 0;
+	z-index: 9;
+	border-radius: 3px;
+	transition: opacity 0.2s;
+}
+
+.dark-mode .info-bubble::after {
+	color: var(--dark-mode-text-color);
+}
+
+.info-bubble::before {
+    content: '';
+    border-bottom: 4px solid var(--primary-background-color);
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    width: 0;
+    height: 0;
+	left: 50%;
+	transform: translate(-50%);
+	top: calc(100% + 1px);
+    position: absolute;
+	z-index: 10;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+.dark-mode .info-bubble::after {
+	background-color: var(--dark-mode-primary-background-color);
+}
+
+.dark-mode .info-bubble::before {
+    border-bottom: 4px solid var(--dark-mode-primary-background-color);
+}
+
+.info-bubble:hover::after, .info-bubble:hover::before {
+	opacity: 1;
+}
+
+.download-overlay-download-button-wrapper {
+	display: inline-block;
+	position: relative;
 }
 
 @keyframes clouds {
