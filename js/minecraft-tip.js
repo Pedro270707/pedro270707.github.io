@@ -378,6 +378,8 @@ var fixResolution = function(resolution) {
 
 document.getElementById('download-tooltip').onclick = function() {
 	downloadOverlay.style.display = 'flex';
+	resolutionSlider.value = document.getElementById('image-resolution').innerHTML = 1;
+	document.getElementById('resolution-warning').style.display = 'none';
 	document.getElementById('download-overlay-download-button').onclick = function() {
 		downloadOverlay.style.display = 'none';
 		fixResolution(resolutionSlider);
@@ -387,7 +389,8 @@ document.getElementById('download-tooltip').onclick = function() {
 
 document.getElementById('download-item').onclick = function() {
 	downloadOverlay.style.display = 'flex';
-	fixResolution(resolutionSlider);
+	resolutionSlider.value = document.getElementById('image-resolution').innerHTML = 1;
+	document.getElementById('resolution-warning').style.display = 'none';
 	document.getElementById('download-overlay-download-button').onclick = function() {
 		downloadOverlay.style.display = 'none';
 		fixResolution(resolutionSlider);
@@ -395,7 +398,7 @@ document.getElementById('download-item').onclick = function() {
 	}
 }
 
-document.getElementById('download-overlay-background').onclick = function() {
+document.getElementById('download-overlay-background').onclick = document.getElementById('close-button').onclick = function() {
 	downloadOverlay.style.display = 'none';
 }
 

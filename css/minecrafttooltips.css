@@ -727,7 +727,7 @@
 	opacity: 1;
 }
 
-.download-overlay-download-button-wrapper {
+.download-overlay-download-button-wrapper, .download-overlay-close-button-wrapper {
 	display: inline-block;
 	position: relative;
 }
