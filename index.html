@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
     var currentLng = localStorage.language;
     var attributeName = 'data-string';
 	var placeholderAttributeName = 'data-placeholder';
-    translate.init(attributeName, placeholderAttributeName, currentLng);
+	var ariaLabelAttributeName = 'data-aria-label';
+    translate.init(attributeName, placeholderAttributeName, ariaLabelAttributeName, currentLng);
     translate.process(); 
 });
 </script>

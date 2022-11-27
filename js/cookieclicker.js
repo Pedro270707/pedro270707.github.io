@@ -60,15 +60,15 @@ function recountWorkers() {
 }
 
 function cookieClicked() {
-	cookieAmount = cookieAmount + clickerLevel;
+	cookieAmount += clickerLevel;
 	recountCookies();
 }
 
 function hireWorker() {
 	if (cookieAmount >= workerCost) {
 		cookieAmount -= workerCost
-		recountCookies();
 		workerAmount += 1;
+		recountCookies();
 		recountWorkers();
 		workerCost = Math.ceil(Math.pow(workerCost / 1.3, 1.2));
 		workerButtonText.innerHTML = getKeyWrapped('cookieclicker-hireworkerbutton') + " " + workerCost;
