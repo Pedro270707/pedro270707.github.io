@@ -269,6 +269,22 @@
 	height: 36px;
 }
 
+.item-output::before {
+	content: '';
+	display: none;
+	width: 32px;
+	height: 32px;
+	background-color: rgba(255, 255, 255, 0.5);
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	z-index: 2;
+}
+
+.item-output:hover::before {
+	display: block;
+}
+
 .output-slot {
 	width: 36px;
 }
@@ -282,17 +298,6 @@
 
 .output-slot, .output-item {
 	image-rendering: pixelated;
-}
-
-.item-glow {
-	display: none;
-	width: 32px;
-	height: 32px;
-	background-color: rgba(255, 255, 255, 0.5);
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	z-index: 2;
 }
 
 .item-count {
@@ -389,7 +394,6 @@
 }
 
 .dark-mode .minecraft-text-input {
-	font-family: var(--default-font-family);
     background-color: var(--dark-mode-text-input-color);
 	border: 2px solid var(--dark-mode-text-input-color);
 	color: var(--dark-mode-text-color);
@@ -610,56 +614,6 @@
 	background: var(--dark-mode-tertiary-background-color);
 }
 
-.icon-button, .item-input label {
-	display: inline-flex;
-	width: 35px;
-	height: 35px;
-	background-color: var(--button-color);
-	border: 1px solid var(--button-border-color);
-	color: var(--button-text-color);
-	border-radius: 100%;
-	text-decoration: none;
-	transition: border-color 0.2s, background-color 0.2s;
-	cursor: pointer;
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-}
-
-.item-input label {
-	position: relative;
-	cursor: pointer;
-}
-
-.dark-mode .icon-button, .dark-mode .item-input label {
-	background-color: var(--dark-mode-button-color);
-	color: var(--dark-mode-button-text-color);
-	border-color: var(--dark-mode-button-border-color);
-}
-
-.icon-button:hover, .item-input label:hover {
-	background-color: var(--button-hover-color);
-	border-color: var(--button-hover-border-color);
-}
-
-.dark-mode .icon-button:hover, .dark-mode .item-input label:hover {
-	background-color: var(--dark-mode-button-hover-color);
-	border-color: var(--dark-mode-button-hover-border-color);
-}
-
-.icon-button:active, .item-input label:active {
-	background-color: var(--button-active-color);
-	border-color: var(--button-active-border-color);
-	color: var(--button-active-text-color);
-}
-
-.dark-mode .icon-button:active, .dark-mode .item-input label:active {
-	background-color: var(--dark-mode-button-active-color);
-	border-color: var(--dark-mode-button-active-border-color);
-	color: var(--dark-mode-button-active-text-color);
-}
-
 .warning {
 	color: red;
 	font-weight: 600;
@@ -668,18 +622,12 @@
 	cursor: help;
 }
 
-.item-flex {
-	display: inline-flex;
-	gap: 3px;
-}
-
 .info-bubble::after {
 	content: attr(aria-label);
 	display: block;
 	position: absolute;
     font-size: 16px;
 	font-family: var(--default-font-family);
-	font-weight: 400;
 	color: var(--default-text-color);
     width: max-content;
     left: 50%;

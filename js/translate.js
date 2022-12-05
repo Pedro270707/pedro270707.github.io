@@ -71,7 +71,6 @@ function Translate() {
 	this.getKey = function(key){
                 var xrhFile = new XMLHttpRequest();
 				var returnValue;
-                //load content data 
                 xrhFile.open("GET", "./language/" + localStorage.language + ".json", false);
                 xrhFile.onreadystatechange = function ()
                 {

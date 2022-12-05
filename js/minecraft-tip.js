@@ -149,43 +149,8 @@ numberKCheckbox.addEventListener('change', () => {
   limitKCheckbox.disabled = true;
 });
 
-$('.slot-item').mouseover(function(event) {
-        var $PosTop = $(this).position().top;
-        var $PosLeft = $(this).position().left;
-        $(itemGlow).insertAfter($(this)).css({display: 'block', top: $PosTop + 2, left: $PosLeft + 2});
-		$(itemGlow).attr("data-mctitle", $(this).attr("data-mctitle"));
-		if($(this).attr("data-mclore") != undefined) {
-			$(itemGlow).attr("data-mclore", $(this).attr("data-mclore"));
-		} else {
-			$(itemGlow).removeAttr("data-mclore");
-		}
-});
-$('.item-output').mouseover(function() {
-        $(itemGlow).css("display", "block");
-});
-$('.item-output').mouseout(function() {
-        $(itemGlow).css("display", "none");
-});
-
-$(".minecraft-item").mouseover(function(event) {
-  $(mcTip).css("display", "block");
-  // Sets X position of the tip, considering possible overflow to the right
-  if (window.innerWidth - event.pageX - 11 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
-	var x = event.pageX - event.pageX % 2 - $(mcTip).outerWidth(true);  
-  } else {
-	var x = event.pageX + 13 - event.pageX % 2;
-  }
-  // Sets Y position of the tip, considering possible overflow to the top
-  if (event.pageY - 28 - event.pageY % 2 < $(document).scrollTop()) {
-	  var y = event.pageY + 17 - event.pageY % 2 - $(document).scrollTop();
-  } else {
-	  var y = event.pageY - 31 - event.pageY % 2 - $(document).scrollTop();
-  }
-  $(mcTip).css("left", x);
-  $(mcTip).css("top", y);
-});
-
 $(".minecraft-item").mousemove(function(event) {
+  $(mcTip).css("display", "block");
   // Sets X position of the tip, considering possible overflow to the right
   if (window.innerWidth - event.pageX - 11 - event.pageX % 2 < $(mcTip).outerWidth(true)) {
 	var x = event.pageX - event.pageX % 2 - $(mcTip).outerWidth(true);  
@@ -206,6 +171,7 @@ $(".minecraft-item").mouseout(function(event) {
   $(mcTip).css("display", "none");
 });
 
+/* §k text */
 var randomizeTextInterval = setInterval(function() {
   randomizeText();
 }, 50);
@@ -270,6 +236,7 @@ function randomizeText() {
 	}
 }
 
+/* Download image */
 var resize = function(img, scale, id) {
 
   var zoom=parseInt(img.zoom*scale);
@@ -376,26 +343,30 @@ var fixResolution = function(resolution) {
 	}
 }
 
-document.getElementById('download-tooltip').onclick = function() {
+function download(type) {
 	downloadOverlay.style.display = 'flex';
 	resolutionSlider.value = document.getElementById('image-resolution').innerHTML = 1;
 	document.getElementById('resolution-warning').style.display = 'none';
 	document.getElementById('download-overlay-download-button').onclick = function() {
 		downloadOverlay.style.display = 'none';
 		fixResolution(resolutionSlider);
-		downloadTooltip(Math.round(resolutionSlider.value));
+		switch (type) {
+			case 'tooltip':
+				downloadTooltip(Math.round(resolutionSlider.value));
+				break;
+			case 'item':
+				downloadItem(Math.round(resolutionSlider.value));
+				break;
+		}
 	}
 }
 
+document.getElementById('download-tooltip').onclick = function() {
+	download('tooltip');
+}
+
 document.getElementById('download-item').onclick = function() {
-	downloadOverlay.style.display = 'flex';
-	resolutionSlider.value = document.getElementById('image-resolution').innerHTML = 1;
-	document.getElementById('resolution-warning').style.display = 'none';
-	document.getElementById('download-overlay-download-button').onclick = function() {
-		downloadOverlay.style.display = 'none';
-		fixResolution(resolutionSlider);
-		downloadItem(Math.round(resolutionSlider.value));
-	}
+	download('item');
 }
 
 document.getElementById('download-overlay-background').onclick = document.getElementById('close-button').onclick = function() {
