@@ -1,0 +1,30 @@
+@font-face {
+	font-family: 'Alexandria';
+	src: url(/assets/Alexandria-Font/Alexandria-VariableFont_wght.ttf) format("truetype");
+}
+
+body {
+	font-family: Alexandria,monospace,sans-serif;
+	font-size: 16px;
+	font-variation-settings: "wght" 350;
+}
+
+.orbit-data-table {
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.orbit-data-table td, .orbit-data-table th {
+	border: 2px solid #ddd;
+	padding: 4px 10px;
+	text-align: center;
+}
+
+.orbit-data-table th {
+	text-align: center;
+}
+
+.empty {
+	border: none !important;
+}
