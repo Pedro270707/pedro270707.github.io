@@ -1,0 +1,16 @@
+.test-class {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	position: relative;
+	background: red;
+}
+
+.pixel-art-grid {
+	display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+    justify-items: center;
+	width: fit-content;
+}
