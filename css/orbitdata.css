@@ -9,6 +9,10 @@ body {
 	font-variation-settings: "wght" 350;
 }
 
+.minor {
+	color: #999;
+}
+
 .orbit-data-table {
 	border-collapse: collapse;
 	margin-left: auto;
@@ -22,6 +26,38 @@ body {
 }
 
 .orbit-data-table th {
+	text-align: center;
+}
+
+.orbit-data-table caption {
+	margin-bottom: 8px;
+}
+
+.itinerario-color {
+	width: 25px;
+    height: 25px;
+    display: inline-block;
+    border: 2px solid #ddd;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.table-color {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.itinerario-bg {
+	background-color: #ddf;
+}
+
+.desconhecido-bg {
+	background-color: #fdd;
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
 }
 

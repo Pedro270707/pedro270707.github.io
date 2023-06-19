@@ -50,15 +50,27 @@ function Translate() {
                                  
                                 if(key != null) {
                                     console.log(key);
-                                    elem.innerHTML = LngObject[key]  ;
+									if (LngObject[key] != undefined) {
+										elem.innerHTML = LngObject[key]  ;
+									} else {
+										elem.innerHTML = key;
+									}
                                 }
 								if(placeholderKey != null) {
 									console.log(placeholderKey);
-                                    elem.placeholder = LngObject[placeholderKey]  ;
+									if (LngObject[placeholderKey] != undefined) {
+										elem.placeholder = LngObject[placeholderKey];
+									} else {
+										elem.placeholder = placeholderKey;
+									}
 								}
 								if(ariaLabelKey != null) {
 									console.log(ariaLabelKey);
-                                    elem.ariaLabel = LngObject[ariaLabelKey]  ;
+									if (LngObject[ariaLabelKey] != undefined) {
+										elem.ariaLabel = LngObject[ariaLabelKey]  ;
+									} else {
+										elem.ariaLabel = ariaLabelKey;
+									}
 								}
                             }
                      

@@ -13,6 +13,7 @@ const outputTextLine = document.getElementById("output-text-line");
 const outputShadowLine = document.getElementById("output-shadow-line");
 const limitKCheckbox = document.getElementById("k-limited");
 const numberKCheckbox = document.getElementById("k-numbers-only");
+const centerTextCheckbox = document.getElementById("center-text");
 const superSecretSettings = document.getElementById("super-secret-settings");
 const resolutionSlider = document.getElementById('resolution-slider');
 const downloadOverlay = document.getElementById('download-overlay');
@@ -52,10 +53,9 @@ $(textInput).on("input", function() {
 	var textOutputFormatted = textInput.value.replace(/&/g, '&amp;')
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
-		.replace(/&amp;el/g, '§r<br class="empty-line">')
 		.replace(/&amp;nbsp/g, '§r<div class="no-break-space"></div>')
 		.replace(/\\\\/g, '&#92;')
-		.replace(/\\n/g, '§r<br class="break">')
+		.replace(/\\n/g, '§r<br>')
 		.replace(/\\/g, '');
 	
 	if (!textOutputFormatted.substring(textOutputFormatted.lastIndexOf("§k")).includes("§r")) {
@@ -109,18 +109,25 @@ $(textInput).on("input", function() {
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
 
 	if (textOutputFormatted == '</span></b></i></n></m></k>') {
-		tipTextLine.innerHTML
-		= tipShadowLine.innerHTML
-		= outputTextLine.innerHTML
-		= outputShadowLine.innerHTML
-		= getKeyWrapped('minecrafttooltips-defaulttooltip');
+		tipTextLine.innerHTML = getKeyWrapped('minecrafttooltips-defaulttooltip');
 	} else {
-		tipTextLine.innerHTML
-		= tipShadowLine.innerHTML
-		= outputTextLine.innerHTML
-		= outputShadowLine.innerHTML
-		= textOutputFormatted;
+		tipTextLine.innerHTML = textOutputFormatted;
 	}
+	
+	tipTextLine.childNodes.forEach(function(child) {
+		if (child.nodeType === Node.TEXT_NODE) { // Wrap text without a color to make CSS `+` selector work on line breaks
+    		var span = document.createElement('span');
+    		span.classList.add('c-f');
+    		span.textContent = child.textContent;
+    		tipTextLine.insertBefore(span, child);
+    		tipTextLine.removeChild(child);
+		}
+	});
+
+	tipShadowLine.innerHTML
+	= outputTextLine.innerHTML
+	= outputShadowLine.innerHTML
+	= tipTextLine.innerHTML;
 	
 	if (textInput.value.trim() == 'supersecretsettings') {
 		superSecretSettings.style.display = "block";

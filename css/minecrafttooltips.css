@@ -27,16 +27,16 @@
 	color: #3f3f3f;
 }
 
-.empty-line {
-  display: block;
-  content: "";
-  margin-top: 1.625em;
+.text-line br + br, .shadow-line br + br {
+	display: grid;
+	content: "";
+	margin-top: 1.5em;
 }
 
-.break {
-  display: block;
-  content: "";
-  margin-top: 0.25em;
+.text-line br:not(.text-line br + br), .shadow-line br:not(.shadow-line br + br) {
+	display: block;
+	content: "";
+	margin-top: 0.25em;
 }
 
 .shadow-line .c-0 {
@@ -310,7 +310,7 @@
 	font-size: 16px;
 	user-select: none;
 	line-height: 0;
-	white-space: nowrap;
+	white-space: pre;
 	word-spacing: 0.25em;
 }
 
@@ -324,13 +324,17 @@
 	margin: 0.125em 0.125em;
 	padding: 0 0.375em 0.375em 0.375em;
 	line-height: 1.125em;
-	white-space: nowrap;
+	white-space: pre;
 	font-size: 16px;
 	text-align: left;
 	font-smooth: never;
 	-webkit-font-smoothing: none;
 	filter: url(#crispify);
 }
+
+/* .center:is(.minecraft-tip), .center:is(.minecraft-text-output) {
+	text-align: center;
+} */
 
 .offscreen {
     position: absolute;
