@@ -23,15 +23,8 @@ title: "Início"
 		<a href="{{ site.baseurl }}/minecrafttooltips"><img src="{{ site.baseurl }}/assets/minecraft-tooltips-button.png"></a>
 	</div>
 </div>
-<script src="{{ site.baseurl }}/js/translate.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function(e) {
-    var translate = new Translate();
-    var currentLng = localStorage.language;
-    var attributeName = 'data-string';
-	var placeholderAttributeName = 'data-placeholder';
-	var ariaLabelAttributeName = 'data-aria-label';
-    translate.init(attributeName, placeholderAttributeName, ariaLabelAttributeName, currentLng);
-    translate.process(); 
-});
+	document.addEventListener("DOMContentLoaded", function(e) {
+		translate.reloadLoc();
+	});
 </script>

@@ -17,11 +17,12 @@ const centerTextCheckbox = document.getElementById("center-text");
 const superSecretSettings = document.getElementById("super-secret-settings");
 const resolutionSlider = document.getElementById('resolution-slider');
 const downloadOverlay = document.getElementById('download-overlay');
-var translate = new Translate();
 
 document.getElementById("item-input-upload").addEventListener('change', function(event) {
 	$(itemInput).attr("data-aria-label", 'minecrafttooltips-changeitem');
-	itemInput.ariaLabel = translate.getKey('minecrafttooltips-changeitem');
+	translate.translateString('minecrafttooltips-changeitem').then(str => {
+		itemInput.ariaLabel = str;
+	});
 	outputItem.src = URL.createObjectURL(event.target.files[0]);
 });
 
@@ -109,25 +110,12 @@ $(textInput).on("input", function() {
 	obfuscatedTextManager.innerHTML = textOutputFormatted.replace(/<k class="c-k">/g, '<k class="c-k-manager">');
 
 	if (textOutputFormatted == '</span></b></i></n></m></k>') {
-		tipTextLine.innerHTML = getKeyWrapped('minecrafttooltips-defaulttooltip');
+		translate.getKeyWrapped('minecrafttooltips-defaulttooltip').then(str => {
+			changeTooltipTo(str);
+		});
 	} else {
-		tipTextLine.innerHTML = textOutputFormatted;
+		changeTooltipTo(textOutputFormatted);
 	}
-	
-	tipTextLine.childNodes.forEach(function(child) {
-		if (child.nodeType === Node.TEXT_NODE) { // Wrap text without a color to make CSS `+` selector work on line breaks
-    		var span = document.createElement('span');
-    		span.classList.add('c-f');
-    		span.textContent = child.textContent;
-    		tipTextLine.insertBefore(span, child);
-    		tipTextLine.removeChild(child);
-		}
-	});
-
-	tipShadowLine.innerHTML
-	= outputTextLine.innerHTML
-	= outputShadowLine.innerHTML
-	= tipTextLine.innerHTML;
 	
 	if (textInput.value.trim() == 'supersecretsettings') {
 		superSecretSettings.style.display = "block";
@@ -301,9 +289,11 @@ function downloadTooltip(canvasScale = 1) {
 				let resizedImg = resize(resize(img, 0.05, 'canvasResized'), canvasScale, 'canvasResized');
 				let link = document.createElement('a');
 				let today = new Date();
-				link.download = translate.getKey('minecrafttooltips-tooltipfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-				link.href = resizedImg.toDataURL();
-				link.click();
+				translate.translateString('minecrafttooltips-tooltipfile').then(str => {
+					link.download = str + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+					link.href = resizedImg.toDataURL();
+					link.click();
+				});
 			}
 			img.src = dataUrl;
 			
@@ -329,9 +319,11 @@ function downloadItem(canvasScale = 1) {
 		.then(function (dataUrl) {
 			let link = document.createElement('a');
 			let today = new Date();
-			link.download = translate.getKey('minecrafttooltips-itemfile') + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
-			link.href = dataUrl;
-			link.click();
+			translate.translateString('minecrafttooltips-itemfile').then(str => {
+				link.download = str + ' ' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds() + '.' + today.getMilliseconds() + '.png';
+				link.href = resizedImg.toDataURL();
+				link.click();
+			});
 			$('#output-item').css("left", "2px");
 			$('#item-count').css("right", "0");
 		})
@@ -387,4 +379,23 @@ resolutionSlider.oninput = function() {
 	} else {
 		document.getElementById('resolution-warning').style.display = 'none';
 	}
+}
+
+function changeTooltipTo(str) {
+	tipTextLine.innerHTML = str;
+	
+	tipTextLine.childNodes.forEach(function(child) {
+		if (child.nodeType === Node.TEXT_NODE) { // Wrap text without a color to make CSS `+` selector work on line breaks
+    		var span = document.createElement('span');
+    		span.classList.add('c-f');
+    		span.textContent = child.textContent;
+    		tipTextLine.insertBefore(span, child);
+    		tipTextLine.removeChild(child);
+		}
+	});
+	
+	tipShadowLine.innerHTML
+	= outputTextLine.innerHTML
+	= outputShadowLine.innerHTML
+	= tipTextLine.innerHTML;
 }

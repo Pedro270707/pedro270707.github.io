@@ -4,7 +4,6 @@ var clickerLevelCounter = document.getElementById("clicker-level-counter");
 
 var workerButtonText = document.getElementById("hire-worker-text");
 var upgradeClickerButtonText = document.getElementById("upgrade-clicker-text");
-var translate = new Translate();
 
 console.log("Loaded");
 if (cookieAmount == undefined) {
@@ -30,32 +29,32 @@ if (clickerCost == undefined) {
 function recountCookies() {
 	switch (cookieAmount) {
 		case 0:
-			cookieCounter.innerHTML = cookieAmount + " " + getKeyWrapped('cookieclicker-zerocookies');
+			setCookieString('cookieclicker-zerocookies', cookieAmount);
 			break;
 		case 1:
-			cookieCounter.innerHTML = cookieAmount + " " + getKeyWrapped('cookieclicker-onecookie');
+			setCookieString('cookieclicker-onecookie', cookieAmount);
 			break;
 		case 2:
-			cookieCounter.innerHTML = cookieAmount + " " + getKeyWrapped('cookieclicker-twocookies');
+			setCookieString('cookieclicker-twocookies', cookieAmount);
 			break;
 		default:
-			cookieCounter.innerHTML = cookieAmount + " " + getKeyWrapped('cookieclicker-pluralcookies');
+			setCookieString('cookieclicker-pluralcookies', cookieAmount);
 	}
 }
 
 function recountWorkers() {
 	switch (workerAmount) {
 		case 0:
-			workerCounter.innerHTML = workerAmount + " " + getKeyWrapped('cookieclicker-zeroworkers');
+			setWorkerString('cookieclicker-zeroworkers', workerAmount);
 			break;
 		case 1:
-			workerCounter.innerHTML = workerAmount + " " + getKeyWrapped('cookieclicker-oneworker');
+			setWorkerString('cookieclicker-oneworker', workerAmount);
 			break;
 		case 2:
-			workerCounter.innerHTML = workerAmount + " " + getKeyWrapped('cookieclicker-twoworkers');
+			setWorkerString('cookieclicker-twoworkers', workerAmount);
 			break;
 		default:
-			workerCounter.innerHTML = workerAmount + " " + getKeyWrapped('cookieclicker-pluralworkers');
+			setWorkerString('cookieclicker-pluralworkers', workerAmount);
 	}
 }
 
@@ -71,7 +70,9 @@ function hireWorker() {
 		recountCookies();
 		recountWorkers();
 		workerCost = Math.ceil(Math.pow(workerCost / 1.3, 1.2));
-		workerButtonText.innerHTML = getKeyWrapped('cookieclicker-hireworkerbutton') + " " + workerCost;
+		translate.getKeyWrapped('cookieclicker-hireworkerbutton').then(str => {
+			workerButtonText.innerHTML = str + " " + workerCost;
+		});
 		
 		setInterval(function () {
 			cookieAmount++
@@ -85,9 +86,27 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		clickerLevelCounter.innerHTML = getKeyWrapped('cookieclicker-clickerlevelbefore') + clickerLevel + getKeyWrapped('cookieclicker-clickerlevelafter');
+		translate.getKeyWrapped('cookieclicker-clickerlevelbefore').then(strBefore => {
+			translate.getKeyWrapped('cookieclicker-clickerlevelafter').then(strAfter => {
+				clickerLevelCounter.innerHTML = strBefore + clickerLevel + strAfter;
+			});
+		});
 		
 		clickerCost = Math.ceil(Math.pow(clickerCost / 1.3, 1.25));
-		upgradeClickerButtonText.innerHTML = getKeyWrapped('cookieclicker-clickerlevelbutton') + " " + clickerCost;
+		translate.getKeyWrapped('cookieclicker-clickerlevelbutton').then(str => {
+			upgradeClickerButtonText.innerHTML = str + " " + clickerCost;
+		});
 	}
+}
+
+function setCookieString(key, cookieAmount) {
+	translate.getKeyWrapped(key).then(str => {
+		cookieCounter.innerHTML = cookieAmount + " " + str;
+	});
+}
+
+function setWorkerString(key, workerAmount) {
+	translate.getKeyWrapped(key).then(str => {
+		workerCounter.innerHTML = workerAmount + " " + str;
+	});
 }

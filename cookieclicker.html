@@ -25,12 +25,6 @@ title: "Cookie Clicker"
 <script src="{{ site.baseurl }}/js/cookieclicker.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function(e) {
-    var translate = new Translate();
-    var currentLng = localStorage.language;
-    var attributeName = 'data-string';
-	var placeholderAttributeName = 'data-placeholder';
-	var ariaLabelAttributeName = 'data-aria-label';
-    translate.init(attributeName, placeholderAttributeName, ariaLabelAttributeName, currentLng);
-    translate.process(); 
+    translate.reloadLoc();
 });
 </script>

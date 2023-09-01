@@ -285,7 +285,7 @@ body {
 
 .main-page-header-image {
 	height: 400px;
-	background-image: linear-gradient(transparent, 80%, #000), url('/assets/pedro-logo.png');
+	background-image: linear-gradient(transparent, 80%, #000), url('/assets/logo.png');
 	background-position: center;
 	background-size: auto 150%;
 	background-repeat: no-repeat;
@@ -296,7 +296,7 @@ body {
 }
 
 .dark-mode .main-page-header-image {
-	background-image: linear-gradient(transparent, var(--dark-mode-secondary-background-color)), url('/assets/pedro-logo.png');
+	background-image: linear-gradient(transparent, var(--dark-mode-secondary-background-color)), url('/assets/logo.png');
 }
 
 .main-page-header-text {

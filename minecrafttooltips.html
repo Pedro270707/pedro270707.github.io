@@ -124,13 +124,7 @@ title: "Itens do Minecraft"
 <script src="{{ site.baseurl }}/js/translate.js"></script>
 <script>
 $(document).ready(function() {
-    var translate = new Translate();
-    var currentLng = localStorage.language;
-    var attributeName = 'data-string';
-	var placeholderAttributeName = 'data-placeholder';
-	var ariaLabelAttributeName = 'data-aria-label';
-    translate.init(attributeName, placeholderAttributeName, ariaLabelAttributeName, currentLng);
-    translate.process(); 
+    translate.reloadLoc();
 });
 </script>
 <script src="/modules/dom-to-image.js"></script>
