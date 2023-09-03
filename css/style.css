@@ -134,7 +134,7 @@
 
 @font-face {
 	font-family: 'JetBrains Mono';
-	src: url("/assets/JetBrains-Mono-Font/JetBrainsMono-RegularItalic.woff2") format("woff2");
+	src: url("/assets/JetBrains-Mono-Font/JetBrainsMono-Italic.woff2") format("woff2");
 		 
 	font-weight: 400;
 	font-style: italic;
@@ -650,6 +650,10 @@ body {
 
 .checkbox-container input[type="checkbox"]:checked:disabled:before {
 	box-shadow: none;
+}
+
+.pixelated {
+	image-rendering: pixelated;
 }
 
 .hidden {

@@ -4,10 +4,12 @@ if (localStorage.darkmode == undefined) {
 	localStorage.darkmode = "false";
 } else if (localStorage.darkmode == "true") {
 	document.body.classList.add("dark-mode");
-	translate.translateString('mainpage-disabledarkmode').then(str => {
-		darkModeButton.innerHTML = str;
-	});
-	darkModeButton.dataset.string = 'mainpage-disabledarkmode';
+	if (darkModeButton) {
+		translate.translateString('mainpage-disabledarkmode').then(str => {
+			darkModeButton.innerHTML = str;
+		});
+		darkModeButton.dataset.string = 'mainpage-disabledarkmode';
+	}
 }
 
 function toggleDarkMode() {

@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/assets/favicon.ico">
-		<title>BTA! Pack Converter</title>
+---
+layout: base
+title: "BTA Pack Converter"
+---
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ site.baseurl }}/css/btapackconverter.css">
+
+<!-- Website -->
+<div class="container">
+	<div class="left-items">
+		<div class="site-name" data-string="btapackconverter-sitename">Conversor de pacotes para BTA</div>
+		<div class="site-description minor" data-string="btapackconverter-sitedescription">Converte pacotes de recursos do Minecraft moderno para pacotes de texturas do BTA</div>
 		
-		<meta content="{{ page.title }}" property="og:title" />
-		<meta content="Converts modern Minecraft resource packs to Better than Adventure! texture packs." property="og:description" />
-		<meta content="https://pedro270707.github.io" property="og:url" />
-		<meta content="{{ site.baseurl }}/assets/logo.png" property="og:image" />
-		<meta content="#777777" data-react-helmet="true" name="theme-color" />
-	</head>
-	<body>
-		{{ content }}
-	</body>
-</html>
+		<div>
+			<!--<input type="file" accept="image/*" id="zip-upload" />-->
+			 <input type="file" accept=".zip,.rar,.7zip" id="zip-upload" /> 
+		</div>
+	</div>
+	<div class="right-items">
+		<canvas width="512" height="512" id="terrain-canvas" class="pixelated" />
+	</div>
+</div>
+
+<!-- Scripts -->
+<script src="{{ site.baseurl }}/js/jszip.min.js"></script>
+<script src="{{ site.baseurl }}/js/btapackconverter.js"></script>

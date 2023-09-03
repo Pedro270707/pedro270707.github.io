@@ -1,0 +1,24 @@
+.container {
+	display: grid;
+	grid-template-columns: 40% 60%;
+}
+
+.container > * {
+	padding: 0.5rem;
+	box-sizing: border-box;
+	height: 100vh;
+	height: 100svh;
+}
+
+.left-items, .right-items {
+	position: relative;
+}
+
+.left-items {
+	background-color: var(--dark-mode-primary-background-color);
+}
+
+.right-items {
+	display: flex;
+	justify-content: center;
+}
