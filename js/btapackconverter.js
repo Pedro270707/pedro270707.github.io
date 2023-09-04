@@ -204,7 +204,7 @@ terrainPositionToName.set(296, (zip) => { // Bed (head, back)
 terrainPositionToName.set(299, "wet_sponge");
 terrainPositionToName.set(320, "redstone_block");
 terrainPositionToName.set(323, "powered_rail");
-terrainPositionToName.set(324, (zip) => {
+terrainPositionToName.set(324, (zip) => { // Redstone dust (cross)
 	const redstoneDustDot = zip.files["assets/minecraft/textures/block/redstone_dust_dot.png"];
 	const redstoneDustLine = zip.files["assets/minecraft/textures/block/redstone_dust_line0.png"];
 	if (redstoneDustDot && redstoneDustLine) {
@@ -219,7 +219,7 @@ terrainPositionToName.set(324, (zip) => {
 		});
 	}
 });
-terrainPositionToName.set(325, (zip) => {
+terrainPositionToName.set(325, (zip) => { // Redstone dust (line)
 	const imgFile = zip.files["assets/minecraft/textures/block/redstone_dust_line0.png"];
 	if (imgFile) {
 		imgFile.async("blob").then(file => {
@@ -228,7 +228,7 @@ terrainPositionToName.set(325, (zip) => {
 			readAndDrawRotatedFile(file, pixelCoordinates[0], pixelCoordinates[1], -90);
 		});
 	}
-}); // This is rotated 90°, so fix it later.
+});
 terrainPositionToName.set(352, "sandstone_top");
 terrainPositionToName.set(355, "powered_rail_on");
 terrainPositionToName.set(384, "sandstone_side");
@@ -254,7 +254,7 @@ terrainPositionToName.set(614, "lime_wool");
 terrainPositionToName.set(640, "oak_log");
 terrainPositionToName.set(641, "oak_log_top");
 terrainPositionToName.set(642, "oak_leaves");
-terrainPositionToName.set(643, (zip) => {
+terrainPositionToName.set(643, (zip) => { // Oak leaves (fast)
 	const imgFile = zip.files["assets/minecraft/textures/block/oak_leaves.png"];
 	if (imgFile) {
 		imgFile.async("blob").then(file => {
@@ -275,7 +275,7 @@ terrainPositionToName.set(710, "magenta_wool");
 terrainPositionToName.set(736, "spruce_log");
 terrainPositionToName.set(737, "spruce_log_top");
 terrainPositionToName.set(738, "spruce_leaves");
-terrainPositionToName.set(739, (zip) => {
+terrainPositionToName.set(739, (zip) => { // Spruce leaves (fast)
 	const imgFile = zip.files["assets/minecraft/textures/block/spruce_leaves.png"];
 	if (imgFile) {
 		imgFile.async("blob").then(file => {
@@ -292,7 +292,7 @@ terrainPositionToName.set(742, "orange_wool");
 terrainPositionToName.set(768, "birch_log");
 terrainPositionToName.set(769, "birch_log_top");
 terrainPositionToName.set(770, "birch_leaves");
-terrainPositionToName.set(771, (zip) => {
+terrainPositionToName.set(771, (zip) => { // Birch leaves (fast)
 	const imgFile = zip.files["assets/minecraft/textures/block/birch_leaves.png"];
 	if (imgFile) {
 		imgFile.async("blob").then(file => {
@@ -434,4 +434,14 @@ function readAndDrawRotatedFileWithSize(file, sx, sy, sWidth, sHeight, x, y, ang
 	}
 	
 	fileReader.readAsDataURL(file);
+}
+
+function downloadCanvas() {
+    const dataURL = terrainCanvas.toDataURL();
+
+    const a = document.createElement("a");
+    a.href = dataURL;
+    a.download = "terrain.png";
+
+    a.click();
 }
