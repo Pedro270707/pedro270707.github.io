@@ -1,4 +1,4 @@
-const validCharacters = "aeiou0123456789-_@#$%&*";
+let validCharacters = "aeiou0123456789-_@#$%&*";
 let currentLastIndex = -1;
 let amountOfCharacters = 5;
 let selectedCharacter = -1;
@@ -78,6 +78,7 @@ function startNewGame(pAmountOfCharacters = 5) {
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
     console.log("New game started! Random sequence: " + randomSequence);
     document.getElementById("valid-characters").innerHTML = validCharacters;
+    document.getElementById("amount-of-characters").max = validCharacters.length;
     addNewCharacterSlotArray();
 }
 
@@ -218,4 +219,9 @@ function getCorrectInWrongPlace(input) {
         }
     }
     return correctInWrongPlace;
+}
+
+function setValidCharactersAndStartGame(str) {
+    validCharacters = str;
+    startNewGame(clamp(amountOfCharacters, 0, validCharacters.length));
 }
