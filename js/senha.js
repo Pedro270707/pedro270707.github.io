@@ -4,9 +4,9 @@ let amountOfCharacters = 5;
 let selectedCharacter = -1;
 
 const gameFlexbox = document.getElementById("game-flexbox");
-const gameGuesses = document.getElementById("game-guesses");
 
 let randomSequence = "12345";
+let numberOfAttempts = 0;
 
 function addNewCharacterSlotArray() {
     lockCharacterSlotArray();
@@ -71,8 +71,8 @@ function lockCharacterSlotArray(index = currentLastIndex) {
 }
 
 function startNewGame(pAmountOfCharacters = 5) {
+    numberOfAttempts = 0;
     gameFlexbox.innerHTML = '';
-    //gameGuesses.innerHTML = '';
     document.getElementById("victory").classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
@@ -151,6 +151,8 @@ document.addEventListener("keyup", (event) => {
     } else if (key === "Enter") {
         let charactersInSlotArray = getCharactersInSlotArray();
         if (!charactersInSlotArray.includes(' ') && !hasDuplicateLetters(charactersInSlotArray)) {
+            numberOfAttempts++;
+            document.getElementById("number-of-attempts").innerHTML = numberOfAttempts;
             if (charactersInSlotArray !== randomSequence) {
                 addNewGuessesArray(getCorrectInWrongPlace(charactersInSlotArray), getCorrectInCorrectPlace(charactersInSlotArray));
                 addNewCharacterSlotArray();

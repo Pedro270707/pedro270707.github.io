@@ -43,7 +43,7 @@
   "senha-restart1": "Iniciar novo jogo",
   "senha-restart2": "com",
   "senha-restart3": "caractere(s)",
-  "senha-victory": "Você venceu!",
+  "senha-victory": "Você venceu! Tentativas:",
   "senha-norepeatingcharacters": "Caracteres não são repetidos",
   "senha-correctincorrectplace": "significa que há um caractere correto no local certo.",
   "senha-correctinwrongplace": "significa que há um caractere correto no local errado.",
