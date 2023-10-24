@@ -6,7 +6,17 @@ title: "Senha"
 <link rel="stylesheet" href="{{ site.baseurl }}/css/senha.css">
 
 <h1 class="center" data-string="senha-title">Senha</h1>
-<div class="center"><span data-string="senha-validcharacters"></span> <span id="valid-characters"></span></div>
+<div id="rules" class="center">
+	<span data-string="senha-validcharacters">Caracteres válidos:</span> <span id="valid-characters"></span>
+	<br>
+	<span data-string="senha-norepeatingcharacters">Caracteres não são repetidos</span>
+	<br>
+	<span class="indicator correct-in-correct-place vertical-align-middle"></span> <span data-string="senha-correctincorrectplace">significa que há um caractere correto no local certo.</span>
+	<br>
+	<span class="indicator correct-in-wrong-place vertical-align-middle"></span> <span data-string="senha-correctinwrongplace">significa que há um caractere correto no local errado.</span>
+	<br>
+	<span class="indicator wrong vertical-align-middle"></span> <span data-string="senha-wrongcharacter">significa um caractere completamente errado.</span>
+</div>
 <div class="center"><span class="invisible" id="victory" data-string="senha-victory"></span></div>
 <div id="game-flexbox" class="game-flexbox center-flex"></div>
 

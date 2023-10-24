@@ -74,6 +74,10 @@
     border-style: dotted;
 }
 
+.vertical-align-middle {
+    vertical-align: middle;
+}
+
 .invisible {
     display: none;
 }

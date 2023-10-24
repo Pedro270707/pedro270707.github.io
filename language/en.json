@@ -44,5 +44,9 @@
   "senha-restart2": "with",
   "senha-restart3": "character(s)",
   "senha-victory": "You won!",
+  "senha-norepeatingcharacters": "Characters are not repeated",
+  "senha-correctincorrectplace": "means that there is a correct character in the right place.",
+  "senha-correctinwrongplace": "means that there is a correct character in the wrong place.",
+  "senha-wrongcharacter": "means that the character is completely wrong.",
   "footer-text": "[created by Pedro270707]"
 }
