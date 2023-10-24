@@ -1,0 +1,19 @@
+---
+layout: baselang
+title: "Senha"
+---
+
+<link rel="stylesheet" href="{{ site.baseurl }}/css/senha.css">
+
+<h1 class="center" data-string="senha-title">Senha</h1>
+<div class="center"><span data-string="senha-validcharacters"></span> <span id="valid-characters"></span></div>
+<div class="center"><span class="invisible" id="victory" data-string="senha-victory"></span></div>
+<div id="game-flexbox" class="game-flexbox center-flex"></div>
+
+<div class="center">
+	<button class="button" id="restart" data-string="senha-restart1">Iniciar novo jogo</button> <span data-string="senha-restart2">com</span> <input type=number id="amount-of-characters" min="1" max="23"></input> <span data-string="senha-restart3">caracteres</span>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="{{ site.baseurl }}/js/senha.js"></script>

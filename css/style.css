@@ -441,6 +441,11 @@ body {
 	text-align: center;
 }
 
+.center-flex {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .main-page-link {
 	position: absolute;
 	top: 4px;

@@ -38,5 +38,11 @@
   "cookieclicker-hireworkerbutton": "Contratar funcionário por",
   "btapackconverter-sitename": "Conversor de pacotes para BTA",
   "btapackconverter-sitedescription": "Converte pacotes de recursos do Minecraft moderno para pacotes de texturas do BTA",
+  "senha-title": "Senha",
+  "senha-validcharacters": "Caracteres válidos:",
+  "senha-restart1": "Iniciar novo jogo",
+  "senha-restart2": "com",
+  "senha-restart3": "caractere(s)",
+  "senha-victory": "Você venceu!",
   "footer-text": "[criado por Pedro270707]"
 }
