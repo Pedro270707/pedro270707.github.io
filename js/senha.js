@@ -191,15 +191,12 @@ document.addEventListener("keyup", (event) => {
         }
         if (hasDuplicateLetters(charactersInSlotArray)) {
             let characterSlots = getCharacterSlots();
-            let seenLetters = '';
             for (const slot of Array.from(characterSlots.children)) {
                 if (slot.innerHTML === '&nbsp;') {
                     continue;
                 }
-                if (seenLetters.includes(slot.innerHTML)) {
-                    pulseSlotError(slot);
-                } else {
-                    seenLetters += slot.innerHTML;
+                if (charactersInSlotArray.split(slot.innerHTML).length - 1 > 1) {
+                    pulseSlotError(slot, "duplicate-letter");
                 }
             }
         }
@@ -224,12 +221,12 @@ document.addEventListener("keyup", (event) => {
     }
 });
 
-function pulseSlotError(slot) {
+function pulseSlotError(slot, errorClass = "error") {
     slot.style.transition = "none";
-    slot.classList.add("error");
+    slot.classList.add(errorClass);
     setTimeout(() => {
         slot.style.transition = "border-color 1s";
-        slot.classList.remove("error");
+        slot.classList.remove(errorClass);
     }, 20);
 }
 

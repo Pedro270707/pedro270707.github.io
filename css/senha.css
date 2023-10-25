@@ -54,6 +54,10 @@
     border-color: #ff0000;
 }
 
+.character-slot.duplicate-letter {
+    border-color: #ff9900;
+}
+
 .character-slots {
     display: flex;
     gap: 0.25rem;
