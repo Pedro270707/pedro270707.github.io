@@ -28,25 +28,27 @@
     display: inline-flex;
     width: 3em;
     height: 3em;
-    border-radius: 6px;
+    border-radius: 0.3em;
     border-color: var(--button-border-color);
-    border-width: 4px;
+    border-width: 0.3em;
     border-style: solid;
     align-items: center;
     text-align: center;
     justify-content: center;
     box-sizing: border-box;
     cursor: pointer;
+    transition: border-width 0.125s;
 }
 
 .character-slot:hover, .character-slot.selected {
-    border-width: 6px;
+    border-width: 0.4em;
     box-sizing: border-box;
+    transition: border-width 0.06125s;
 }
 
 .character-slot.locked {
     filter: opacity(0.5);
-    border-width: 4px;
+    border-width: 0.3em;
     cursor: not-allowed;
 }
 
@@ -68,7 +70,7 @@
     width: 1em;
     height: 1em;
     border-radius: 100%;
-    border-width: 4px;
+    border-width: 0.3em;
     border-color: var(--button-border-color);
     border-style: solid;
 }
@@ -91,17 +93,18 @@
     position: relative;
     align-items: center;
     justify-content: center;
-    width: 35em;
-    width: min(35em, 100svw);
+    width: 36em;
+    width: min(36em, 100svw);
     flex-wrap: wrap;
     margin-top: 2em;
     margin-bottom: 2em;
+    gap: 0.3em;
 }
 
 .key {
-    border-radius: 6px;
+    border-width: 0.3em;
     border-color: var(--button-border-color);
-    border-width: 4px;
+    border-width: 0.3em;
     border-style: solid;
 }
 
