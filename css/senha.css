@@ -88,6 +88,7 @@
     align-items: center;
     justify-content: center;
     width: 35rem;
+    width: min(35rem, 100svw);
     flex-wrap: wrap;
     margin-top: 2rem;
     margin-bottom: 2rem;
