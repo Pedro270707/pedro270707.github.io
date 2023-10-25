@@ -4,6 +4,8 @@ let amountOfCharacters = 5;
 let selectedCharacter = -1;
 
 const gameFlexbox = document.getElementById("game-flexbox");
+const keyboard = document.getElementById("keyboard");
+const amountOfCharactersInput = document.getElementById("amount-of-characters");
 
 let randomSequence = "12345";
 let numberOfAttempts = 0;
@@ -61,7 +63,7 @@ function addNewGuessesArray(correctInWrongPlace, correctInCorrectPlace) {
 }
 
 function lockCharacterSlotArray(index = currentLastIndex) {
-    let characterSlots = document.getElementById("array-" + index);
+    let characterSlots = getCharacterSlots(index);
     if (characterSlots) {
         for (const el of characterSlots.children) {
             el.classList.remove("selected");
@@ -78,8 +80,29 @@ function startNewGame(pAmountOfCharacters = 5) {
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
     console.log("New game started! Random sequence: " + randomSequence);
     document.getElementById("valid-characters").innerHTML = validCharacters;
-    document.getElementById("amount-of-characters").max = validCharacters.length;
+    amountOfCharactersInput.max = validCharacters.length;
+    updateKeyboard();
     addNewCharacterSlotArray();
+}
+
+function updateKeyboard() {
+    keyboard.innerHTML = '';
+    for (let i = 0; i < validCharacters.length; i++) {
+        keyboard.appendChild(createKey(validCharacters[i]));
+        if (i == 9 || (validCharacters.length <= 9 && i == validCharacters.length - 1)) {
+            keyboard.appendChild(createKey("Backspace"));
+        }
+    }
+    keyboard.appendChild(createKey("Enter"));
+}
+
+function createKey(key) {
+    let keyElement = document.createElement("button");
+    keyElement.classList.add("button");
+    keyElement.classList.add("key");
+    keyElement.addEventListener('click', (event) => simulateKeyPress(key));
+    keyElement.innerHTML = key;
+    return keyElement;
 }
 
 function shuffleString(str) {
@@ -111,7 +134,7 @@ function hasDuplicateLetters(str) {
 startNewGame(5);
 
 function getSelectedCharacterSlot(withLetter) {
-    let characterSlots = document.getElementById("array-" + currentLastIndex).children;
+    let characterSlots = getCharacterSlots().children;
     if (characterSlots[selectedCharacter].innerHTML === '&nbsp;' && withLetter) {
         return (characterSlots[selectedCharacter - 1] && characterSlots[selectedCharacter - 1].innerHTML !== '&nbsp;') ? characterSlots[selectedCharacter - 1] : characterSlots[selectedCharacter];
     } else {
@@ -119,8 +142,12 @@ function getSelectedCharacterSlot(withLetter) {
     }
 }
 
+function getCharacterSlots(index = currentLastIndex) {
+    return document.getElementById("array-" + index);
+}
+
 function getCharactersInSlotArray(slotsIndex = currentLastIndex) {
-    let characterSlots = document.getElementById("array-" + slotsIndex);
+    let characterSlots = getCharacterSlots(slotsIndex);
     let characters = '';
     for (const el of characterSlots.children) {
         characters += el.innerHTML;
@@ -162,6 +189,28 @@ document.addEventListener("keyup", (event) => {
                 document.getElementById("victory").classList.remove("invisible");
             }
         }
+        if (hasDuplicateLetters(charactersInSlotArray)) {
+            let characterSlots = getCharacterSlots();
+            let seenLetters = '';
+            for (const slot of Array.from(characterSlots.children)) {
+                if (slot.innerHTML === '&nbsp;') {
+                    continue;
+                }
+                if (seenLetters.includes(slot.innerHTML)) {
+                    pulseSlotError(slot);
+                } else {
+                    seenLetters += slot.innerHTML;
+                }
+            }
+        }
+        if (charactersInSlotArray.includes(' ')) {
+            let characterSlots = getCharacterSlots();
+            for (const slot of Array.from(characterSlots.children)) {
+                if (slot.innerHTML === '&nbsp;') {
+                    pulseSlotError(slot);
+                }
+            }
+        }
     } else if (key === "ArrowLeft") {
         incrementSlot(-1);
     } else if (key === "ArrowRight") {
@@ -174,6 +223,15 @@ document.addEventListener("keyup", (event) => {
         incrementSlot(1);
     }
 });
+
+function pulseSlotError(slot) {
+    slot.style.transition = "none";
+    slot.classList.add("error");
+    setTimeout(() => {
+        slot.style.transition = "border-color 1s";
+        slot.classList.remove("error");
+    }, 20);
+}
 
 $(".character-slot").on("mouseup", characterSlotMouseUp)
 
@@ -188,7 +246,7 @@ function characterSlotMouseUp(event) {
 }
 
 $("#restart").on("click", (event) => {
-    let amountOfCharactersFromInput = document.getElementById("amount-of-characters").value || 3;
+    let amountOfCharactersFromInput = amountOfCharactersInput.value || 3;
     startNewGame(clamp(amountOfCharactersFromInput, 1, validCharacters.length));
     event.target.blur();
 });
@@ -224,4 +282,9 @@ function getCorrectInWrongPlace(input) {
 function setValidCharactersAndStartGame(str) {
     validCharacters = str;
     startNewGame(clamp(amountOfCharacters, 0, validCharacters.length));
+}
+
+function simulateKeyPress(key) {
+    const event = new KeyboardEvent('keyup', { key });
+    document.dispatchEvent(event);
 }

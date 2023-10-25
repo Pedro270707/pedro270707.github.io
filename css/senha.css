@@ -50,6 +50,10 @@
     cursor: not-allowed;
 }
 
+.character-slot.error {
+    border-color: #ff0000;
+}
+
 .character-slots {
     display: flex;
     gap: 0.25rem;
@@ -76,6 +80,24 @@
 
 .vertical-align-middle {
     vertical-align: middle;
+}
+
+.keyboard {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 35rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.key {
+    border-radius: 6px;
+    border-color: var(--button-border-color);
+    border-width: 4px;
+    border-style: solid;
 }
 
 .invisible {
