@@ -56,12 +56,15 @@ function addIndicatorsOfType(type, amount, parent) {
     }
 }
 
-function lockCharacterSlotArray(index = currentLastIndex) {
+function lockCharacterSlotArray(index = currentLastIndex, additionalClass) {
     let characterSlots = getCharacterSlots(index);
     if (characterSlots) {
         for (const el of characterSlots.children) {
             el.classList.remove("selected");
             el.classList.add("locked");
+            if (additionalClass) {
+                el.classList.add(additionalClass);
+            }
         }
     }
 }
@@ -179,7 +182,7 @@ document.addEventListener("keyup", (event) => {
                 addNewGuessesArray(getCorrectInWrongPlace(charactersInSlotArray), getCorrectInCorrectPlace(charactersInSlotArray));
                 addNewCharacterSlotArray();
             } else {
-                lockCharacterSlotArray();
+                lockCharacterSlotArray(currentLastIndex, "win");
                 document.getElementById("victory").classList.remove("invisible");
             }
         }
@@ -237,6 +240,7 @@ function characterSlotMouseUp(event) {
 }
 
 $("#restart").on("click", (event) => {
+    amountOfCharactersInput.value = clamp(amountOfCharactersInput.value, 1, validCharacters.length)
     let amountOfCharactersFromInput = amountOfCharactersInput.value || 3;
     startNewGame(clamp(amountOfCharactersFromInput, 1, validCharacters.length));
     event.target.blur();

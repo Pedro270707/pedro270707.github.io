@@ -60,6 +60,10 @@
     border-color: #ff9900;
 }
 
+.character-slot.win {
+    border-color: lightgreen;
+}
+
 .character-slots {
     display: flex;
     gap: 0.25em;
