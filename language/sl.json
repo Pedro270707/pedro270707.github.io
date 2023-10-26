@@ -35,5 +35,15 @@
   "cookieclicker-clickerlevelafter": "",
   "cookieclicker-clickerlevelbutton": "Nadgradi kliker za",
   "cookieclicker-hireworkerbutton": "Najeti delavca za",
+  "senha-title": "Mastermind",
+  "senha-validcharacters": "Upoštevani znaki:",
+  "senha-restart1": "Začni novo igro",
+  "senha-restart2": "z naslednjim številom znakov:",
+  "senha-restart3": "",
+  "senha-victory": "You won! Number of attempts:",
+  "senha-norepeatingcharacters": "Znaki se ne smejo ponavljati",
+  "senha-correctincorrectplace": "Pomeni, da je pravilen znak na pravilnem mestu",
+  "senha-correctinwrongplace": "Pomeni, da je pravilen znak na napačnem mestu",
+  "senha-wrongcharacter": "Znak ni vsebovan in je v celoti napačem",
   "footer-text": "[ustvaril Pedro270707]"
 }
