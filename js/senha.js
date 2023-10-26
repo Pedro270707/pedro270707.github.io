@@ -2,6 +2,7 @@ let validCharacters = "aeiou0123456789-_@#$%&*";
 let currentLastIndex = -1;
 let amountOfCharacters = 5;
 let selectedCharacter = -1;
+let indicateWrongCharacters = false;
 
 const gameFlexbox = document.getElementById("game-flexbox");
 const keyboard = document.getElementById("keyboard");
@@ -38,28 +39,21 @@ function addNewGuessesArray(correctInWrongPlace, correctInCorrectPlace) {
     let newGuessesArray = document.createElement("div");
     newGuessesArray.classList.add("guess-container");
     newGuessesArray.id = "guesses-" + currentLastIndex;
-    let wrong = amountOfCharacters;
-    for (let i = 0; i < correctInCorrectPlace; i++) {
-        wrong--;
-        let guess = document.createElement("span");
-        guess.classList.add("indicator");
-        guess.classList.add("correct-in-correct-place");
-        newGuessesArray.appendChild(guess);
-    }
-    for (let i = 0; i < correctInWrongPlace; i++) {
-        wrong--;
-        let guess = document.createElement("span");
-        guess.classList.add("indicator");
-        guess.classList.add("correct-in-wrong-place");
-        newGuessesArray.appendChild(guess);
-    }
-    for (let i = 0; i < wrong; i++) {
-        let guess = document.createElement("span");
-        guess.classList.add("indicator");
-        guess.classList.add("wrong");
-        newGuessesArray.appendChild(guess);
-    }
+    addIndicatorsOfType("correct-in-correct-place", correctInCorrectPlace, newGuessesArray);
+    addIndicatorsOfType("correct-in-wrong-place", correctInWrongPlace, newGuessesArray);
+    let wrong = amountOfCharacters - (correctInCorrectPlace + correctInWrongPlace);
+    addIndicatorsOfType("wrong", wrong, newGuessesArray);
+
     document.getElementById("array-container-" + currentLastIndex).appendChild(newGuessesArray);
+}
+
+function addIndicatorsOfType(type, amount, parent) {
+    for (let i = 0; i < amount; i++) {
+        let guess = document.createElement("span");
+        guess.classList.add("indicator");
+        guess.classList.add(type);
+        parent.appendChild(guess);
+    }
 }
 
 function lockCharacterSlotArray(index = currentLastIndex) {
@@ -284,4 +278,13 @@ function setValidCharactersAndStartGame(str) {
 function simulateKeyPress(key) {
     const event = new KeyboardEvent('keyup', { key });
     document.dispatchEvent(event);
+}
+
+function toggleWrongCharacterIndicator() {
+    if (indicateWrongCharacters) {
+        document.body.classList.remove("indicate-wrong-characters");
+    } else {
+        document.body.classList.add("indicate-wrong-characters");
+    }
+    indicateWrongCharacters = !indicateWrongCharacters;
 }

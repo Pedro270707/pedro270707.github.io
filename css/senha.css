@@ -84,6 +84,14 @@
     border-style: dotted;
 }
 
+.wrong {
+    visibility: hidden;
+}
+
+.indicate-wrong-characters .wrong {
+    visibility: visible;
+}
+
 .vertical-align-middle {
     vertical-align: middle;
 }
