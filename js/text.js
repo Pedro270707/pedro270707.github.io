@@ -66,13 +66,18 @@ class TranslatableText {
 
 function getTextFromJSON(jsonObject) {
     if (typeof jsonObject !== 'object') {
-        jsonObject = JSON.parse(jsonObject);
+        try {
+            jsonObject = JSON.parse(jsonObject);
+        } catch (error) {
+            console.log("Error when translating JSON to text: " + error.message + "\nPassed parameter: " + jsonObject);
+            return new LiteralText(jsonObject);
+        }
     }
     for (const key in jsonObject) {
         let arr = [];
         if (jsonObject.with) {
             if (!Array.isArray(jsonObject.with)) {
-                throw new Error(jsonObject.with + "is not a JSON array");
+                console.log(jsonObject.with + "is not a JSON array");
             }
             for (const jsonObj of jsonObject.with) {
                 arr.push(getTextFromJSON(jsonObj));
@@ -83,7 +88,7 @@ function getTextFromJSON(jsonObject) {
         } else if (key === 'translate') {
             return new TranslatableText(jsonObject[key], ...arr);
         } else {
-            throw new Error('Invalid text type: ' + key);
+            console.log('Invalid text type: ' + key);
         }
     }
 }

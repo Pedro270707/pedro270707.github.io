@@ -5,27 +5,27 @@ title: "Senha"
 
 <link rel="stylesheet" href="{{ site.baseurl }}/css/senha.css">
 
-<h1 class="center" data-string="senha-title">Senha</h1>
+<h1 class="center" data-string='{"translate":"senha-title"}'>Senha</h1>
 <div id="rules" class="center">
-	<span data-string="senha-validcharacters">Caracteres válidos:</span> <span id="valid-characters"></span>
+	<span data-string='{"translate":"senha-validcharacters"}'>Caracteres válidos:</span> <span id="valid-characters"></span>
 	<br>
-	<span data-string="senha-norepeatingcharacters">Caracteres não são repetidos</span>
+	<span data-string='{"translate":"senha-norepeatingcharacters"}'>Caracteres não são repetidos</span>
 	<br>
-	<span class="indicator correct-in-correct-place vertical-align-middle"></span> <span data-string="senha-correctincorrectplace">significa que há um caractere correto no local certo.</span>
+	<span class="indicator correct-in-correct-place vertical-align-middle"></span> <span data-string='{"translate":"senha-correctincorrectplace"}'>significa que há um caractere correto no local certo.</span>
 	<br>
-	<span class="indicator correct-in-wrong-place vertical-align-middle"></span> <span data-string="senha-correctinwrongplace">significa que há um caractere correto no local errado.</span>
+	<span class="indicator correct-in-wrong-place vertical-align-middle"></span> <span data-string='{"translate":"senha-correctinwrongplace"}'>significa que há um caractere correto no local errado.</span>
 	<span class="wrong">
 		<br>
-		<span class="indicator wrong vertical-align-middle"></span> <span data-string="senha-wrongcharacter">significa um caractere completamente errado.</span>
+		<span class="indicator wrong vertical-align-middle"></span> <span data-string='{"translate":"senha-wrongcharacter"}'>significa um caractere completamente errado.</span>
 	</span>
 </div>
-<div class="center invisible" id="victory"><span data-string="senha-victory"></span> <span id="number-of-attempts"></span></div>
+<div class="center invisible" id="victory"><span data-string='{"translate":"senha-victory"}'></span> <span id="number-of-attempts"></span></div>
 <div id="game-flexbox" class="game-flexbox center-flex"></div>
 
 <div id="keyboard" class="keyboard center-flex"></div>
 
 <div class="center">
-	<button class="button" id="restart" data-string="senha-restart1">Iniciar novo jogo</button> <span data-string="senha-restart2">com</span> <input class="text-input" type=number id="amount-of-characters" min="1" max="23"></input> <span data-string="senha-restart3">caractere(s)</span>
+	<button class="button" id="restart" data-string='{"translate":"senha-restart1"}'>Iniciar novo jogo</button> <span data-string='{"translate":"senha-restart2"}'>com</span> <input class="text-input" type=number id="amount-of-characters" min="1" max="23"></input> <span data-string='{"translate":"senha-restart3"}'>caractere(s)</span>
 </div>
 
 <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>

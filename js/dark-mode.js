@@ -8,7 +8,7 @@ if (localStorage.darkmode == undefined) {
 		translate.translateString('mainpage-disabledarkmode').then(str => {
 			darkModeButton.innerHTML = str;
 		});
-		darkModeButton.dataset.string = 'mainpage-disabledarkmode';
+		darkModeButton.dataset.string = '{"translate":"mainpage-disabledarkmode"}';
 	}
 }
 
@@ -19,13 +19,13 @@ function toggleDarkMode() {
 		translate.translateString('mainpage-disabledarkmode').then(str => {
 			darkModeButton.innerHTML = str;
 		});
-		darkModeButton.dataset.string = 'mainpage-disabledarkmode';
+		darkModeButton.dataset.string = '{"translate":"mainpage-disabledarkmode"}';
 	} else {
 		document.body.classList.remove("dark-mode");
 		localStorage.darkmode = "false";
 		translate.translateString('mainpage-enabledarkmode').then(str => {
 			darkModeButton.innerHTML = str;
 		});
-		darkModeButton.dataset.string = 'mainpage-enabledarkmode';
+		darkModeButton.dataset.string = '{"translate":"mainpage-enabledarkmode"}';
 	}
 }

@@ -78,7 +78,7 @@ function startNewGame(pAmountOfCharacters = 5) {
     document.getElementById("victory").classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
-    translate.translateString("senha-gamestarted", randomSequence).then(str => {
+    translate.translateString("senha-gamestarted", new LiteralText(randomSequence)).then(str => {
         console.log(str);
     });
     document.getElementById("valid-characters").innerHTML = validCharacters;

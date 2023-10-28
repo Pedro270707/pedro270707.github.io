@@ -78,13 +78,13 @@ class Translate {
 
 			if (placeholderKeyAttribute !== null) {
 				getTextFromJSON(placeholderKeyAttribute).get().then(str => {
-					currentElement.innerHTML = str;
+					currentElement.placeholder = str;
 				});
 			}
 
 			if (ariaLabelKeyAttribute !== null) {
 				getTextFromJSON(ariaLabelKeyAttribute).get().then(str => {
-					currentElement.innerHTML = str;
+					currentElement.ariaLabel = str;
 				});
 			}
 		}
