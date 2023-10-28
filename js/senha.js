@@ -12,7 +12,11 @@ let randomSequence = "12345";
 let numberOfAttempts = 0;
 
 function createCharacterSlot() {
-
+    let characterSlot = document.createElement("span");
+    characterSlot.classList.add("character-slot");
+    characterSlot.innerHTML = '&nbsp;';
+    characterSlot.addEventListener("mouseup", characterSlotMouseUp);
+    return characterSlot;
 }
 
 function addNewCharacterSlotArray() {
@@ -28,11 +32,7 @@ function addNewCharacterSlotArray() {
     newCharacterSlots.classList.add("character-slots");
     newCharacterSlots.id = "array-" + currentLastIndex;
     for (i = 0; i < amountOfCharacters; i++) {
-        let characterSlot = document.createElement("span");
-        characterSlot.classList.add("character-slot");
-        characterSlot.innerHTML = '&nbsp;';
-        newCharacterSlots.appendChild(characterSlot);
-        characterSlot.addEventListener("mouseup", characterSlotMouseUp);
+        newCharacterSlots.appendChild(createCharacterSlot());
     }
     newCharacterSlotArrayContainer.appendChild(newCharacterSlots);
     gameFlexbox.appendChild(newCharacterSlotArrayContainer);
@@ -54,14 +54,13 @@ function addNewGuessesArray(correctInWrongPlace, correctInCorrectPlace) {
 function addIndicatorsOfType(type, amount, parent) {
     for (let i = 0; i < amount; i++) {
         let guess = document.createElement("span");
-        guess.classList.add("indicator");
-        guess.classList.add(type);
+        guess.classList.add("indicator", type);
         parent.appendChild(guess);
     }
 }
 
 function lockCharacterSlotArray(index = currentLastIndex, additionalClass) {
-    let characterSlots = getCharacterSlots(index);
+    let characterSlots = getCharacterSlotArray(index);
     if (characterSlots) {
         for (const el of characterSlots.children) {
             el.classList.remove("selected");
@@ -79,7 +78,9 @@ function startNewGame(pAmountOfCharacters = 5) {
     document.getElementById("victory").classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
-    console.log("New game started! Random sequence: " + randomSequence);
+    translate.translateString("senha-gamestarted", randomSequence).then(str => {
+        console.log(str);
+    });
     document.getElementById("valid-characters").innerHTML = validCharacters;
     amountOfCharactersInput.max = validCharacters.length;
     updateKeyboard();
@@ -105,36 +106,14 @@ function createKey(key) {
     return keyElement;
 }
 
-function shuffleString(str) {
-    const array = str.split('');
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array.join('');
-}
-
 function getRandomCharacterSequence(pAmountOfCharacters = amountOfCharacters) {
     return shuffleString(validCharacters).slice(0, pAmountOfCharacters);
-}
-
-function hasDuplicateLetters(str) {
-    const charCount = {};
-
-    for (let char of str) {
-        if (charCount[char]) {
-            return true;
-        }
-        charCount[char] = 1;
-    }
-
-    return false;
 }
 
 startNewGame(5);
 
 function getSelectedCharacterSlot(withLetter) {
-    let characterSlots = getCharacterSlots().children;
+    let characterSlots = getCharacterSlotArray().children;
     if (characterSlots[selectedCharacter].innerHTML === '&nbsp;' && withLetter) {
         return (characterSlots[selectedCharacter - 1] && characterSlots[selectedCharacter - 1].innerHTML !== '&nbsp;') ? characterSlots[selectedCharacter - 1] : characterSlots[selectedCharacter];
     } else {
@@ -142,21 +121,17 @@ function getSelectedCharacterSlot(withLetter) {
     }
 }
 
-function getCharacterSlots(index = currentLastIndex) {
+function getCharacterSlotArray(index = currentLastIndex) {
     return document.getElementById("array-" + index);
 }
 
-function getCharactersInSlotArray(slotsIndex = currentLastIndex) {
-    let characterSlots = getCharacterSlots(slotsIndex);
+function getCharacterSlotArrayAsString(slotsIndex = currentLastIndex) {
+    let characterSlots = getCharacterSlotArray(slotsIndex);
     let characters = '';
     for (const el of characterSlots.children) {
         characters += el.innerHTML;
     }
     return characters.replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
-}
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
 }
 
 function incrementSlot(amount) {
@@ -177,7 +152,7 @@ document.addEventListener("keyup", (event) => {
             incrementSlot(-1);
         }
     } else if (key === "Enter") {
-        let charactersInSlotArray = getCharactersInSlotArray();
+        let charactersInSlotArray = getCharacterSlotArrayAsString();
         if (!charactersInSlotArray.includes(' ') && !hasDuplicateLetters(charactersInSlotArray)) {
             numberOfAttempts++;
             document.getElementById("number-of-attempts").innerHTML = numberOfAttempts;
@@ -190,7 +165,7 @@ document.addEventListener("keyup", (event) => {
             }
         }
         if (hasDuplicateLetters(charactersInSlotArray)) {
-            let characterSlots = getCharacterSlots();
+            let characterSlots = getCharacterSlotArray();
             for (const slot of Array.from(characterSlots.children)) {
                 if (slot.innerHTML === '&nbsp;') {
                     continue;
@@ -201,7 +176,7 @@ document.addEventListener("keyup", (event) => {
             }
         }
         if (charactersInSlotArray.includes(' ')) {
-            let characterSlots = getCharacterSlots();
+            let characterSlots = getCharacterSlotArray();
             for (const slot of Array.from(characterSlots.children)) {
                 if (slot.innerHTML === '&nbsp;') {
                     pulseSlotError(slot);
@@ -265,6 +240,33 @@ function simulateKeyPress(key) {
 }
 
 function toggleWrongCharacterIndicator() {
-    document.body.classList.toggle("indicate-wrong-characters", indicateWrongCharacters);
+    document.body.classList.toggle("indicate-wrong-characters", !indicateWrongCharacters);
     indicateWrongCharacters = !indicateWrongCharacters;
+}
+
+// Helper methods
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function shuffleString(str) {
+    const array = str.split('');
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array.join('');
+}
+
+function hasDuplicateLetters(str) {
+    const charCount = {};
+
+    for (let char of str) {
+        if (charCount[char]) {
+            return true;
+        }
+        charCount[char] = 1;
+    }
+
+    return false;
 }

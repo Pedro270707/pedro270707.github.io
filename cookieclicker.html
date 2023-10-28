@@ -8,23 +8,17 @@ title: "Cookie Clicker"
 	<div class="milk"></div>
 	<div class="milk-back"></div>
 	<div class="cookie-background-text">
-		<h1 data-string="cookieclicker-title"></h1>
+		<h1 data-string='{"translate":"cookieclicker-title"}'></h1>
 	</div>
 </div>
 <div class="website-divider">
 	<div class="cookie-wrapper center"><div class="cookie" onclick="cookieClicked();"><img src="{{ site.baseurl }}/assets/cookieclicker/cookie.png" draggable="false"></div></div>
-	<div id="cookie-counter">0 <span id="cookie-counter-word" data-string="cookieclicker-zerocookies">cookie</span></div>
+	<div id="cookie-counter"><span data-string='{"translate":"cookieclicker-zerocookies","with":[{"text":"0"}]}'></span></div>
 </div>
 <div class="website-divider">
-	<button id="hire-worker" onclick="hireWorker();" class="button"><span id="hire-worker-text"><span data-string="cookieclicker-hireworkerbutton">Contratar funcionário por</span> 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
-	<div id="worker-counter">0 <span data-string="cookieclicker-zeroworkers"></span></div>
-	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text"><span data-string="cookieclicker-clickerlevelbutton">Melhorar cursor por</span> 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
-	<div id="clicker-level-counter"><span data-string="cookieclicker-clickerlevelbefore"></span>1<span data-string="cookieclicker-clickerlevelafter"></span></div>
+	<button id="hire-worker" onclick="hireWorker();" class="button"><span id="hire-worker-text"><span data-string='{"translate":"cookieclicker-hireworkerbutton","with":[{"text":"10"}]}'>Contratar funcionário por 10</span></span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="worker-counter"><span data-string='{"translate":"cookieclicker-zeroworkers","with":[{"text":"0"}]}'></span></div>
+	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text"><span data-string='{"translate":"cookieclicker-clickerlevelbutton","with":[{"text":"10"}]}'>Melhorar cursor por 10</span></span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="clicker-level-counter"><span data-string='{"translate":"cookieclicker-clickerlevel","with":[{"text":"1"}]}'></span></div>
 </div>
-<script src="{{ site.baseurl }}/js/translate.js"></script>
 <script src="{{ site.baseurl }}/js/cookieclicker.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function(e) {
-    translate.reloadLoc();
-});
-</script>

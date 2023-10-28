@@ -29,6 +29,9 @@ class Translate {
 			this.file = await fetch('./language/' + (this.language ? this.language : localStorage.language) + '.json');
 		}
 		let translatedString = string;
+
+        const promises = [];
+
 		if (this.file.ok) {
 			const fileJson = await this.file.clone().json();
 			if (fileJson[string] != null) {
@@ -37,14 +40,25 @@ class Translate {
 
 			for (let i = 1; i <= args.length; i++) {
 				const placeholder = "%" + i + "$s";
+				if (!(args[i - 1] instanceof LiteralText || args[i - 1] instanceof TranslatableText)) continue;
+				const argPromise = args[i - 1].get();
 
 				if (translatedString.includes(placeholder)) {
-					translatedString = translatedString.replace(placeholder, args[i - 1]);
+					argPromise.then(str => {
+						translatedString = translatedString.replace(placeholder, str);
+					});
 				} else {
-					translatedString = translatedString.replace("%s", args[i - 1]);
+					argPromise.then(str => {
+						translatedString = translatedString.replace("%s", str);
+					});
 				}
+
+				promises.push(argPromise);
 			}
 		}
+
+		await Promise.all(promises);
+
 		return translatedString;
 	}
 	
@@ -57,15 +71,21 @@ class Translate {
 			const ariaLabelKeyAttribute = currentElement.getAttribute("data-aria-label");
 
 			if (keyAttribute !== null) {
-				currentElement.innerHTML = await this.translateString(keyAttribute);
+				getTextFromJSON(keyAttribute).get().then(str => {
+					currentElement.innerHTML = str;
+				});
 			}
 
 			if (placeholderKeyAttribute !== null) {
-				currentElement.placeholder = await this.translateString(placeholderKeyAttribute);
+				getTextFromJSON(placeholderKeyAttribute).get().then(str => {
+					currentElement.innerHTML = str;
+				});
 			}
 
 			if (ariaLabelKeyAttribute !== null) {
-				currentElement.ariaLabel = await this.translateString(ariaLabelKeyAttribute);
+				getTextFromJSON(ariaLabelKeyAttribute).get().then(str => {
+					currentElement.innerHTML = str;
+				});
 			}
 		}
 	}
@@ -79,7 +99,7 @@ class Translate {
 	}
 	
 	async getKeyWrapped(key, ...args) {
-		return "<span data-string=\"" + key + "\">" + (await this.translateString(key, ...args)) + "</span>";
+		return "<span data-string='" + JSON.stringify(new TranslatableText(key, ...args)) + "'>" + (await this.translateString(key, ...args)) + "</span>";
 	}
 }
 

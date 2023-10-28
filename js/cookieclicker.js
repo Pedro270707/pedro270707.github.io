@@ -70,8 +70,8 @@ function hireWorker() {
 		recountCookies();
 		recountWorkers();
 		workerCost = Math.ceil(Math.pow(workerCost / 1.3, 1.2));
-		translate.getKeyWrapped('cookieclicker-hireworkerbutton').then(str => {
-			workerButtonText.innerHTML = str + " " + workerCost;
+		translate.getKeyWrapped('cookieclicker-hireworkerbutton', new LiteralText(workerCost)).then(str => {
+			workerButtonText.innerHTML = str;
 		});
 		
 		setInterval(function () {
@@ -86,27 +86,25 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		translate.getKeyWrapped('cookieclicker-clickerlevelbefore').then(strBefore => {
-			translate.getKeyWrapped('cookieclicker-clickerlevelafter').then(strAfter => {
-				clickerLevelCounter.innerHTML = strBefore + clickerLevel + strAfter;
-			});
+		translate.getKeyWrapped('cookieclicker-clickerlevel', new LiteralText(clickerLevel)).then(str => {
+			clickerLevelCounter.innerHTML = str;
 		});
 		
 		clickerCost = Math.ceil(Math.pow(clickerCost / 1.3, 1.25));
-		translate.getKeyWrapped('cookieclicker-clickerlevelbutton').then(str => {
-			upgradeClickerButtonText.innerHTML = str + " " + clickerCost;
+		translate.getKeyWrapped('cookieclicker-clickerlevelbutton', clickerCost).then(str => {
+			upgradeClickerButtonText.innerHTML = str;
 		});
 	}
 }
 
 function setCookieString(key, cookieAmount) {
-	translate.getKeyWrapped(key).then(str => {
-		cookieCounter.innerHTML = cookieAmount + " " + str;
+	translate.getKeyWrapped(key, new LiteralText(cookieAmount)).then(str => {
+		cookieCounter.innerHTML = str;
 	});
 }
 
 function setWorkerString(key, workerAmount) {
-	translate.getKeyWrapped(key).then(str => {
-		workerCounter.innerHTML = workerAmount + " " + str;
+	translate.getKeyWrapped(key, new LiteralText(workerAmount)).then(str => {
+		workerCounter.innerHTML = str;
 	});
 }
