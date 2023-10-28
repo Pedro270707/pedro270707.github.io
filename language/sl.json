@@ -35,7 +35,7 @@
   "cookieclicker-clickerlevelbutton": "Nadgradi kliker za %s",
   "cookieclicker-hireworkerbutton": "Najeti delavca za %s",
   "senha-title": "Mastermind",
-  "senha-validcharacters": "Upoštevani znaki:",
+  "senha-validcharacters": "Upoštevani znaki: %s",
   "senha-restart1": "Začni novo igro",
   "senha-restart2": "z naslednjim številom znakov:",
   "senha-restart3": "",

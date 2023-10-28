@@ -86,25 +86,17 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		translate.getKeyWrapped('cookieclicker-clickerlevel', new LiteralText(clickerLevel)).then(str => {
-			clickerLevelCounter.innerHTML = str;
-		});
+		translate.setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", new LiteralText(clickerLevel)));
 		
 		clickerCost = Math.ceil(Math.pow(clickerCost / 1.3, 1.25));
-		translate.getKeyWrapped('cookieclicker-clickerlevelbutton', clickerCost).then(str => {
-			upgradeClickerButtonText.innerHTML = str;
-		});
+		translate.setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", new LiteralText(clickerCost)));
 	}
 }
 
 function setCookieString(key, cookieAmount) {
-	translate.getKeyWrapped(key, new LiteralText(cookieAmount)).then(str => {
-		cookieCounter.innerHTML = str;
-	});
+	translate.setElementString(cookieCounter, new TranslatableText(key, new LiteralText(cookieAmount)));
 }
 
 function setWorkerString(key, workerAmount) {
-	translate.getKeyWrapped(key, new LiteralText(workerAmount)).then(str => {
-		workerCounter.innerHTML = str;
-	});
+	translate.setElementString(workerCounter, new TranslatableText(key, new LiteralText(workerAmount)));
 }

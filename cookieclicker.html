@@ -13,12 +13,12 @@ title: "Cookie Clicker"
 </div>
 <div class="website-divider">
 	<div class="cookie-wrapper center"><div class="cookie" onclick="cookieClicked();"><img src="{{ site.baseurl }}/assets/cookieclicker/cookie.png" draggable="false"></div></div>
-	<div id="cookie-counter"><span data-string='{"translate":"cookieclicker-zerocookies","with":[{"text":"0"}]}'></span></div>
+	<div id="cookie-counter" data-string='{"translate":"cookieclicker-zerocookies","with":[{"text":"0"}]}'></div>
 </div>
 <div class="website-divider">
 	<button id="hire-worker" onclick="hireWorker();" class="button"><span id="hire-worker-text"><span data-string='{"translate":"cookieclicker-hireworkerbutton","with":[{"text":"10"}]}'>Contratar funcionário por 10</span></span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
-	<div id="worker-counter"><span data-string='{"translate":"cookieclicker-zeroworkers","with":[{"text":"0"}]}'></span></div>
-	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text"><span data-string='{"translate":"cookieclicker-clickerlevelbutton","with":[{"text":"10"}]}'>Melhorar cursor por 10</span></span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
-	<div id="clicker-level-counter"><span data-string='{"translate":"cookieclicker-clickerlevel","with":[{"text":"1"}]}'></span></div>
+	<div id="worker-counter" data-string='{"translate":"cookieclicker-zeroworkers","with":[{"text":"0"}]}'></div>
+	<button id="upgrade-clicker" onclick="upgradeClicker();" class="button"><span id="upgrade-clicker-text" data-string='{"translate":"cookieclicker-clickerlevelbutton","with":[{"text":"10"}]}'>Melhorar cursor por 10</span> <img src="{{ site.baseurl }}/assets/cookieclicker/cookie_icon.png" class="cookie-icon" draggable="false"></button>
+	<div id="clicker-level-counter" data-string='{"translate":"cookieclicker-clickerlevel","with":[{"text":"1"}]}'></div>
 </div>
 <script src="{{ site.baseurl }}/js/cookieclicker.js"></script>

@@ -77,7 +77,7 @@ function getTextFromJSON(jsonObject) {
         let arr = [];
         if (jsonObject.with) {
             if (!Array.isArray(jsonObject.with)) {
-                console.log(jsonObject.with + "is not a JSON array");
+                console.log(jsonObject.with + " is not a JSON array");
             }
             for (const jsonObj of jsonObject.with) {
                 arr.push(getTextFromJSON(jsonObj));

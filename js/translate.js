@@ -90,16 +90,38 @@ class Translate {
 		}
 	}
 	
-	async updateElementContent(content, key) {
-		if (key != null) {
-			return this.translateString(key);
-		} else {
-			return content;
-		}
-	}
-	
 	async getKeyWrapped(key, ...args) {
 		return "<span data-string='" + JSON.stringify(new TranslatableText(key, ...args)) + "'>" + (await this.translateString(key, ...args)) + "</span>";
+	}
+
+	async setElementString(element, text) {
+		if (text instanceof LiteralText || text instanceof TranslatableText) {
+			text = JSON.stringify(text);
+		}
+		element.dataset.string = text;
+		getTextFromJSON(text).get().then(str => {
+			element.innerHTML = str;
+		});
+	}
+
+	async setElementPlaceholder(element, text) {
+		if (text instanceof LiteralText || text instanceof TranslatableText) {
+			text = JSON.stringify(text);
+		}
+		element.dataset.placeholder = text;
+		getTextFromJSON(text).get().then(str => {
+			element.placeholder = str;
+		});
+	}
+
+	async setElementAriaLabel(element, text) {
+		if (text instanceof LiteralText || text instanceof TranslatableText) {
+			text = JSON.stringify(text);
+		}
+		element.dataset.ariaLabel = text;
+		getTextFromJSON(text).get().then(str => {
+			element.ariaLabel = str;
+		});
 	}
 }
 

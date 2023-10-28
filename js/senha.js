@@ -81,7 +81,7 @@ function startNewGame(pAmountOfCharacters = 5) {
     translate.translateString("senha-gamestarted", new LiteralText(randomSequence)).then(str => {
         console.log(str);
     });
-    document.getElementById("valid-characters").innerHTML = validCharacters;
+    translate.setElementString(document.getElementById("valid-characters"), new TranslatableText("senha-validcharacters", new LiteralText(validCharacters)));
     amountOfCharactersInput.max = validCharacters.length;
     updateKeyboard();
     addNewCharacterSlotArray();
