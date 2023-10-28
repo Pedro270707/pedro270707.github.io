@@ -11,6 +11,10 @@ const amountOfCharactersInput = document.getElementById("amount-of-characters");
 let randomSequence = "12345";
 let numberOfAttempts = 0;
 
+function createCharacterSlot() {
+
+}
+
 function addNewCharacterSlotArray() {
     lockCharacterSlotArray();
 
@@ -95,8 +99,7 @@ function updateKeyboard() {
 
 function createKey(key) {
     let keyElement = document.createElement("button");
-    keyElement.classList.add("button");
-    keyElement.classList.add("key");
+    keyElement.classList.add("button", "key");
     keyElement.addEventListener('click', (event) => simulateKeyPress(key));
     keyElement.innerHTML = key;
     return keyElement;
@@ -227,8 +230,6 @@ function pulseSlotError(slot, errorClass = "error") {
     }, 20);
 }
 
-$(".character-slot").on("mouseup", characterSlotMouseUp)
-
 function characterSlotMouseUp(event) {
     if (Array.from(event.target.classList).includes("locked")) return;
     let parent = event.target.parentElement;
@@ -240,38 +241,17 @@ function characterSlotMouseUp(event) {
 }
 
 $("#restart").on("click", (event) => {
-    amountOfCharactersInput.value = clamp(amountOfCharactersInput.value, 1, validCharacters.length)
-    let amountOfCharactersFromInput = amountOfCharactersInput.value || 3;
-    startNewGame(clamp(amountOfCharactersFromInput, 1, validCharacters.length));
+    amountOfCharactersInput.value = clamp(amountOfCharactersInput.value || 5, 1, validCharacters.length)
+    startNewGame(amountOfCharactersInput.value);
     event.target.blur();
 });
 
 function getCorrectInCorrectPlace(input) {
-    let correctInCorrectPlace = 0;
-    for (let i = 0; i < input.length; i++) {
-        if (input[i] === randomSequence[i]) {
-            correctInCorrectPlace++;
-        }
-    }
-    return correctInCorrectPlace;
+    return Array.from(input).reduce((count, value, index) => count + (value === randomSequence[index] ? 1 : 0), 0);
 }
 
 function getCorrectInWrongPlace(input) {
-    let correctInWrongPlace = 0;
-    let randomSequenceCopy = randomSequence;
-    for (let i = input.length; i >= 0; i--) {
-        if (input[i] === randomSequenceCopy[i]) {
-            randomSequenceCopy = randomSequenceCopy.substring(0, i) + randomSequenceCopy.substring(i + 1);
-        }
-    }
-    for (let i = 0; i < input.length; i++) {
-        let index = randomSequenceCopy.indexOf(input[i]);
-        if (index !== -1) {
-            correctInWrongPlace++;
-            randomSequenceCopy = randomSequenceCopy.substring(0, index) + randomSequenceCopy.substring(index + 1);
-        }
-    }
-    return correctInWrongPlace;
+    return Array.from(input).reduce((count, value, index) => count + (randomSequence.split(value).length - 1), 0) - getCorrectInCorrectPlace(input);
 }
 
 function setValidCharactersAndStartGame(str) {
@@ -285,10 +265,6 @@ function simulateKeyPress(key) {
 }
 
 function toggleWrongCharacterIndicator() {
-    if (indicateWrongCharacters) {
-        document.body.classList.remove("indicate-wrong-characters");
-    } else {
-        document.body.classList.add("indicate-wrong-characters");
-    }
+    document.body.classList.toggle("indicate-wrong-characters", indicateWrongCharacters);
     indicateWrongCharacters = !indicateWrongCharacters;
 }
