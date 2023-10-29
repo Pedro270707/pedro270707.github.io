@@ -53,11 +53,9 @@ class Translate {
 					});
 				}
 
-				promises.push(argPromise);
+				await argPromise;
 			}
 		}
-
-		await Promise.all(promises);
 
 		return translatedString;
 	}

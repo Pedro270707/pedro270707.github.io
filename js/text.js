@@ -37,10 +37,8 @@ class LiteralText {
                 }
             });
     
-            promises.push(argPromise);
+            await argPromise;
         }
-    
-        await Promise.all(promises);
     
         return Promise.resolve(key);
     }
