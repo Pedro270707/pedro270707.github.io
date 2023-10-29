@@ -1,6 +1,11 @@
 class LiteralText {
     constructor(key, ...args) {
         this.key = key;
+        for (const arg in args) {
+            if (!(args[arg] instanceof LiteralText || args[arg] instanceof TranslatableText)) {
+                args[arg] = new LiteralText(args[arg]);
+            }
+        }
         this.args = args;
     }
 
@@ -44,6 +49,11 @@ class LiteralText {
 class TranslatableText {
     constructor(key, ...args) {
         this.key = key;
+        for (const arg in args) {
+            if (!(args[arg] instanceof LiteralText || args[arg] instanceof TranslatableText)) {
+                args[arg] = new LiteralText(args[arg]);
+            }
+        }
         this.args = args;
     }
 
