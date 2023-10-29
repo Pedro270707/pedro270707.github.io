@@ -86,17 +86,17 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		translate.setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
+		setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
 		
 		clickerCost = Math.ceil(Math.pow(clickerCost / 1.3, 1.25));
-		translate.setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
+		setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
 	}
 }
 
 function setCookieString(key, cookieAmount) {
-	translate.setElementString(cookieCounter, new TranslatableText(key, cookieAmount));
+	setElementString(cookieCounter, new TranslatableText(key, cookieAmount));
 }
 
 function setWorkerString(key, workerAmount) {
-	translate.setElementString(workerCounter, new TranslatableText(key, workerAmount));
+	setElementString(workerCounter, new TranslatableText(key, workerAmount));
 }

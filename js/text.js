@@ -102,3 +102,33 @@ function getTextFromJSON(jsonObject) {
         }
     }
 }
+
+async function setElementString(element, text) {
+    if (text instanceof LiteralText || text instanceof TranslatableText) {
+        text = JSON.stringify(text);
+    }
+    element.dataset.string = text;
+    getTextFromJSON(text).get().then(str => {
+        element.innerHTML = str;
+    });
+}
+
+async function setElementPlaceholder(element, text) {
+    if (text instanceof LiteralText || text instanceof TranslatableText) {
+        text = JSON.stringify(text);
+    }
+    element.dataset.placeholder = text;
+    getTextFromJSON(text).get().then(str => {
+        element.placeholder = str;
+    });
+}
+
+async function setElementAriaLabel(element, text) {
+    if (text instanceof LiteralText || text instanceof TranslatableText) {
+        text = JSON.stringify(text);
+    }
+    element.dataset.ariaLabel = text;
+    getTextFromJSON(text).get().then(str => {
+        element.ariaLabel = str;
+    });
+}
