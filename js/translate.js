@@ -40,7 +40,7 @@ class Translate {
 
 			for (let i = 1; i <= args.length; i++) {
 				const placeholder = "%" + i + "$s";
-				if (!(args[i - 1] instanceof LiteralText || args[i - 1] instanceof TranslatableText)) continue;
+				if (!(args[i - 1] instanceof LiteralText || args[i - 1] instanceof TranslatableText)) args[i - 1] = new LiteralText(args[i - 1]);
 				const argPromise = args[i - 1].get();
 
 				if (translatedString.includes(placeholder)) {

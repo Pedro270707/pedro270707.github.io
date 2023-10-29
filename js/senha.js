@@ -79,10 +79,10 @@ function startNewGame(pAmountOfCharacters = 5) {
     victoryText.classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
-    translate.translateString("senha-gamestarted", new LiteralText(randomSequence)).then(str => {
+    translate.translateString("senha-gamestarted", randomSequence).then(str => {
         console.log(str);
     });
-    translate.setElementString(document.getElementById("valid-characters"), new TranslatableText("senha-validcharacters", new LiteralText(validCharacters)));
+    translate.setElementString(document.getElementById("valid-characters"), new TranslatableText("senha-validcharacters", validCharacters));
     amountOfCharactersInput.max = validCharacters.length;
     updateKeyboard();
     addNewCharacterSlotArray();
@@ -157,7 +157,7 @@ document.addEventListener("keyup", (event) => {
         let charactersInSlotArray = getCharacterSlotArrayAsString();
         if (!charactersInSlotArray.includes(' ') && !hasDuplicateLetters(charactersInSlotArray)) {
             numberOfAttempts++;
-            translate.setElementString(victoryText, new TranslatableText("senha-victory", new LiteralText(numberOfAttempts)));
+            translate.setElementString(victoryText, new TranslatableText("senha-victory", numberOfAttempts));
             if (charactersInSlotArray !== randomSequence) {
                 addNewGuessesArray(getCorrectInWrongPlace(charactersInSlotArray), getCorrectInCorrectPlace(charactersInSlotArray));
                 addNewCharacterSlotArray();
