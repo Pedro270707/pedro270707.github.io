@@ -39,7 +39,7 @@
   "senha-restart1": "Začni novo igro",
   "senha-restart2": "z naslednjim številom znakov:",
   "senha-restart3": "",
-  "senha-victory": "Zmagal si! Število poskusov:",
+  "senha-victory": "Zmagal si! Število poskusov: %s",
   "senha-norepeatingcharacters": "Znaki se ne smejo ponavljati",
   "senha-correctincorrectplace": "Pomeni, da je pravilen znak na pravilnem mestu",
   "senha-correctinwrongplace": "Pomeni, da je pravilen znak na napačnem mestu",

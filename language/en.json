@@ -42,7 +42,7 @@
   "senha-restart1": "Start a new game",
   "senha-restart2": "with",
   "senha-restart3": "character(s)",
-  "senha-victory": "You won! Number of attempts:",
+  "senha-victory": "You won! Number of attempts: %s",
   "senha-norepeatingcharacters": "Characters are not repeated",
   "senha-correctincorrectplace": "means that there is a correct character in the right place.",
   "senha-correctinwrongplace": "means that there is a correct character in the wrong place.",

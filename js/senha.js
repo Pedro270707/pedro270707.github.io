@@ -7,6 +7,7 @@ let indicateWrongCharacters = false;
 const gameFlexbox = document.getElementById("game-flexbox");
 const keyboard = document.getElementById("keyboard");
 const amountOfCharactersInput = document.getElementById("amount-of-characters");
+const victoryText = document.getElementById("victory");
 
 let randomSequence = "12345";
 let numberOfAttempts = 0;
@@ -75,7 +76,7 @@ function lockCharacterSlotArray(index = currentLastIndex, additionalClass) {
 function startNewGame(pAmountOfCharacters = 5) {
     numberOfAttempts = 0;
     gameFlexbox.innerHTML = '';
-    document.getElementById("victory").classList.add("invisible");
+    victoryText.classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
     translate.translateString("senha-gamestarted", new LiteralText(randomSequence)).then(str => {
@@ -155,13 +156,13 @@ document.addEventListener("keyup", (event) => {
         let charactersInSlotArray = getCharacterSlotArrayAsString();
         if (!charactersInSlotArray.includes(' ') && !hasDuplicateLetters(charactersInSlotArray)) {
             numberOfAttempts++;
-            document.getElementById("number-of-attempts").innerHTML = numberOfAttempts;
+            translate.setElementString(victoryText, new TranslatableText("senha-victory", new LiteralText(numberOfAttempts)));
             if (charactersInSlotArray !== randomSequence) {
                 addNewGuessesArray(getCorrectInWrongPlace(charactersInSlotArray), getCorrectInCorrectPlace(charactersInSlotArray));
                 addNewCharacterSlotArray();
             } else {
                 lockCharacterSlotArray(currentLastIndex, "win");
-                document.getElementById("victory").classList.remove("invisible");
+                victoryText.classList.remove("invisible");
             }
         }
         if (hasDuplicateLetters(charactersInSlotArray)) {
