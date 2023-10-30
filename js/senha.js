@@ -143,12 +143,12 @@ function incrementSlot(amount) {
 
 document.addEventListener("keyup", (event) => {
     let key = event.key;
-    if (getSelectedCharacterSlot(true).classList.contains("locked")) return;
+    let selectedLetterCharacterSlot = getSelectedCharacterSlot(true);
+    if (selectedLetterCharacterSlot.classList.contains("locked")) return;
     if (key === "Backspace") {
-        if (selectedCharacterSlot.classList.contains("locked")) return;
         let shouldIncrement = getSelectedCharacterSlot(false).innerHTML === '&nbsp;';
-        if (selectedCharacterSlot) {
-            selectedCharacterSlot.innerHTML = '&nbsp;';
+        if (selectedLetterCharacterSlot) {
+            selectedLetterCharacterSlot.innerHTML = '&nbsp;';
         }
         if (shouldIncrement) {
             incrementSlot(-1);
