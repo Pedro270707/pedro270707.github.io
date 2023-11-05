@@ -26,7 +26,7 @@ class Translate {
 	
 	async translateString(string, ...args) {
 		if (!this.file) {
-			this.file = await fetch('./language/' + (this.language ? this.language : localStorage.language) + '.json');
+			this.file = await fetch('/language/' + (this.language ? this.language : localStorage.language) + '.json');
 		}
 		let translatedString = string;
 
