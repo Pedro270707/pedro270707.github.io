@@ -684,6 +684,16 @@
 	position: relative;
 }
 
+.tooltip {
+	image-rendering: pixelated;
+	z-index: 10;
+}
+
+.follow-cursor {
+	position: fixed;
+	z-index: 11;
+}
+
 @keyframes clouds {
 	0% {
 		background-position: 0;
