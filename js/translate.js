@@ -61,7 +61,7 @@ class Translate {
 	}
 	
 	async reloadLoc() {
-		this.file = await fetch('./language/' + (this.language ? this.language : localStorage.language) + '.json');
+		this.file = await fetch('/language/' + (this.language ? this.language : localStorage.language) + '.json');
 		let allElements = document.getElementsByTagName("*");
 		for (let currentElement of allElements) {
 			const keyAttribute = currentElement.getAttribute("data-string");
