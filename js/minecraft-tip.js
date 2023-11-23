@@ -25,7 +25,7 @@ function drawTooltip(canvas, textRenderer) {
   const str = canvas.dataset.text;
   const ctx = canvas.getContext('2d');
 
-  updateCanvasSize(canvas, str, textRenderer);
+  updateCanvasSize(canvas, textRenderer);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -51,13 +51,13 @@ function drawTooltip(canvas, textRenderer) {
   requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
 }
 
-function updateCanvasSize(canvas, text, textRenderer) {
+function updateCanvasSize(canvas, textRenderer, text = canvas.dataset.text) {
 	setDefaultCanvasSettings(canvas);
   canvas.width = textRenderer.getWidth(text) + 22;
   canvas.height = textRenderer.getHeight(text) + 18;
 }
 
-function createTooltip(text = "", followCursor) {
+function createTooltip(text = "", followCursor = false) {
   let tooltip = document.createElement("canvas");
   tooltip.classList.add("tooltip");
   setTooltipText(tooltip, text);
@@ -160,7 +160,7 @@ class TextRenderer {
     }
   }
 
-  drawChar(char, x, y, shadow, formatting) {
+  drawChar(char, x, y, shadow, formatting = new TextFormatting()) {
     const ctx = this.canvas.getContext('2d');
     ctx.save();
 
@@ -168,7 +168,11 @@ class TextRenderer {
 
     if (shadow) {
       ctx.save();
-      this.drawChar(char, x + 2, y + 2, false, formatting.copy().withFormattingOption(TextFormatting.FormattingOptions.COLOR, formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR) * (21/85)).withFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false));
+      const originalColor = formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR);
+      let red = Math.round((originalColor >> 16) * (41/168));
+      let green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
+      let blue = Math.round((originalColor & 0xFF) * (41/168));
+      this.drawChar(char, x + 2, y + 2, false, formatting.copy().withFormattingOption(TextFormatting.FormattingOptions.COLOR, red << 16 | green << 8 | blue).withFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false));
       ctx.restore();
     }
     
@@ -204,6 +208,11 @@ class TextFormatting {
     RESET: 'reset'
   });
 
+  /*
+  This is called every animation frame, so you can dynamically change properties based on time and such.
+  NOT 20 TPS! It's actually as fast as it can be, and Minecraft does that too.
+  Another thing to note is that formatting codes can only be one character in length. e.g. §g would work, but §rainbow would not.
+  */
   static formattingCodes = {
     0: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, 0x000000), type: TextFormatting.FormattingOptions.COLOR},
     1: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, 0x0000AA), type: TextFormatting.FormattingOptions.COLOR},
@@ -325,7 +334,7 @@ class TextFormatting {
   }
 
   isFormatting(key) {
-    return this.formattingOptions[key].isFormatting;
+    return this.formattingOptions[key] && this.formattingOptions[key].isFormatting;
   }
 
   reset() {
