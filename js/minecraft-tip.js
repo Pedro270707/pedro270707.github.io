@@ -137,24 +137,34 @@ class TextRenderer {
   }
 
   drawText(string, x, y, shadow, formatting = new TextFormatting()) {
+    const ctx = this.canvas.getContext('2d');
+
     let cursor = 0;
     let left = 0;
     let line = 0;
 
     while (cursor < string.length) {
       let char = string[cursor];
-      if (char == '\n') {
-        line++;
-        left = 0;
-        formatting.reset();
-      } else if (char == '§') {
-        cursor++;
-        char = string[cursor];
-        if (TextFormatting.formattingCodes[char] && (formatting.isFormatting(TextFormatting.formattingCodes[char].type) || !formatting.isFormatted())) {
-          TextFormatting.formattingCodes[char].formatFunction(formatting);
-        }
-      } else {
-        left += this.drawChar(char, x + left, y + (line * this.getLineHeight()), shadow, formatting);
+      switch (char) {
+        case '\n':
+          line++;
+          left = 0;
+          formatting.reset();
+          break;
+        case '§':
+          cursor++;
+          char = string[cursor];
+          if (TextFormatting.formattingCodes[char] && (formatting.isFormatting(TextFormatting.formattingCodes[char].type) || !formatting.isFormatted())) {
+            TextFormatting.formattingCodes[char].formatFunction(formatting);
+          }
+          break;
+        // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
+        case ' ':
+          left += parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
+          break;
+        default:
+          left += this.drawChar(char, x + left, y + (line * this.getLineHeight()), shadow, formatting);
+          break;
       }
       cursor++;
     }
@@ -272,7 +282,6 @@ class TextFormatting {
     this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (text, ctx, textRenderer, value) => {
       if (value && !ctx.font.includes("bold")) {
         ctx.font = "bold " + ctx.font;
-        ctx.wordSpacing = "4px";
       }
       return text;
     }, false);
