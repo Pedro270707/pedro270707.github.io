@@ -99,19 +99,26 @@ class TextRenderer {
 
       while (cursor < line.length) {
         let char = line[cursor];
-        if (char == '§') {
-          cursor++;
-          char = line[cursor];
-          if (TextFormatting.formattingCodes[char] && (formatting.isFormatting(TextFormatting.formattingCodes[char].type) || !formatting.isFormatted())) {
-            TextFormatting.formattingCodes[char].formatFunction(formatting);
-          }
-        } else {
-          ctx.save();
-          char = formatting.applyFormatting(char, ctx, this);
-          const lines = line.split('\n');
-          const textMetrics = this.canvas.getContext('2d').measureText(char);
-          lineWidth += textMetrics.width;
-          ctx.restore();
+        switch (char) {
+          case '§':
+            cursor++;
+            char = line[cursor];
+            if (TextFormatting.formattingCodes[char] && (formatting.isFormatting(TextFormatting.formattingCodes[char].type) || !formatting.isFormatted())) {
+              TextFormatting.formattingCodes[char].formatFunction(formatting);
+            }
+            break;
+          // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
+          case ' ':
+            lineWidth += parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
+            break;
+          default:
+            ctx.save();
+            char = formatting.applyFormatting(char, ctx, this);
+            const lines = line.split('\n');
+            const textMetrics = this.canvas.getContext('2d').measureText(char);
+            lineWidth += textMetrics.width;
+            ctx.restore();
+            break;
         }
         cursor++;
       }
