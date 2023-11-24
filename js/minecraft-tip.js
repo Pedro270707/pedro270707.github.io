@@ -187,13 +187,6 @@ class TextRenderer {
             TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext.formatting);
           }
           break;
-        // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
-        case ' ':
-          ctx.save();
-          textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
-          textRenderingContext.left += parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
-          ctx.restore();
-          break;
         default:
           textRenderingContext.left += this.drawChar(textRenderingContext);
           break;
@@ -223,10 +216,16 @@ class TextRenderer {
 
     textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
     
-    ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0));
-    const width = textRenderingContext.left - originalLeft + this.getWidth(textRenderingContext.char + ".") - this.getWidth(".");
-    ctx.restore();
-    return width;
+    // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
+    if (textRenderingContext.char === ' ') {
+      ctx.restore();
+      return parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
+    } else {
+      ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0));
+      const width = textRenderingContext.left - originalLeft + this.getWidth(textRenderingContext.char + ".") - this.getWidth(".");
+      ctx.restore();
+      return width;
+    }
   }
 
   getRandomTextFrom(originalText) {
@@ -314,30 +313,6 @@ class TextFormatting {
         textRenderingContext.char = textRenderer.getRandomTextFrom(textRenderingContext.char);
       }
     }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value) {
-        let originalFillStyle = ctx.fillStyle;
-        ctx.fillStyle = "#" + ('000000' + this.color.toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect(x - 2, y + 2, this.getWidth(char) + 2, 2);
-        ctx.fillStyle = originalFillStyle;
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value) {
-        let originalFillStyle = ctx.fillStyle;
-        ctx.fillStyle = "#" + ('000000' + this.color.toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect(x - 2, y - 7, this.getWidth(char) + 2, 2);
-        ctx.fillStyle = originalFillStyle;
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value && !ctx.font.includes("italic")) {
-        ctx.font = "italic " + ctx.font;
-      }
-    }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (textRenderingContext, textRenderer, value) => {
       if (value) {
         textRenderingContext.canvas.getContext('2d').wordSpacing = (settings.wordSpacing + 2) + "px";
@@ -346,6 +321,30 @@ class TextFormatting {
         textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
         textRenderer.drawChar(textRenderingContextCopy);
         textRenderingContext.left += 2;
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        let originalFillStyle = ctx.fillStyle;
+        ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR).toString(16).toUpperCase()).slice(-6);
+        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) + 2, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
+        ctx.fillStyle = originalFillStyle;
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        let originalFillStyle = ctx.fillStyle;
+        ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR).toString(16).toUpperCase()).slice(-6);
+        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
+        ctx.fillStyle = originalFillStyle;
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value && !ctx.font.includes("italic")) {
+        ctx.font = "italic " + ctx.font;
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
