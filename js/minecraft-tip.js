@@ -299,10 +299,10 @@ class TextFormatting {
     e: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFF55), type: TextFormatting.FormattingOptions.COLOR},
     f: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFFFF), type: TextFormatting.FormattingOptions.COLOR},
     j: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => {
-      const time = performance.now() * 0.001; // Convert milliseconds to seconds
+      const time = performance.now() * 0.001;
       const r = (Math.sin(time) + 1) * 127.5;
-      const g = (Math.sin((time) + (Math.PI / 2)) + 1) * 127.5;
-      const b = (Math.sin((time) + Math.PI) + 1) * 127.5;
+      const g = (Math.sin(time + (Math.PI / 2)) + 1) * 127.5;
+      const b = (Math.sin(time + Math.PI) + 1) * 127.5;
 
       return r << 16 | g << 8 | b;
     }), type: TextFormatting.FormattingOptions.COLOR},
