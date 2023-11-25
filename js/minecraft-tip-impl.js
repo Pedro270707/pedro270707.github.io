@@ -32,20 +32,22 @@ setInterval(() => {
     }
 }, 50);
 
-// followerTooltip.classList.add("hidden");
-// const minecraftItems = document.getElementsByClassName("minecraft-item");
+function startRecording() {
+  const chunks = [];
+  const stream = tooltip.captureStream();
+  const rec = new MediaRecorder(stream);
+  
+  rec.ondataavailable = e => chunks.push(e.data);
 
-// for (let i = 0; i < minecraftItems.length; i++) {
-//   minecraftItems.item(i).addEventListener('mouseenter', (e) => {
-//     if (!e.target.dataset.mctitle) return;
-//     followerTooltip.classList.remove("hidden");
-//     getTextFromJSON(e.target.dataset.mctitle).get().then(str => {
-//       setTooltipText(followerTooltip, str);
-//     });
-//   });
+  rec.onstop = e => exportVid(new Blob(chunks, {type: 'video/webm'}));
+  
+  rec.start();
+  setTimeout(()=>rec.stop(), Math.PI * 2000);
+}
 
-//   minecraftItems.item(i).addEventListener('mouseleave', (e) => {
-//     followerTooltip.classList.add("hidden");
-//   });
-// }
-// document.body.appendChild(followerTooltip);
+function exportVid(blob) {
+  const a = document.createElement('a');
+  a.download = 'myvid.webm';
+  a.href = URL.createObjectURL(blob);
+  a.click();
+}

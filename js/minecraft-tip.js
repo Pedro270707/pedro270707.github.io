@@ -349,7 +349,6 @@ class TextFormatting {
       if (value) {
         let originalFillStyle = ctx.fillStyle;
         ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
-        console.log((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
         ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
         ctx.fillStyle = originalFillStyle;
       }
