@@ -83,7 +83,7 @@ class TextRenderer {
 
     this.characterWidthsMap = new Map();
 
-    document.fonts.onloadingdone = () => {
+    document.fonts.ready.then(() => {
       for (let charCode = 33; charCode <= 16384; charCode++) {
         const char = String.fromCodePoint(charCode);
         const width = this.getWidth(char, false);
@@ -94,7 +94,7 @@ class TextRenderer {
       
         this.characterWidthsMap.get(width).push(char);
       }
-    };
+    });
   }
 
   getWidth(string, shouldConsiderWeight = true, formatting = new TextFormatting()) {
@@ -115,7 +115,10 @@ class TextRenderer {
           case '§':
             cursor++;
             textRenderingContext.char = line[cursor];
-            if (TextFormatting.formattingCodes[textRenderingContext.char] && (textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type) || !textRenderingContext.formatting.isFormatted())) {
+            if (TextFormatting.formattingCodes[textRenderingContext.char]) {
+              if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
+                textRenderingContext.formatting.reset();
+              }
               TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext.formatting);
             }
             break;
@@ -182,7 +185,10 @@ class TextRenderer {
         case '§':
           cursor++;
           textRenderingContext.char = string[cursor];
-          if (TextFormatting.formattingCodes[textRenderingContext.char] && (textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type) || !textRenderingContext.formatting.isFormatted())) {
+          if (TextFormatting.formattingCodes[textRenderingContext.char]) {
+            if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
+              textRenderingContext.formatting.reset();
+            }
             TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext.formatting);
           }
           break;
