@@ -84,7 +84,7 @@ class TextRenderer {
     this.characterWidthsMap = new Map();
 
     document.fonts.onloadingdone = () => {
-      for (let charCode = 33; charCode <= 65535; charCode++) {
+      for (let charCode = 33; charCode <= 16384; charCode++) {
         const char = String.fromCodePoint(charCode);
         const width = this.getWidth(char, false);
       
