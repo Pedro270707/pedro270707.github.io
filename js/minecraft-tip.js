@@ -15,7 +15,7 @@ function setDefaultCanvasSettings(canvas) {
   let ctx = canvas.getContext('2d');
   ctx.font = '16px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
   ctx.fillStyle = 'black';
-  ctx.wordSpacing = settings.wordSpacing + "px";
+  canvas.dataset.wordSpacing = settings.wordSpacing + "px";
 }
 
 function setTooltipText(canvas, str) {
@@ -125,7 +125,7 @@ class TextRenderer {
             if (shouldConsiderWeight) {
               textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
             }
-            lineWidth += parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
+            lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing.substring(0, textRenderingContext.canvas.dataset.wordSpacing.length - 2));
             ctx.restore();
             break;
           default:
@@ -136,7 +136,6 @@ class TextRenderer {
             } else {
               setDefaultCanvasSettings(this.canvas);
             }
-            const lines = line.split('\n');
             const textMetrics = ctx.measureText(textRenderingContext.char);
             lineWidth += textMetrics.width + (textRenderingContext.left - originalLeft);
             ctx.restore();
@@ -147,7 +146,7 @@ class TextRenderer {
       if (lineWidth > width) {
         width = lineWidth;
       }
-      formatting.reset();
+      textRenderingContext.formatting.reset();
     }
 
     return width;
@@ -219,7 +218,7 @@ class TextRenderer {
     // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
     if (textRenderingContext.char === ' ') {
       ctx.restore();
-      return parseFloat(ctx.wordSpacing.substring(0, ctx.wordSpacing.length - 2));
+      return parseFloat(textRenderingContext.canvas.dataset.wordSpacing.substring(0, textRenderingContext.canvas.dataset.wordSpacing.length - 2));
     } else {
       ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0));
       const width = textRenderingContext.left - originalLeft + this.getWidth(textRenderingContext.char + ".") - this.getWidth(".");
@@ -315,7 +314,7 @@ class TextFormatting {
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (textRenderingContext, textRenderer, value) => {
       if (value) {
-        textRenderingContext.canvas.getContext('2d').wordSpacing = (settings.wordSpacing + 2) + "px";
+        textRenderingContext.canvas.dataset.wordSpacing = (settings.wordSpacing + 2) + "px";
         const textRenderingContextCopy = textRenderingContext.copy();
         textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, false);
         textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
