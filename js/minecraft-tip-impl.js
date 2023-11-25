@@ -5,17 +5,33 @@ new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
     document.getElementById("tooltip-output").appendChild(tooltip);
 });
 
+const followerTooltip = document.body.appendChild(createTooltip("Follower tooltip", true));
+followerTooltip.classList.add("hidden");
+const minecraftItems = document.getElementsByClassName("minecraft-item");
+
+for (let i = 0; i < minecraftItems.length; i++) {
+    minecraftItems.item(i).addEventListener('mouseenter', (e) => {
+        followerTooltip.classList.remove("hidden");
+    });
+
+    minecraftItems.item(i).addEventListener('mouseleave', (e) => {
+        followerTooltip.classList.add("hidden");
+    });
+}
+
 setInterval(() => {
     if (tooltipField.value === '') {
         new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
             setTooltipText(tooltip, str);
+            setTooltipText(followerTooltip, str);
         });
     } else {
-        setTooltipText(tooltip, tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n"));
+        const unescapedValue = tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
+        setTooltipText(tooltip, unescapedValue);
+        setTooltipText(followerTooltip, unescapedValue);
     }
 }, 50);
 
-// const followerTooltip = createTooltip("Follower tooltip", true);
 // followerTooltip.classList.add("hidden");
 // const minecraftItems = document.getElementsByClassName("minecraft-item");
 
