@@ -14,7 +14,6 @@ document.addEventListener('mousemove', (e) => {
 function setDefaultCanvasSettings(canvas) {
   let ctx = canvas.getContext('2d');
   ctx.font = '16px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
-  ctx.fillStyle = 'black';
   canvas.dataset.wordSpacing = settings.wordSpacing + "px";
 }
 
@@ -117,9 +116,9 @@ class TextRenderer {
             textRenderingContext.char = line[cursor];
             if (TextFormatting.formattingCodes[textRenderingContext.char]) {
               if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
-                textRenderingContext.formatting.reset();
+                textRenderingContext.formatting.reset(textRenderingContext);
               }
-              TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext.formatting);
+              TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext);
             }
             break;
           // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
@@ -149,7 +148,7 @@ class TextRenderer {
       if (lineWidth > width) {
         width = lineWidth;
       }
-      textRenderingContext.formatting.reset();
+      textRenderingContext.formatting.reset(textRenderingContext);
     }
 
     return width;
@@ -180,16 +179,16 @@ class TextRenderer {
         case '\n':
           textRenderingContext.line++;
           textRenderingContext.left = 0;
-          textRenderingContext.formatting.reset();
+          textRenderingContext.formatting.reset(textRenderingContext);
           break;
         case '§':
           cursor++;
           textRenderingContext.char = string[cursor];
           if (TextFormatting.formattingCodes[textRenderingContext.char]) {
             if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
-              textRenderingContext.formatting.reset();
+              textRenderingContext.formatting.reset(textRenderingContext);
             }
-            TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext.formatting);
+            TextFormatting.formattingCodes[textRenderingContext.char].formatFunction(textRenderingContext);
           }
           break;
         default:
@@ -282,23 +281,23 @@ class TextFormatting {
   Another thing to note is that formatting codes can only be one character in length. e.g. §g would work, but §rainbow would not.
   */
   static formattingCodes = {
-    0: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x000000), type: TextFormatting.FormattingOptions.COLOR},
-    1: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x0000AA), type: TextFormatting.FormattingOptions.COLOR},
-    2: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x00AA00), type: TextFormatting.FormattingOptions.COLOR},
-    3: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x00AAAA), type: TextFormatting.FormattingOptions.COLOR},
-    4: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAA0000), type: TextFormatting.FormattingOptions.COLOR},
-    5: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAA00AA), type: TextFormatting.FormattingOptions.COLOR},
-    6: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFAA00), type: TextFormatting.FormattingOptions.COLOR},
-    7: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAAAAAA), type: TextFormatting.FormattingOptions.COLOR},
-    8: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x555555), type: TextFormatting.FormattingOptions.COLOR},
-    9: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x5555FF), type: TextFormatting.FormattingOptions.COLOR},
-    a: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x55FF55), type: TextFormatting.FormattingOptions.COLOR},
-    b: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x55FFFF), type: TextFormatting.FormattingOptions.COLOR},
-    c: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFF5555), type: TextFormatting.FormattingOptions.COLOR},
-    d: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFF55FF), type: TextFormatting.FormattingOptions.COLOR},
-    e: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFF55), type: TextFormatting.FormattingOptions.COLOR},
-    f: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFFFF), type: TextFormatting.FormattingOptions.COLOR},
-    j: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => {
+    0: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x000000), type: TextFormatting.FormattingOptions.COLOR},
+    1: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x0000AA), type: TextFormatting.FormattingOptions.COLOR},
+    2: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x00AA00), type: TextFormatting.FormattingOptions.COLOR},
+    3: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x00AAAA), type: TextFormatting.FormattingOptions.COLOR},
+    4: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAA0000), type: TextFormatting.FormattingOptions.COLOR},
+    5: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAA00AA), type: TextFormatting.FormattingOptions.COLOR},
+    6: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFAA00), type: TextFormatting.FormattingOptions.COLOR},
+    7: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xAAAAAA), type: TextFormatting.FormattingOptions.COLOR},
+    8: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x555555), type: TextFormatting.FormattingOptions.COLOR},
+    9: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x5555FF), type: TextFormatting.FormattingOptions.COLOR},
+    a: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x55FF55), type: TextFormatting.FormattingOptions.COLOR},
+    b: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x55FFFF), type: TextFormatting.FormattingOptions.COLOR},
+    c: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFF5555), type: TextFormatting.FormattingOptions.COLOR},
+    d: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFF55FF), type: TextFormatting.FormattingOptions.COLOR},
+    e: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFF55), type: TextFormatting.FormattingOptions.COLOR},
+    f: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFFFF), type: TextFormatting.FormattingOptions.COLOR},
+    j: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => {
       const time = performance.now() * 0.001;
       const r = (Math.sin(time) + 1) * 127.5;
       const g = (Math.sin(time + (Math.PI / 2)) + 1) * 127.5;
@@ -306,12 +305,12 @@ class TextFormatting {
 
       return r << 16 | g << 8 | b;
     }), type: TextFormatting.FormattingOptions.COLOR},
-    k: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, true), type: TextFormatting.FormattingOptions.OBFUSCATED},
-    l: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, true), type: TextFormatting.FormattingOptions.BOLD},
-    m: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
-    n: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
-    o: {formatFunction: (formatting) => formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
-    r: {formatFunction: (formatting) => formatting.reset(), type: TextFormatting.FormattingOptions.RESET}
+    k: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, true), type: TextFormatting.FormattingOptions.OBFUSCATED},
+    l: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, true), type: TextFormatting.FormattingOptions.BOLD},
+    m: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
+    n: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
+    o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
+    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET}
   }
 
   constructor() {
@@ -350,6 +349,7 @@ class TextFormatting {
       if (value) {
         let originalFillStyle = ctx.fillStyle;
         ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
+        console.log((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
         ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
         ctx.fillStyle = originalFillStyle;
       }
@@ -362,7 +362,7 @@ class TextFormatting {
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
       if (value) {
-        this.reset();
+        this.reset(textRenderingContext);
       }
     }, false);
   }
@@ -419,10 +419,11 @@ class TextFormatting {
     return this.formattingOptions[key] && this.formattingOptions[key].isFormatting;
   }
 
-  reset() {
+  reset(textRenderingContext) {
     for (const [key, value] of Object.entries(this.formattingOptions)) {
       this.formattingOptions[key].value = value.default;
     }
+    setDefaultCanvasSettings(textRenderingContext.canvas);
     return this;
   }
 }
