@@ -5,15 +5,15 @@ new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
     document.getElementById("tooltip-output").appendChild(tooltip);
 });
 
-tooltipField.addEventListener("input", (e) => {
-    if (e.target.value === '') {
+setInterval(() => {
+    if (tooltipField.value === '') {
         new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
             setTooltipText(tooltip, str);
         });
     } else {
-        setTooltipText(tooltip, e.target.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n"));
+        setTooltipText(tooltip, tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n"));
     }
-});
+}, 50);
 
 // const followerTooltip = createTooltip("Follower tooltip", true);
 // followerTooltip.classList.add("hidden");
