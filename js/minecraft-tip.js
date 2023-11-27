@@ -5,6 +5,7 @@ class VanillaTooltipStyle {
     this.paddingTop = 6;
     this.paddingBottom = 6;
     this.lineSpace = 4;
+    this.fontSize = 16;
   }
 
   render(canvas) {
@@ -39,6 +40,7 @@ class BetaTooltipStyle {
     this.paddingTop = 4;
     this.paddingBottom = 4;
     this.lineSpace = 4;
+    this.fontSize = 16;
   }
 
   render(canvas) {
@@ -66,7 +68,7 @@ document.addEventListener('mousemove', (e) => {
 
 function setDefaultCanvasSettings(canvas) {
   let ctx = canvas.getContext('2d');
-  ctx.font = '16px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
+  ctx.font = settings.style.fontSize + 'px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
   canvas.dataset.wordSpacing = settings.wordSpacing + "px";
 }
 
@@ -134,7 +136,7 @@ class TextRenderer {
 
     const lines = string.split('\n');
 
-    const textRenderingContext = new TextRenderingContext(null, this.canvas, formatting, -Infinity, -Infinity);
+    const textRenderingContext = new TextRenderingContext(null, 0, this.canvas, formatting, -Infinity, -Infinity);
     const ctx = textRenderingContext.canvas.getContext('2d');
 
     for (const line of lines) {
@@ -162,6 +164,7 @@ class TextRenderer {
             }
             lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing.substring(0, textRenderingContext.canvas.dataset.wordSpacing.length - 2));
             ctx.restore();
+            textRenderingContext.charIndex++;
             break;
           default:
             ctx.save();
@@ -174,6 +177,7 @@ class TextRenderer {
             const textMetrics = ctx.measureText(textRenderingContext.char);
             lineWidth += textMetrics.width + (textRenderingContext.left - originalLeft);
             ctx.restore();
+            textRenderingContext.charIndex++;
             break;
         }
         cursor++;
@@ -192,12 +196,7 @@ class TextRenderer {
   }
 
   getLineHeight(withLineSpace = true) {
-    const ctx = this.canvas.getContext('2d');
-    ctx.save();
-    setDefaultCanvasSettings(this.canvas);
-    const height = parseInt(this.canvas.getContext('2d').font.match(/(?<value>\d+\.?\d*)/)) + (withLineSpace ? settings.style.lineSpace : 0);
-    ctx.restore();
-    return height;
+    return settings.style.fontSize + (withLineSpace ? settings.style.lineSpace : 0);
   }
 
   removeColorCodes(string) {
@@ -209,7 +208,7 @@ class TextRenderer {
 
     let cursor = 0;
 
-    let textRenderingContext = new TextRenderingContext(null, this.canvas, formatting, x, y, 0, 0, shadow);
+    let textRenderingContext = new TextRenderingContext(null, 0, this.canvas, formatting, x, y, 0, 0, shadow);
 
     while (cursor < string.length) {
       textRenderingContext.char = string[cursor];
@@ -231,6 +230,7 @@ class TextRenderer {
           break;
         default:
           textRenderingContext.left += this.drawChar(textRenderingContext);
+          textRenderingContext.charIndex++;
           break;
       }
       cursor++;
@@ -286,8 +286,9 @@ class TextRenderer {
 }
 
 class TextRenderingContext {
-  constructor(char, canvas, formatting = new TextFormatting(), x = 0, y = 0, left = 0, line = 0, shadow = false) {
+  constructor(char, charIndex, canvas, formatting = new TextFormatting(), x = 0, y = 0, left = 0, line = 0, shadow = false) {
     this.char = char;
+    this.charIndex = charIndex;
     this.canvas = canvas;
     this.formatting = formatting;
     this.x = x;
@@ -298,7 +299,7 @@ class TextRenderingContext {
   }
 
   copy() {
-    return new TextRenderingContext(this.char, this.canvas, this.formatting.copy(), this.x, this.y, this.left, this.line, this.shadow);
+    return new TextRenderingContext(this.char, this.charIndex, this.canvas, this.formatting.copy(), this.x, this.y, this.left, this.line, this.shadow);
   }
 }
 
@@ -310,6 +311,7 @@ class TextFormatting {
     ITALIC: 'italic',
     BOLD: 'bold',
     OBFUSCATED: 'obfuscated',
+    BOBBING: 'bobbing',
     RESET: 'reset'
   });
 
@@ -348,6 +350,7 @@ class TextFormatting {
     m: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
     n: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
     o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
+    p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOBBING, true), type: TextFormatting.FormattingOptions.BOBBING},
     r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET}
   }
 
@@ -393,8 +396,15 @@ class TextFormatting {
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value && !ctx.font.includes("italic")) {
-        ctx.font = "italic " + ctx.font;
+      if (value) {
+        ctx.setTransform(1, 0, -0.2, 1, 4, 0);
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.BOBBING, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        const time = performance.now() * 0.01;
+        ctx.setTransform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * 2);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
