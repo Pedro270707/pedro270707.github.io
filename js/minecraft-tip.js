@@ -58,7 +58,7 @@ class BetaTooltipStyle {
 
 const settings = {
   style: new VanillaTooltipStyle(),
-  pixelScale: 1.5
+  pixelScale: 2
 }
 
 document.addEventListener('mousemove', (e) => {
