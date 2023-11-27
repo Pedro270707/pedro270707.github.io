@@ -32,7 +32,16 @@ title: "Itens do Minecraft"
 </div>
 <br>
 <div class="download-tooltip-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-downloadtooltip"}'>
-	<button class="icon-button" id="download-tooltip" onclick="startRecording()"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	<button class="icon-button" id="download-tooltip" onclick="recordPNG(exportFile)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+		viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
+	<path d="M344.1,207.5c-16.6,0-30,13.4-30,30v76.6h-254v-76.6c0-16.6-13.4-30-30-30s-30,13.4-30,30v106.6c0,16.6,13.4,30,30,30h314
+		c16.6,0,30-13.4,30-30V237.5C374.1,220.9,360.6,207.5,344.1,207.5z"/>
+	<path d="M250.5,108.3l-33.5,33.5V30c0-16.6-13.4-30-30-30s-30,13.4-30,30v111.8l-33.5-33.5c-5.9-5.9-13.5-8.8-21.2-8.8
+		s-15.4,2.9-21.2,8.8c-11.7,11.7-11.7,30.7,0,42.4l84.7,84.7c11.7,11.7,30.7,11.7,42.4,0l84.7-84.7c11.7-11.7,11.7-30.7,0-42.4
+		C281.3,96.6,262.3,96.6,250.5,108.3z"/></svg></button>
+</div>
+<div class="download-tooltip-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-downloadtooltip-webp"}'>
+	<button class="icon-button" id="download-tooltip" onclick="recordPNG(exportWebP)"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 		viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
 	<path d="M344.1,207.5c-16.6,0-30,13.4-30,30v76.6h-254v-76.6c0-16.6-13.4-30-30-30s-30,13.4-30,30v106.6c0,16.6,13.4,30,30,30h314
 		c16.6,0,30-13.4,30-30V237.5C374.1,220.9,360.6,207.5,344.1,207.5z"/>
@@ -118,8 +127,8 @@ title: "Itens do Minecraft"
 </div>
 
 <script src="https://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-<script src="{{ site.baseurl }}/js/CCapture.min.js"></script>
-<script src="{{ site.baseurl }}/js/gif.js"></script>
+<script src="{{ site.baseurl }}/js/canvas2apng.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apng2webp"></script>
 <script src="{{ site.baseurl }}/js/minecraft-tip.js"></script>
-<script src="{{ site.baseurl }}/js/minecraft-tip-impl.js"></script>
+<script defer src="{{ site.baseurl }}/js/minecraft-tip-impl.js"></script>
 <script src="/modules/dom-to-image.js"></script>

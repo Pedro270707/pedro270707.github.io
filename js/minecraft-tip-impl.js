@@ -1,3 +1,5 @@
+var apng2webp = window.apng2webp.default;
+
 const tooltipField = document.getElementById("minecraft-text-input");
 let tooltip;
 new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
@@ -32,22 +34,40 @@ setInterval(() => {
     }
 }, 50);
 
-function startRecording() {
-  const chunks = [];
-  const stream = tooltip.captureStream();
-  const rec = new MediaRecorder(stream);
-  
-  rec.ondataavailable = e => chunks.push(e.data);
+function recordPNG(exporter) {
+    let encoder = new APNGencoder(tooltip);
+    encoder.setRepeat(0);
+    encoder.setDelay(5);
+    encoder.start();
 
-  rec.onstop = e => exportVid(new Blob(chunks, {type: 'video/webm'}));
-  
-  rec.start();
-  setTimeout(()=>rec.stop(), Math.PI * 2000);
+    let interval = setInterval(() => {
+        encoder.addFrame();
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(interval);
+        encoder.finish();
+        let base64Out = bytesToBase64(encoder.stream().bin);
+        exporter(base64Out);
+    }, Math.PI * 2000);
 }
 
-function exportVid(blob) {
-  const a = document.createElement('a');
-  a.download = 'myvid.webm';
-  a.href = URL.createObjectURL(blob);
-  a.click();
+function exportFile(data) {
+    const a = document.createElement('a');
+    a.download = tooltip.dataset.text.replace(/ /g, "_").replace(/§./, "") + '.png';
+    a.href = "data:image/png;base64," + data;
+    a.click();
+}
+
+function exportWebP(data) {
+    apng2webp(Uint8Array.from(atob(data), (c) => c.charCodeAt(0)).buffer)
+    .then(blob => {
+        const a = document.createElement('a');
+        a.download = tooltip.dataset.text.replace(/ /g, "_").replace(/§./, "") + '.png';
+        a.href = URL.createObjectURL(blob);
+        a.click();
+    })
+    .catch(error => {
+        console.error('Conversion failed:', error);
+    });
 }
