@@ -245,9 +245,10 @@ class TextRenderer {
 
     if (textRenderingContext.shadow) {
       const originalColor = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)();
-      let red = Math.round((originalColor >> 16) * (41/168));
-      let green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
-      let blue = Math.round((originalColor & 0xFF) * (41/168));
+      const red = Math.round((originalColor >> 16) * (41/168));
+      const green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
+      const blue = Math.round((originalColor & 0xFF) * (41/168));
+
       const textRenderingContextCopy = textRenderingContext.copy();
       textRenderingContextCopy.x += 2;
       textRenderingContextCopy.y += 2;
