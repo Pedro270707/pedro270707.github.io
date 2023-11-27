@@ -366,7 +366,7 @@ class TextFormatting {
     }, false);
   }
 
-  addFormattingOption(name, formatFunction, defaultValue, loopTime) {
+  addFormattingOption(name, formatFunction, defaultValue) {
     this.formattingOptions[name] = {formatFunction: formatFunction, value: defaultValue, default: defaultValue, isFormatting: true};
   }
 
