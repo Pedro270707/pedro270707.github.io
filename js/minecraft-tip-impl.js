@@ -74,7 +74,7 @@ function recordPNG(exporter) {
 
 function exportFile(data) {
     const a = document.createElement('a');
-    a.download = tooltip.dataset.text.replace(/ /g, "_").replace(/§./, "") + '.png';
+    a.download = tooltip.dataset.text.replace(/ |\n/g, "_").replace(/§./, "") + '.png';
     a.href = "data:image/png;base64," + data;
     a.click();
 }
