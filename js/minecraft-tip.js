@@ -1,11 +1,13 @@
 class VanillaTooltipStyle {
   constructor() {
-    this.paddingLeft = 8;
-    this.paddingRight = 8;
-    this.paddingTop = 6;
-    this.paddingBottom = 6;
-    this.lineSpace = 4;
-    this.fontSize = 16;
+    this.paddingLeft = 4;
+    this.paddingRight = 4;
+    this.paddingTop = 3;
+    this.paddingBottom = 3;
+    this.lineSpace = 2;
+    this.fontSize = 8;
+    this.wordSpacing = 4;
+    this.firstLineIsHigher = true;
   }
 
   render(canvas) {
@@ -14,33 +16,35 @@ class VanillaTooltipStyle {
 
     ctx.fillStyle = "rgba(16,0,16,0.94)";
   
-    ctx.fillRect(0, 2, 4, canvas.height - 4);
-    ctx.fillRect(canvas.width - 4, 2, canvas.width, canvas.height - 4);
-    ctx.fillRect(2, 0, canvas.width - 4, 2);
-    ctx.fillRect(4, 2, canvas.width - 8, 2);
-    ctx.fillRect(2, canvas.height - 2, canvas.width - 4, 2);
-    ctx.fillRect(4, canvas.height - 4, canvas.width - 8, 2);
+    ctx.fillRect(0, settings.pixelScale, 2 * settings.pixelScale, canvas.height - (2 * settings.pixelScale));
+    ctx.fillRect(canvas.width - (2 * settings.pixelScale), settings.pixelScale, canvas.width, canvas.height - (2 * settings.pixelScale));
+    ctx.fillRect(settings.pixelScale, 0, canvas.width - (2 * settings.pixelScale), settings.pixelScale);
+    ctx.fillRect(2 * settings.pixelScale, settings.pixelScale, canvas.width - (4 * settings.pixelScale), settings.pixelScale);
+    ctx.fillRect(settings.pixelScale, canvas.height - settings.pixelScale, canvas.width - (2 * settings.pixelScale), settings.pixelScale);
+    ctx.fillRect(2 * settings.pixelScale, canvas.height - (2 * settings.pixelScale), canvas.width - (4 * settings.pixelScale), settings.pixelScale);
   
     let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
     gradient.addColorStop(0, "rgba(80,0,255,0.31)");
     gradient.addColorStop(1, "rgba(40,0,127,0.31)");
     ctx.fillStyle = gradient;
-    ctx.fillRect(2, 2, canvas.width - 4, canvas.height - 4);
-    ctx.clearRect(4, 4, canvas.width - 8, canvas.height - 8);
+    ctx.fillRect(settings.pixelScale, settings.pixelScale, canvas.width - (2 * settings.pixelScale), canvas.height - (2 * settings.pixelScale));
+    ctx.clearRect(2 * settings.pixelScale, 2 * settings.pixelScale, canvas.width - (4 * settings.pixelScale), canvas.height - (4 * settings.pixelScale));
   
     ctx.fillStyle = "rgba(16,0,16,0.94)";
-    ctx.fillRect(4, 4, canvas.width - 8, canvas.height - 8);
+    ctx.fillRect(2 * settings.pixelScale, 2 * settings.pixelScale, canvas.width - (4 * settings.pixelScale), canvas.height - (4 * settings.pixelScale));
   }
 }
 
 class BetaTooltipStyle {
   constructor() {
-    this.paddingLeft = 6;
-    this.paddingRight = 6;
-    this.paddingTop = 4;
-    this.paddingBottom = 4;
-    this.lineSpace = 4;
-    this.fontSize = 16;
+    this.paddingLeft = 3;
+    this.paddingRight = 3;
+    this.paddingTop = 2;
+    this.paddingBottom = 2;
+    this.lineSpace = 2;
+    this.fontSize = 8;
+    this.wordSpacing = 4;
+    this.firstLineIsHigher = true;
   }
 
   render(canvas) {
@@ -53,9 +57,8 @@ class BetaTooltipStyle {
 }
 
 const settings = {
-  wordSpacing: 8,
-  firstLineIsHigher: true,
-  style: new VanillaTooltipStyle()
+  style: new VanillaTooltipStyle(),
+  pixelScale: 1.5
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -68,8 +71,8 @@ document.addEventListener('mousemove', (e) => {
 
 function setDefaultCanvasSettings(canvas) {
   let ctx = canvas.getContext('2d');
-  ctx.font = settings.style.fontSize + 'px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
-  canvas.dataset.wordSpacing = settings.wordSpacing + "px";
+  ctx.font = settings.style.fontSize * settings.pixelScale + 'px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
+  canvas.dataset.wordSpacing = settings.style.wordSpacing + "px";
 }
 
 function setTooltipText(canvas, str) {
@@ -82,22 +85,21 @@ function drawTooltip(canvas, textRenderer) {
     textRenderer = new TextRenderer(canvas);
   }
   const str = canvas.dataset.text;
-  const ctx = canvas.getContext('2d');
 
   updateCanvasSize(canvas, textRenderer);
 
   settings.style.render(canvas);
 
   setDefaultCanvasSettings(canvas);
-  textRenderer.drawText(str, settings.style.paddingLeft, settings.style.paddingTop + textRenderer.getLineHeight(false), true);
+  textRenderer.drawText(str, settings.style.paddingLeft * settings.pixelScale, (settings.style.paddingTop + textRenderer.getLineHeight(false)) * settings.pixelScale, true);
 
   requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
 }
 
 function updateCanvasSize(canvas, textRenderer, text = canvas.dataset.text) {
 	setDefaultCanvasSettings(canvas);
-  canvas.width = textRenderer.getWidth(text) + settings.style.paddingLeft + settings.style.paddingRight;
-  canvas.height = textRenderer.getHeight(text) + settings.style.paddingTop + settings.style.paddingBottom + (settings.firstLineIsHigher && text.split('\n').length > 1 ? 4 : 0);
+  canvas.width = (textRenderer.getWidth(text) + settings.style.paddingLeft + settings.style.paddingRight) * settings.pixelScale;
+  canvas.height = (textRenderer.getHeight(text) + settings.style.paddingTop + settings.style.paddingBottom) * settings.pixelScale + (settings.style.firstLineIsHigher && text.split('\n').length > 1 ? 2 * settings.pixelScale : 0);
 }
 
 function createTooltip(text = "", followCursor = false) {
@@ -132,7 +134,7 @@ class TextRenderer {
   }
 
   getWidth(string, shouldConsiderWeight = true, formatting = new TextFormatting()) {
-    let width = 0;
+    let scaledWidth = 0;
 
     const lines = string.split('\n');
 
@@ -162,7 +164,7 @@ class TextRenderer {
             if (shouldConsiderWeight) {
               textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
             }
-            lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing.substring(0, textRenderingContext.canvas.dataset.wordSpacing.length - 2));
+            lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing) * settings.pixelScale;
             ctx.restore();
             textRenderingContext.charIndex++;
             break;
@@ -182,13 +184,13 @@ class TextRenderer {
         }
         cursor++;
       }
-      if (lineWidth > width) {
-        width = lineWidth;
+      if (lineWidth > scaledWidth) {
+        scaledWidth = lineWidth;
       }
       textRenderingContext.formatting.reset(textRenderingContext);
     }
 
-    return width;
+    return scaledWidth / settings.pixelScale;
   }
 
   getHeight(string) {
@@ -250,8 +252,8 @@ class TextRenderer {
       const blue = Math.round((originalColor & 0xFF) * (41/168));
 
       const textRenderingContextCopy = textRenderingContext.copy();
-      textRenderingContextCopy.x += 2;
-      textRenderingContextCopy.y += 2;
+      textRenderingContextCopy.x += settings.pixelScale;
+      textRenderingContextCopy.y += settings.pixelScale;
       textRenderingContextCopy.shadow = false;
       textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => red << 16 | green << 8 | blue);
       this.drawChar(textRenderingContextCopy);
@@ -262,10 +264,10 @@ class TextRenderer {
     // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
     if (textRenderingContext.char === ' ') {
       ctx.restore();
-      return parseFloat(textRenderingContext.canvas.dataset.wordSpacing.substring(0, textRenderingContext.canvas.dataset.wordSpacing.length - 2));
+      return parseFloat(textRenderingContext.canvas.dataset.wordSpacing) * settings.pixelScale;
     } else {
-      ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0));
-      const width = textRenderingContext.left - originalLeft + this.getWidth(textRenderingContext.char + ".") - this.getWidth(".");
+      ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0));
+      const width = textRenderingContext.left - originalLeft + (this.getWidth(textRenderingContext.char + ".") - this.getWidth(".")) * settings.pixelScale;
       ctx.restore();
       return width;
     }
@@ -371,7 +373,7 @@ class TextFormatting {
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (textRenderingContext, textRenderer, value) => {
       if (value) {
-        textRenderingContext.canvas.dataset.wordSpacing = (settings.wordSpacing + 2) + "px";
+        textRenderingContext.canvas.dataset.wordSpacing = (settings.style.wordSpacing + settings.pixelScale) + "px";
         const textRenderingContextCopy = textRenderingContext.copy();
         textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, false);
         textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
@@ -384,7 +386,7 @@ class TextFormatting {
       if (value) {
         let originalFillStyle = ctx.fillStyle;
         ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) + 2, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
+        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) + settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
         ctx.fillStyle = originalFillStyle;
       }
     }, false);
@@ -393,14 +395,14 @@ class TextFormatting {
       if (value) {
         let originalFillStyle = ctx.fillStyle;
         ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - 2, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7, textRenderer.getWidth(textRenderingContext.char) + 2, 2);
+        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
         ctx.fillStyle = originalFillStyle;
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
-        const verticalPosition = (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7;
+        const verticalPosition = (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale;
         ctx.transform(1, 0, 0, 1, 0, verticalPosition);
         ctx.transform(1, 0, -0.2, 1, 0, 0);
         ctx.transform(1, 0, 0, 1, 0, -verticalPosition);
@@ -410,14 +412,14 @@ class TextFormatting {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
         const time = performance.now() * 0.01;
-        ctx.transform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * 2);
+        ctx.transform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * settings.pixelScale);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
         const time = performance.now() * 0.01;
-        ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex), 0);
+        ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex) * settings.pixelScale / 2, 0);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
