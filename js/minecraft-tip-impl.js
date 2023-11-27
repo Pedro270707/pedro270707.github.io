@@ -63,7 +63,7 @@ function recordPNG(exporter) {
             let base64Out = bytesToBase64(encoder.stream().bin);
             exporter(base64Out);
             recordingText.classList.add("hidden");
-        }, Math.PI * 2000);
+        }, getTooltipTimeLength());
     }
 }
 
@@ -78,7 +78,7 @@ function exportWebP(data) {
     apng2webp(Uint8Array.from(atob(data), (c) => c.charCodeAt(0)).buffer)
     .then(blob => {
         const a = document.createElement('a');
-        a.download = tooltip.dataset.text.replace(/ /g, "_").replace(/§./, "") + '.png';
+        a.download = tooltip.dataset.text.replace(/ |\n/g, "_").replace(/§./g, "") + '.png';
         a.href = URL.createObjectURL(blob);
         a.click();
     })

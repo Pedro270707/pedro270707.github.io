@@ -1,6 +1,57 @@
+class VanillaTooltipStyle {
+  constructor() {
+    this.paddingLeft = 8;
+    this.paddingRight = 8;
+    this.paddingTop = 6;
+    this.paddingBottom = 6;
+    this.lineSpace = 4;
+  }
+
+  render(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "rgba(16,0,16,0.94)";
+  
+    ctx.fillRect(0, 2, 4, canvas.height - 4);
+    ctx.fillRect(canvas.width - 4, 2, canvas.width, canvas.height - 4);
+    ctx.fillRect(2, 0, canvas.width - 4, 2);
+    ctx.fillRect(4, 2, canvas.width - 8, 2);
+    ctx.fillRect(2, canvas.height - 2, canvas.width - 4, 2);
+    ctx.fillRect(4, canvas.height - 4, canvas.width - 8, 2);
+  
+    let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, "rgba(80,0,255,0.31)");
+    gradient.addColorStop(1, "rgba(40,0,127,0.31)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(2, 2, canvas.width - 4, canvas.height - 4);
+    ctx.clearRect(4, 4, canvas.width - 8, canvas.height - 8);
+  
+    ctx.fillStyle = "rgba(16,0,16,0.94)";
+    ctx.fillRect(4, 4, canvas.width - 8, canvas.height - 8);
+  }
+}
+
+class BetaTooltipStyle {
+  constructor() {
+    this.paddingLeft = 6;
+    this.paddingRight = 6;
+    this.paddingTop = 4;
+    this.paddingBottom = 4;
+    this.lineSpace = 4;
+  }
+
+  render(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = "rgba(0,0,0,0.7529411765)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
 const settings = {
   wordSpacing: 8,
-  firstLineIsHigher: true
+  firstLineIsHigher: true,
+  style: new BetaTooltipStyle()
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -31,38 +82,18 @@ function drawTooltip(canvas, textRenderer) {
 
   updateCanvasSize(canvas, textRenderer);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "rgba(16,0,16,0.94)";
-  // ctx.fillRect(2, 2, canvas.width - 4, canvas.height - 4);
-
-  ctx.fillRect(0, 2, 4, canvas.height - 4);
-  ctx.fillRect(canvas.width - 4, 2, canvas.width, canvas.height - 4);
-  ctx.fillRect(2, 0, canvas.width - 4, 2);
-  ctx.fillRect(4, 2, canvas.width - 8, 2);
-  ctx.fillRect(2, canvas.height - 2, canvas.width - 4, 2);
-  ctx.fillRect(4, canvas.height - 4, canvas.width - 8, 2);
-
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, "rgba(80,0,255,0.31)");
-  gradient.addColorStop(1, "rgba(40,0,127,0.31)");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(2, 2, canvas.width - 4, canvas.height - 4);
-  ctx.clearRect(4, 4, canvas.width - 8, canvas.height - 8);
-
-  ctx.fillStyle = "rgba(16,0,16,0.94)";
-  ctx.fillRect(4, 4, canvas.width - 8, canvas.height - 8);
+  settings.style.render(canvas);
 
   setDefaultCanvasSettings(canvas);
-  textRenderer.drawText(str, 8, 22, true);
+  textRenderer.drawText(str, settings.style.paddingLeft, settings.style.paddingTop + textRenderer.getLineHeight(false), true);
 
   requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
 }
 
 function updateCanvasSize(canvas, textRenderer, text = canvas.dataset.text) {
 	setDefaultCanvasSettings(canvas);
-  canvas.width = textRenderer.getWidth(text) + 16;
-  canvas.height = textRenderer.getHeight(text) + 20 + (settings.firstLineIsHigher && text.split('\n').length > 1 ? 4 : 0);
+  canvas.width = textRenderer.getWidth(text) + settings.style.paddingLeft + settings.style.paddingRight;
+  canvas.height = textRenderer.getHeight(text) + settings.style.paddingTop + settings.style.paddingBottom + (settings.firstLineIsHigher && text.split('\n').length > 1 ? 4 : 0);
 }
 
 function createTooltip(text = "", followCursor = false) {
@@ -155,11 +186,16 @@ class TextRenderer {
   }
 
   getHeight(string) {
-    return this.removeColorCodes(string).split('\n').length * (this.getLineHeight() + 6) - 8;
+    return this.removeColorCodes(string).split('\n').length * this.getLineHeight();
   }
 
-  getLineHeight() {
-    return parseInt(this.canvas.getContext('2d').font.match(/(?<value>\d+\.?\d*)/)) + 4;
+  getLineHeight(withLineSpace = true) {
+    const ctx = this.canvas.getContext('2d');
+    ctx.save();
+    setDefaultCanvasSettings(this.canvas);
+    const height = parseInt(this.canvas.getContext('2d').font.match(/(?<value>\d+\.?\d*)/)) + (withLineSpace ? settings.style.lineSpace : 0);
+    ctx.restore();
+    return height;
   }
 
   removeColorCodes(string) {
