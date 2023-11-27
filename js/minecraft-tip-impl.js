@@ -42,9 +42,17 @@ setInterval(() => {
 
 const recordingText = document.getElementById("recording-text");
 
-function recordPNG(exporter) {
-    if (getTooltipTimeLength() === 0) {
-        let encoder = new APNGencoder(tooltip);
+// let testCanvas = document.createElement("canvas");
+// document.body.appendChild(testCanvas);
+// testCanvas.width = 500;
+// testCanvas.height = 500;
+// testCanvas.getContext('2d').fillStyle = "rgba(0, 0, 0, 0.5)";
+// testCanvas.getContext('2d').fillRect(0, 0, 500, 500);
+// recordPNG(exportFile, testCanvas, 2000);
+
+function recordPNG(exporter, canvas = tooltip, length = getTooltipTimeLength()) {
+    if (length === 0) {
+        let encoder = new APNGencoder(canvas);
         encoder.start();
         encoder.addFrame();
         encoder.finish();
@@ -53,8 +61,9 @@ function recordPNG(exporter) {
     } else {
         recordingText.classList.remove("hidden");
         downloadOverlay.classList.add("hidden");
-        let encoder = new APNGencoder(tooltip);
+        let encoder = new APNGencoder(canvas);
         encoder.setRepeat(0);
+        encoder.setDispose(1);
         encoder.setDelay(5);
         encoder.start();
 
@@ -68,7 +77,7 @@ function recordPNG(exporter) {
             let base64Out = bytesToBase64(encoder.stream().bin);
             exporter(base64Out);
             recordingText.classList.add("hidden");
-        }, getTooltipTimeLength());
+        }, length);
     }
 }
 
@@ -99,13 +108,6 @@ function getTooltipTimeLength() {
 
     for (const child of form.children) {
         if (child.checked) {
-            if (child === custom) {
-                console.log("Custom");
-                console.log((customInput.value || 0) * 1000);
-            } else {
-                console.log(child);
-                console.log(child.value);
-            }
             return child === custom ? (customInput.value || 0) * 1000 : parseInt(child.value);
         }
     }
