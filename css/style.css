@@ -312,7 +312,7 @@ body {
 
 .website-divider {
 	background-color: var(--primary-background-color);
-	min-height: 200px;
+	min-height: 1em;
 	text-align: center;
 	padding-top: 15px;
 	padding-bottom: 15px;

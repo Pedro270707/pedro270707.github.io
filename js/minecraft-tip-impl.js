@@ -1,5 +1,6 @@
 var apng2webp = window.apng2webp.default;
 
+const downloadOverlay = document.getElementById("download-overlay");
 const tooltipField = document.getElementById("minecraft-text-input");
 let tooltip;
 new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
@@ -37,7 +38,7 @@ setInterval(() => {
 const recordingText = document.getElementById("recording-text");
 
 function recordPNG(exporter) {
-    if (!tooltip.dataset.text.includes("§j") && !tooltip.dataset.text.includes("§k")) { // temporary, if you're a beginner programmer PLEASE don't be inspired by this
+    if (getTooltipTimeLength() === 0) {
         let encoder = new APNGencoder(tooltip);
         encoder.start();
         encoder.addFrame();
@@ -46,6 +47,7 @@ function recordPNG(exporter) {
         exporter(base64Out);
     } else {
         recordingText.classList.remove("hidden");
+        downloadOverlay.classList.add("hidden");
         let encoder = new APNGencoder(tooltip);
         encoder.setRepeat(0);
         encoder.setDelay(5);
@@ -83,4 +85,24 @@ function exportWebP(data) {
     .catch(error => {
         console.error('Conversion failed:', error);
     });
+}
+
+function getTooltipTimeLength() {
+    const form = document.getElementById("tooltip-time-length");
+    const custom = document.getElementById("download-tooltip-custom");
+    const customInput = document.getElementById("download-tooltip-custom-input");
+
+    for (const child of form.children) {
+        if (child.checked) {
+            if (child === custom) {
+                console.log("Custom");
+                console.log((customInput.value || 0) * 1000);
+            } else {
+                console.log(child);
+                console.log(child.value);
+            }
+            return child === custom ? (customInput.value || 0) * 1000 : parseInt(child.value);
+        }
+    }
+    return 0;
 }

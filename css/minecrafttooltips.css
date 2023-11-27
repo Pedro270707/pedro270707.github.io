@@ -381,25 +381,30 @@
   border-style: solid none;
 }
 
-.minecraft-text-input {
-	min-width: 500px;
-    min-height: 32px;
-    max-width: 95%;
+.text-input, .minecraft-text-input {
+    width: 3em;
+    height: 1.4em;
+    max-width: 95vw;
+    max-width: 95svw;
     font-family: var(--default-font-family);
     background-color: var(--text-input-color);
-	border: 2px solid var(--text-input-color);
-    padding: 5px;
+    border: 2px solid var(--text-input-color);
+    padding: 0.5em;
     outline: none;
     border-radius: 32px;
     color: var(--default-text-color);
-	transition: background-color 0.2s;
-	padding-left: 10px;
-	padding-right: 10px;
+    transition: background-color 0.2s;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.minecraft-text-input {
+	width: 40rem;
 }
 
 .dark-mode .minecraft-text-input {
     background-color: var(--dark-mode-text-input-color);
-	border: 2px solid var(--dark-mode-text-input-color);
+	border-color: var(--dark-mode-text-input-color);
 	color: var(--dark-mode-text-color);
 }
 
@@ -535,6 +540,7 @@
 
 .download-overlay {
 	position: fixed;
+	display: flex;
 	height: 100vh;
 	width: 100vw;
 	top: 0;
@@ -543,7 +549,6 @@
 	text-align: center;
 	align-items: center;
 	justify-content: center;
-	display: none;
 }
 
 .download-overlay-background {
@@ -563,6 +568,7 @@
 	z-index: 9999;
 	box-shadow: 0 0 5px #000;
 	padding: 6px;
+	width: fit-content;
 }
 
 .dark-mode .download-overlay-window {

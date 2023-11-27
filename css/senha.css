@@ -121,8 +121,8 @@
 }
 
 .text-input {
-    min-width: 50px;
-    min-height: 32px;
+    width: 3em;
+    height: 1.4em;
     max-width: 95vw;
     max-width: 95svw;
     font-family: var(--default-font-family);
