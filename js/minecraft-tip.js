@@ -311,7 +311,8 @@ class TextFormatting {
     ITALIC: 'italic',
     BOLD: 'bold',
     OBFUSCATED: 'obfuscated',
-    BOBBING: 'bobbing',
+    VERTICAL_BOBBING: 'vertical_bobbing',
+    HORIZONTAL_BOBBING: 'horizontal_bobbing',
     RESET: 'reset'
   });
 
@@ -350,7 +351,8 @@ class TextFormatting {
     m: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
     n: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
     o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
-    p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOBBING, true), type: TextFormatting.FormattingOptions.BOBBING},
+    p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, true), type: TextFormatting.FormattingOptions.VERTICAL_BOBBING},
+    q: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, true), type: TextFormatting.FormattingOptions.HORIZONTAL_BOBBING},
     r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET}
   }
 
@@ -397,14 +399,24 @@ class TextFormatting {
     this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
-        ctx.setTransform(1, 0, -0.2, 1, 4, 0);
+        const verticalPosition = (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight()) + (textRenderingContext.line > 0 && settings.firstLineIsHigher ? 4 : 0)) - 7;
+        ctx.transform(1, 0, 0, 1, 0, verticalPosition);
+        ctx.transform(1, 0, -0.2, 1, 0, 0);
+        ctx.transform(1, 0, 0, 1, 0, -verticalPosition);
       }
     }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.BOBBING, (textRenderingContext, textRenderer, value) => {
+    this.addFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
         const time = performance.now() * 0.01;
-        ctx.setTransform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * 2);
+        ctx.transform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * 2);
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        const time = performance.now() * 0.01;
+        ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex), 0);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
