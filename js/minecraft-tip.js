@@ -51,7 +51,7 @@ class BetaTooltipStyle {
 const settings = {
   wordSpacing: 8,
   firstLineIsHigher: true,
-  style: new BetaTooltipStyle()
+  style: new VanillaTooltipStyle()
 }
 
 document.addEventListener('mousemove', (e) => {
