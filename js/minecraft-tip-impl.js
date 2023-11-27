@@ -34,22 +34,35 @@ setInterval(() => {
     }
 }, 50);
 
+const recordingText = document.getElementById("recording-text");
+
 function recordPNG(exporter) {
-    let encoder = new APNGencoder(tooltip);
-    encoder.setRepeat(0);
-    encoder.setDelay(5);
-    encoder.start();
-
-    let interval = setInterval(() => {
+    if (!tooltip.dataset.text.includes("§j") && !tooltip.dataset.text.includes("§k")) { // temporary, if you're a beginner programmer PLEASE don't be inspired by this
+        let encoder = new APNGencoder(tooltip);
+        encoder.start();
         encoder.addFrame();
-    }, 50);
-
-    setTimeout(() => {
-        clearInterval(interval);
         encoder.finish();
         let base64Out = bytesToBase64(encoder.stream().bin);
         exporter(base64Out);
-    }, Math.PI * 2000);
+    } else {
+        recordingText.classList.remove("hidden");
+        let encoder = new APNGencoder(tooltip);
+        encoder.setRepeat(0);
+        encoder.setDelay(5);
+        encoder.start();
+
+        let interval = setInterval(() => {
+            encoder.addFrame();
+        }, 50);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            encoder.finish();
+            let base64Out = bytesToBase64(encoder.stream().bin);
+            exporter(base64Out);
+            recordingText.classList.add("hidden");
+        }, Math.PI * 2000);
+    }
 }
 
 function exportFile(data) {
