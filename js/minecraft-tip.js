@@ -62,10 +62,10 @@ class BetaTooltipStyle {
 
 class UndertaleTooltipStyle {
   constructor() {
-    this.paddingLeft = 10;
-    this.paddingRight = 10;
-    this.paddingTop = 6;
-    this.paddingBottom = 10;
+    this.paddingLeft = 13;
+    this.paddingRight = 13;
+    this.paddingTop = 9;
+    this.paddingBottom = 13;
     this.lineSpace = 2;
     this.fontSize = 16;
     this.wordSpacing = 8;
@@ -79,12 +79,16 @@ class UndertaleTooltipStyle {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     ctx.fillStyle = "#000000";
-    ctx.fillRect(3 * settings.pixelScale, 3 * settings.pixelScale, canvas.width - (3 * settings.pixelScale), canvas.height - (3 * settings.pixelScale));
-    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(6 * settings.pixelScale, 6 * settings.pixelScale, canvas.width - (12 * settings.pixelScale), canvas.height - (12 * settings.pixelScale));
     ctx.fillRect(3 * settings.pixelScale, 0, canvas.width - 6 * settings.pixelScale, 3 * settings.pixelScale);
     ctx.fillRect(3 * settings.pixelScale, canvas.height - (3 * settings.pixelScale), canvas.width - 6 * settings.pixelScale, 3 * settings.pixelScale);
     ctx.fillRect(0, 0, 3 * settings.pixelScale, canvas.height);
     ctx.fillRect(canvas.width - (3 * settings.pixelScale), 0, 3 * settings.pixelScale, canvas.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(6 * settings.pixelScale, 3 * settings.pixelScale, canvas.width - 12 * settings.pixelScale, 3 * settings.pixelScale);
+    ctx.fillRect(6 * settings.pixelScale, canvas.height - (6 * settings.pixelScale), canvas.width - 12 * settings.pixelScale, 3 * settings.pixelScale);
+    ctx.fillRect(3 * settings.pixelScale, 3 * settings.pixelScale, 3 * settings.pixelScale, canvas.height - 6 * settings.pixelScale);
+    ctx.fillRect(canvas.width - (6 * settings.pixelScale), 3 * settings.pixelScale, 3 * settings.pixelScale, canvas.height - 6 * settings.pixelScale);
   }
 }
 
