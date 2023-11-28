@@ -311,18 +311,12 @@ class TextRenderer {
     }
   }
 
-  static hasLogged = false;
-
   getRandomTextFrom(originalText) {
     let newText = '';
     for (const char of originalText) {
       const width = this.getWidth(char, false);
       if (this.characterWidthsMap.has(width)) {
         const charactersWithSameWidth = this.characterWidthsMap.get(width);
-        if (!TextRenderer.hasLogged && charactersWithSameWidth.length > 8000) {
-          TextRenderer.hasLogged = true;
-          console.log(charactersWithSameWidth);
-        }
         newText += charactersWithSameWidth[Math.floor(Math.random() * charactersWithSameWidth.length)];
       } else {
         newText += originalText;
