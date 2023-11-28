@@ -95,7 +95,7 @@ const styles = Object.freeze({
 });
 
 const settings = {
-  style: styles.undertale,
+  style: styles.vanilla,
   pixelScale: 2
 }
 
