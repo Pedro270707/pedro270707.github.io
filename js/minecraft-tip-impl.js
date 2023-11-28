@@ -29,10 +29,8 @@ setInterval(() => {
             setTooltipText(followerTooltip, str);
         });
     } else {
-        if (tooltipField.value === 'style:bta') {
-            settings.style = new BetaTooltipStyle();
-        } else if (tooltipField.value === 'style:vanilla') {
-            settings.style = new VanillaTooltipStyle();
+        if (tooltipField.value.startsWith("style:") && styles[tooltipField.value.substring("style:".length)]) {
+            settings.style = styles[tooltipField.value.substring("style:".length)];
         }
         const unescapedValue = tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
         setTooltipText(tooltip, unescapedValue);

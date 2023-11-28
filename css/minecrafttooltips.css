@@ -19,6 +19,13 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'Determination';
+	src: url("/assets/Determination-Font/Determination.ttf") format("truetype");
+		
+	font-weight: normal;
+}
+
 .info-bubble {
 	position: relative;
 }

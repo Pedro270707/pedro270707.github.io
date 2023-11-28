@@ -8,6 +8,8 @@ class VanillaTooltipStyle {
     this.fontSize = 8;
     this.wordSpacing = 4;
     this.firstLineIsHigher = true;
+    this.font = 'Minecraft';
+    this.shadow = true;
   }
 
   render(canvas) {
@@ -45,6 +47,8 @@ class BetaTooltipStyle {
     this.fontSize = 8;
     this.wordSpacing = 4;
     this.firstLineIsHigher = true;
+    this.font = 'Minecraft';
+    this.shadow = true;
   }
 
   render(canvas) {
@@ -56,8 +60,42 @@ class BetaTooltipStyle {
   }
 }
 
+class UndertaleTooltipStyle {
+  constructor() {
+    this.paddingLeft = 10;
+    this.paddingRight = 10;
+    this.paddingTop = 6;
+    this.paddingBottom = 10;
+    this.lineSpace = 2;
+    this.fontSize = 16;
+    this.wordSpacing = 8;
+    this.firstLineIsHigher = false;
+    this.font = 'Determination';
+    this.shadow = false;
+  }
+
+  render(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(3 * settings.pixelScale, 3 * settings.pixelScale, canvas.width - (3 * settings.pixelScale), canvas.height - (3 * settings.pixelScale));
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(3 * settings.pixelScale, 0, canvas.width - 6 * settings.pixelScale, 3 * settings.pixelScale);
+    ctx.fillRect(3 * settings.pixelScale, canvas.height - (3 * settings.pixelScale), canvas.width - 6 * settings.pixelScale, 3 * settings.pixelScale);
+    ctx.fillRect(0, 0, 3 * settings.pixelScale, canvas.height);
+    ctx.fillRect(canvas.width - (3 * settings.pixelScale), 0, 3 * settings.pixelScale, canvas.height);
+  }
+}
+
+const styles = Object.freeze({
+  beta: new BetaTooltipStyle(),
+  vanilla: new VanillaTooltipStyle(),
+  undertale: new UndertaleTooltipStyle()
+});
+
 const settings = {
-  style: new VanillaTooltipStyle(),
+  style: styles.undertale,
   pixelScale: 2
 }
 
@@ -71,7 +109,7 @@ document.addEventListener('mousemove', (e) => {
 
 function setDefaultCanvasSettings(canvas) {
   let ctx = canvas.getContext('2d');
-  ctx.font = settings.style.fontSize * settings.pixelScale + 'px Minecraft,"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
+  ctx.font = settings.style.fontSize * settings.pixelScale + 'px ' + settings.style.font + ',"WenQuanYi Bitmap Song",SimSun,Unifont,NISC18030,Beijing,Courier,sans-serif';
   canvas.dataset.wordSpacing = settings.style.wordSpacing + "px";
 }
 
@@ -91,7 +129,7 @@ function drawTooltip(canvas, textRenderer) {
   settings.style.render(canvas);
 
   setDefaultCanvasSettings(canvas);
-  textRenderer.drawText(str, settings.style.paddingLeft * settings.pixelScale, (settings.style.paddingTop + textRenderer.getLineHeight(false)) * settings.pixelScale, true);
+  textRenderer.drawText(str, settings.style.paddingLeft * settings.pixelScale, (settings.style.paddingTop + textRenderer.getLineHeight(false)) * settings.pixelScale, settings.style.shadow);
 
   requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
 }
