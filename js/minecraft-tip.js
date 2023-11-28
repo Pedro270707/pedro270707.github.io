@@ -322,6 +322,7 @@ class TextFormatting {
     OBFUSCATED: 'obfuscated',
     VERTICAL_BOBBING: 'vertical_bobbing',
     HORIZONTAL_BOBBING: 'horizontal_bobbing',
+    RANDOM_BOBBING: 'random_bobbing',
     RESET: 'reset'
   });
 
@@ -362,7 +363,8 @@ class TextFormatting {
     o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
     p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, true), type: TextFormatting.FormattingOptions.VERTICAL_BOBBING},
     q: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, true), type: TextFormatting.FormattingOptions.HORIZONTAL_BOBBING},
-    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET}
+    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET},
+    s: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, true), type: TextFormatting.FormattingOptions.RANDOM_BOBBING}
   }
 
   constructor() {
@@ -426,6 +428,13 @@ class TextFormatting {
       if (value) {
         const time = performance.now() * 0.01;
         ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex) * settings.pixelScale / 2, 0);
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        const time = performance.now() * 0.01;
+        ctx.transform(1, 0, 0, 1, ((Math.random() * 2) - 1) * settings.pixelScale / 2, ((Math.random() * 2) - 1) * settings.pixelScale / 2);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
