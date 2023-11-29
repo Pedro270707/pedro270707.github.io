@@ -41,7 +41,7 @@ setInterval(() => {
 const recordingText = document.getElementById("recording-text");
 const recordingPercentage = document.getElementById("recording-percentage");
 
-function recordPNG(exporter, canvas = tooltip, length = getTooltipTimeLength()) {
+function recordPNG(exporter, canvas = tooltip, length = getTooltipDuration()) {
     if (length === 0) {
         let encoder = new APNGencoder(canvas);
         encoder.start();
@@ -97,14 +97,14 @@ function exportWebP(data) {
     });
 }
 
-function getTooltipTimeLength() {
-    const form = document.getElementById("tooltip-time-length");
+function getTooltipDuration() {
+    const form = document.getElementById("tooltip-duration");
     const custom = document.getElementById("download-tooltip-custom");
     const customInput = document.getElementById("download-tooltip-custom-input");
 
     for (const child of form.children) {
         if (child.checked) {
-            return child === custom ? (customInput.value || 0) * 1000 : parseInt(child.value);
+            return child === custom ? (customInput.value < 0 ? 0 : (customInput.value || 0)) * 1000 : parseInt(child.value);
         }
     }
     return 0;

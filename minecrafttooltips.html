@@ -16,10 +16,6 @@ title: "Itens do Minecraft"
 <link rel="preconnect" href="/assets/Minecraft-Font/Minecraft.ttf" crossorigin>
 
 <link rel="stylesheet" href="{{ site.baseurl }}/css/minecrafttooltips.css">
-<div id="minecraft-tip-container" class="minecraft-tip-container">
-	<div id="minecraft-tip" class="minecraft-tip"><div id="tip-text-line" class="text-line"><span data-string='{"translate":"minecrafttooltips-defaulttooltip"}'></span></div><div id="tip-shadow-line" class="shadow-line"><span data-string='{"translate":"minecrafttooltips-defaulttooltip"}'></span></div></div>
-	<div class="minecraft-tip-border center" id="minecraft-tip-border"></div>
-</div>
 <div class="minecraft-background">
 	<div class="minecraft-landscape"></div>
 	<div class="minecraft-background-glow"></div>
@@ -98,7 +94,7 @@ title: "Itens do Minecraft"
 
 <div class="website-divider">
 	<div class="text-input-wrapper center">
-		<input type="text" data-placeholder='{"translate":"minecrafttooltips-defaulttooltip"}' id="minecraft-text-input" name="Texto do Minecraft" class="minecraft-text-input">
+		<input type="text" data-placeholder='{"translate":"minecrafttooltips-defaulttooltip"}' id="minecraft-text-input" name="Texto do Minecraft" class="text-input minecraft-text-input">
 		<!--<input type="text" data-placeholder='{"translate":"minecrafttooltips-itemquantity"}' id="item-count-input" name="Número de itens" class="minecraft-text-input">-->
 	</div>
 </div>
@@ -111,12 +107,23 @@ title: "Itens do Minecraft"
 		<input type="range" min="1" max="50" value="1" class="slider" id="resolution-slider">
 		-->
 
-		<form id="tooltip-time-length" action="">
-			<input type="radio" name="tooltip-time-length" id="download-tooltip-static" value="0" checked><label for="download-tooltip-static" data-string='{"translate":"minecrafttooltips-downloadtooltipstatic"}'></label><br>
-			<input type="radio" name="tooltip-time-length" id="download-tooltip-full-loop" value="6283.185307179586"><label for="download-tooltip-full-loop" data-string='{"translate":"minecrafttooltips-downloadtooltipfullloop"}'></label><br>
-			
-			<input type="radio" name="tooltip-time-length" id="download-tooltip-custom" value="0"><label for="download-tooltip-custom" data-string='{"translate":"minecrafttooltips-downloadtooltipcustom"}'></label>
-			<input type="number" id="download-tooltip-custom-input" name="download-tooltip-custom-input" class="text-input" step="0.1">
+		<span class="minor" data-string='{"translate":"minecrafttooltips-duration"}'></span>
+		<form id="tooltip-duration" action="">
+			<label class="radio-input">
+				<input type="radio" name="tooltip-duration" id="download-tooltip-static" value="0" checked>
+				<span data-string='{"translate":"minecrafttooltips-downloadtooltipstatic"}'></label>
+			</label>
+			<br>
+			<label class="radio-input">
+				<input type="radio" name="tooltip-duration" id="download-tooltip-full-loop" value="6283.185307179586">
+				<span data-string='{"translate":"minecrafttooltips-downloadtooltipfullloop"}'></label>
+			</label>
+			<br>
+			<label class="radio-input">
+				<input type="radio" name="tooltip-duration" id="download-tooltip-custom" value="0">
+				<span data-string='{"translate":"minecrafttooltips-downloadtooltipcustom"}'></label>
+				<input class="text-input" type="number" id="download-tooltip-custom-input" name="download-tooltip-custom-input" step="0.1">
+			</label>
 		</form>
 
 		<br>

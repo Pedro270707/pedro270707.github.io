@@ -542,6 +542,89 @@ body {
 	margin-top: 10px;
 }
 
+.text-input {
+    width: 5em;
+    height: 1.4em;
+    max-width: 95vw;
+    max-width: 95svw;
+    font-family: var(--default-font-family);
+    background-color: var(--text-input-color);
+    border: 0.2em solid var(--text-input-active-color);
+    padding: 0.5em;
+    outline: none;
+    border-radius: 32px;
+    color: var(--default-text-color);
+    transition: background-color 0.2s;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dark-mode .text-input {
+    background-color: var(--dark-mode-text-input-color);
+	border-color: var(--dark-mode-text-input-active-color);
+	color: var(--dark-mode-text-color);
+}
+
+.text-input:focus {
+	background-color: var(--text-input-active-color);
+	border-color: var(--text-input-color);
+}
+
+.dark-mode .text-input:focus {
+	background-color: var(--dark-mode-text-input-active-color);
+	border-color: var(--dark-mode-text-input-color);
+}
+
+.radio-input input[type="radio"] {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: var(--primary-background-color);
+	background-color: transparent;
+	margin: 0;
+	width: 1.5em;
+	height: 1.5em;
+	border-width: 0.2em;
+	border-style: solid;
+    border-color: var(--button-border-color);
+	border-radius: 100%;
+	vertical-align: middle;
+	display: inline-grid;
+  	place-content: center;
+}
+
+.radio-input:hover input[type="radio"] {
+	border-color: var(--button-hover-border-color);
+}
+
+.dark-mode .radio-input input[type="radio"] {
+	background-color: var(--dark-mode-primary-background-color);
+	background-color: transparent;
+	border-color: var(--dark-mode-button-border-color);
+}
+
+.dark-mode .radio-input:hover input[type="radio"] {
+	border-color: var(--dark-mode-button-hover-border-color);
+}
+
+.radio-input input[type="radio"]::before {
+	content: '';
+	display: inline-block;
+	transform: scale(0);
+	width: 0.75em;
+	height: 0.75em;
+    background-color: var(--button-border-color);
+	border-radius: 100%;
+	vertical-align: middle;
+}
+
+.dark-mode .radio-input input[type="radio"]::before {
+	background-color: var(--dark-mode-button-border-color);
+}
+
+.radio-input input[type="radio"]:checked::before {
+	transform: scale(1);
+}
+
 @media (any-pointer: coarse) {
 	:root {
 		--default-font-size: 5vw;
