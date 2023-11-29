@@ -31,6 +31,11 @@ setInterval(() => {
     } else {
         if (tooltipField.value.startsWith("style:") && styles[tooltipField.value.substring("style:".length)]) {
             settings.style = styles[tooltipField.value.substring("style:".length)];
+        } else if (tooltipField.value.startsWith("scale:")) {
+            const scale = parseFloat(tooltipField.value.substring("scale:".length));
+            if (!Number.isNaN(scale) && scale >= 0) {
+                settings.pixelScale = scale;
+            }
         }
         const unescapedValue = tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
         setTooltipText(tooltip, unescapedValue);
