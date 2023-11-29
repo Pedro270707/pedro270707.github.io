@@ -108,8 +108,11 @@ function getTooltipDuration() {
     const customInput = document.getElementById("download-tooltip-custom-input");
 
     for (const child of form.children) {
-        if (child.checked) {
-            return child === custom ? (customInput.value < 0 ? 0 : (customInput.value || 0)) * 1000 : parseInt(child.value);
+        if (child.tagName === 'LABEL') {
+            const radio = child.querySelector('input[type="radio"]');
+            if (radio.checked) {
+                return radio === custom ? (customInput.value < 0 ? 0 : (customInput.value || 0)) * 1000 : parseInt(radio.value);
+            }
         }
     }
     return 0;
