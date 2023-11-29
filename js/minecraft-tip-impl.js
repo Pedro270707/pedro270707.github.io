@@ -39,14 +39,7 @@ setInterval(() => {
 }, 50);
 
 const recordingText = document.getElementById("recording-text");
-
-// let testCanvas = document.createElement("canvas");
-// document.body.appendChild(testCanvas);
-// testCanvas.width = 500;
-// testCanvas.height = 500;
-// testCanvas.getContext('2d').fillStyle = "rgba(0, 0, 0, 0.5)";
-// testCanvas.getContext('2d').fillRect(0, 0, 500, 500);
-// recordPNG(exportFile, testCanvas, 2000);
+const recordingPercentage = document.getElementById("recording-percentage");
 
 function recordPNG(exporter, canvas = tooltip, length = getTooltipTimeLength()) {
     if (length === 0) {
@@ -58,6 +51,7 @@ function recordPNG(exporter, canvas = tooltip, length = getTooltipTimeLength()) 
         exporter(base64Out);
     } else {
         recordingText.classList.remove("hidden");
+        recordingPercentage.innerHTML = 0;
         downloadOverlay.classList.add("hidden");
         let encoder = new APNGencoder(canvas);
         encoder.setRepeat(0);
@@ -65,8 +59,12 @@ function recordPNG(exporter, canvas = tooltip, length = getTooltipTimeLength()) 
         encoder.setDelay(5);
         encoder.start();
 
+        let frame = 0;
+        const amountOfFrames = Math.floor(length / 50) - 1;
         let interval = setInterval(() => {
+            frame++;
             encoder.addFrame();
+            recordingPercentage.innerHTML = (100 * frame / amountOfFrames).toFixed(1);
         }, 50);
 
         setTimeout(() => {
