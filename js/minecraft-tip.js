@@ -189,6 +189,7 @@ class TextRenderer {
 
       while (cursor < line.length) {
         textRenderingContext.char = line[cursor];
+        const originalLeft = textRenderingContext.left;
         switch (textRenderingContext.char) {
           case '§':
             cursor++;
@@ -205,22 +206,28 @@ class TextRenderer {
             ctx.save();
             if (shouldConsiderWeight) {
               textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
+              for (const renderFunction of textRenderingContext.setToRender) {
+                renderFunction(textRenderingContext, this, false);
+              }
             }
-            lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing) * settings.pixelScale;
+            lineWidth += parseFloat(textRenderingContext.canvas.dataset.wordSpacing) * settings.pixelScale + ((textRenderingContext.left - originalLeft));
             ctx.restore();
             textRenderingContext.charIndex++;
             break;
           default:
             ctx.save();
-            const originalLeft = textRenderingContext.left;
             if (shouldConsiderWeight) {
               textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
+              for (const renderFunction of textRenderingContext.setToRender) {
+                renderFunction(textRenderingContext, this, false);
+              }
             } else {
               setDefaultCanvasSettings(this.canvas);
             }
             const textMetrics = ctx.measureText(textRenderingContext.char);
             lineWidth += textMetrics.width + (textRenderingContext.left - originalLeft);
             ctx.restore();
+            textRenderingContext.setToRender = [];
             textRenderingContext.charIndex++;
             break;
         }
@@ -273,7 +280,23 @@ class TextRenderer {
           }
           break;
         default:
-          textRenderingContext.left += this.drawChar(textRenderingContext);
+          ctx.save();
+          textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
+          if (textRenderingContext.shadow) {
+            const originalColor = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)();
+            const red = Math.round((originalColor >> 16) * (41/168));
+            const green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
+            const blue = Math.round((originalColor & 0xFF) * (41/168));
+
+            const textRenderingContextCopy = textRenderingContext.copy();
+            textRenderingContextCopy.x += settings.pixelScale;
+            textRenderingContextCopy.y += settings.pixelScale;
+            this.drawChar(textRenderingContextCopy, red << 16 | green << 8 | blue);
+          }
+          this.drawChar(textRenderingContext);
+          ctx.restore();
+          textRenderingContext.left += this.getWidth(textRenderingContext.char, false, textRenderingContext.formatting.copy()) * settings.pixelScale;
+          textRenderingContext.setToRender = [];
           textRenderingContext.charIndex++;
           break;
       }
@@ -281,38 +304,19 @@ class TextRenderer {
     }
   }
 
-  drawChar(textRenderingContext) {
+  drawChar(textRenderingContext, color = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)()) {
     const ctx = textRenderingContext.canvas.getContext('2d');
+
     ctx.save();
-
-    const originalLeft = textRenderingContext.left;
-
-    if (textRenderingContext.shadow) {
-      const originalColor = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)();
-      const red = Math.round((originalColor >> 16) * (41/168));
-      const green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
-      const blue = Math.round((originalColor & 0xFF) * (41/168));
-
-      const textRenderingContextCopy = textRenderingContext.copy();
-      textRenderingContextCopy.x += settings.pixelScale;
-      textRenderingContextCopy.y += settings.pixelScale;
-      textRenderingContextCopy.shadow = false;
-      textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => red << 16 | green << 8 | blue);
-      this.drawChar(textRenderingContextCopy);
+    ctx.fillStyle = "#" + ('000000' + color.toString(16).toUpperCase()).slice(-6);
+    for (const renderFunction of textRenderingContext.setToRender) {
+      renderFunction(textRenderingContext, this, true);
     }
-
-    textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
-    
     // CanvasRenderingContext2D.wordSpacing doesn't seem to work on Chromium-based browsers, so we have a special condition for spaces
-    if (textRenderingContext.char === ' ') {
-      ctx.restore();
-      return parseFloat(textRenderingContext.canvas.dataset.wordSpacing) * settings.pixelScale;
-    } else {
+    if (textRenderingContext.char !== ' ') {
       ctx.fillText(textRenderingContext.char, textRenderingContext.x + textRenderingContext.left, textRenderingContext.y + (textRenderingContext.line * this.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0));
-      const width = textRenderingContext.left - originalLeft + (this.getWidth(textRenderingContext.char + ".") - this.getWidth(".")) * settings.pixelScale;
-      ctx.restore();
-      return width;
     }
+    ctx.restore();
   }
 
   getRandomTextFrom(originalText) {
@@ -341,6 +345,7 @@ class TextRenderingContext {
     this.left = left;
     this.line = line;
     this.shadow = shadow;
+    this.setToRender = [];
   }
 
   copy() {
@@ -399,57 +404,22 @@ class TextFormatting {
     o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
     p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, true), type: TextFormatting.FormattingOptions.VERTICAL_BOBBING},
     q: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, true), type: TextFormatting.FormattingOptions.HORIZONTAL_BOBBING},
-    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.reset(textRenderingContext), type: TextFormatting.FormattingOptions.RESET},
+    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RESET, true), type: TextFormatting.FormattingOptions.RESET},
     s: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, true), type: TextFormatting.FormattingOptions.RANDOM_BOBBING}
   }
 
   constructor() {
     this.formattingOptions = {}
 
-    this.addColorOption(TextFormatting.FormattingOptions.COLOR, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      ctx.fillStyle = "#" + ('000000' + value().toString(16).toUpperCase()).slice(-6);
-    }, () => 0xFFFFFF);
+    this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
+      if (value) {
+        this.reset(textRenderingContext);
+      }
+    }, false);
+    this.addColorOption(TextFormatting.FormattingOptions.COLOR, () => {}, () => 0xFFFFFF);
     this.addFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, (textRenderingContext, textRenderer, value) => {
       if (value) {
         textRenderingContext.char = textRenderer.getRandomTextFrom(textRenderingContext.char);
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (textRenderingContext, textRenderer, value) => {
-      if (value) {
-        textRenderingContext.canvas.dataset.wordSpacing = (settings.style.wordSpacing + settings.pixelScale) + "px";
-        const textRenderingContextCopy = textRenderingContext.copy();
-        textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, false);
-        textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
-        textRenderer.drawChar(textRenderingContextCopy);
-        textRenderingContext.left += 2;
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value) {
-        let originalFillStyle = ctx.fillStyle;
-        ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) + settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
-        ctx.fillStyle = originalFillStyle;
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value) {
-        let originalFillStyle = ctx.fillStyle;
-        ctx.fillStyle = "#" + ('000000' + this.getFormattingOption(TextFormatting.FormattingOptions.COLOR)().toString(16).toUpperCase()).slice(-6);
-        ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
-        ctx.fillStyle = originalFillStyle;
-      }
-    }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
-      const ctx = textRenderingContext.canvas.getContext('2d');
-      if (value) {
-        const verticalPosition = (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale;
-        ctx.transform(1, 0, 0, 1, 0, verticalPosition);
-        ctx.transform(1, 0, -0.2, 1, 0, 0);
-        ctx.transform(1, 0, 0, 1, 0, -verticalPosition);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, (textRenderingContext, textRenderer, value) => {
@@ -473,9 +443,41 @@ class TextFormatting {
         ctx.transform(1, 0, 0, 1, ((Math.random() * 2) - 1) * settings.pixelScale / 2, ((Math.random() * 2) - 1) * settings.pixelScale / 2);
       }
     }, false);
-    this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
+    this.addFormattingOption(TextFormatting.FormattingOptions.BOLD, (textRenderingContext, textRenderer, value) => {
       if (value) {
-        this.reset(textRenderingContext);
+        textRenderingContext.left += settings.pixelScale;
+        textRenderingContext.setToRender.push((textRenderingContext, textRenderer, shouldDraw) => {
+          const textRenderingContextCopy = textRenderingContext.copy();
+          textRenderingContextCopy.left -= settings.pixelScale;
+          textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, false);
+          textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
+          if (shouldDraw) textRenderer.drawChar(textRenderingContextCopy);
+        });
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, (textRenderingContext, textRenderer, value) => {
+      if (value) {
+        textRenderingContext.setToRender.push((textRenderingContext, textRenderer, shouldDraw) => {
+          const ctx = textRenderingContext.canvas.getContext('2d');
+          if (shouldDraw) ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) + settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
+        })
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        textRenderingContext.setToRender.push((textRenderingContext, textRenderer, shouldDraw) => {
+          if (shouldDraw) ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
+        });
+      }
+    }, false);
+    this.addFormattingOption(TextFormatting.FormattingOptions.ITALIC, (textRenderingContext, textRenderer, value) => {
+      const ctx = textRenderingContext.canvas.getContext('2d');
+      if (value) {
+        const verticalPosition = (textRenderingContext.y + (textRenderingContext.line * textRenderer.getLineHeight() * settings.pixelScale) + (textRenderingContext.line > 0 && settings.style.firstLineIsHigher ? 2 * settings.pixelScale : 0)) - 3.5 * settings.pixelScale;
+        ctx.transform(1, 0, 0, 1, 0, verticalPosition);
+        ctx.transform(1, 0, -0.2, 1, 0, 0);
+        ctx.transform(1, 0, 0, 1, 0, -verticalPosition);
       }
     }, false);
   }
