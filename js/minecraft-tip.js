@@ -308,7 +308,7 @@ class TextRenderer {
     const ctx = textRenderingContext.canvas.getContext('2d');
 
     ctx.save();
-    ctx.fillStyle = "#" + ('000000' + color.toString(16).toUpperCase()).slice(-6);
+    ctx.fillStyle = "#" + color.toString(16).padStart(6, '0');
     for (const renderFunction of textRenderingContext.setToRender) {
       renderFunction(textRenderingContext, this, true);
     }
