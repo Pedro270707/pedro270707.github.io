@@ -284,15 +284,18 @@ body {
 }
 
 .main-page-header-image {
-	height: 400px;
+	height: calc(100dvh - 2rem);
 	background-image: linear-gradient(transparent, 80%, #000), url('/assets/logo.png');
-	background-position: center;
+	background-position: center, -500px -250px;
 	background-size: auto 150%;
 	background-repeat: no-repeat;
-	text-align: center;
-	line-height: 400px;
+	text-align: right;
+	line-height: calc(100dvh - 16rem);
 	text-shadow: 0 0 10px black;
 	color: #ffffff;
+	padding: 7rem;
+	box-sizing: border-box;
+	position: relative;
 }
 
 .dark-mode .main-page-header-image {
@@ -301,7 +304,7 @@ body {
 
 .main-page-header-text {
 	margin: 0;
-	line-height: 1.5;
+	line-height: 0.5;
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -345,6 +348,8 @@ body {
 	padding-left: 3px;
 	padding-right: 3px;
 	border-radius: 5px;
+	line-height: 1.5;
+	margin: 0;
 }
 
 .dark-mode .dark-mode-toggle {
@@ -462,19 +467,17 @@ body {
 }
 
 .project-flexbox {
-	width: 517px;
 	max-width: fit-content;
 	display: flex;
 	flex-wrap: wrap;
-	flex: 256px 1;
 	justify-content: center;
-	gap: 5px;
+	gap: 1rem;
 	position: relative;
 }
 
 .project-flexbox img {
-	border-radius: 5px;
-	width: 256px;
+	border-radius: 8px;
+	width: 512px;
 	image-rendering: pixelated;
 	transition: filter 0.2s;
 }
@@ -498,7 +501,7 @@ body {
 }
 
 .project-flexbox a {
-	height: 64px;
+	height: 128px;
 	position: relative;
 }
 
