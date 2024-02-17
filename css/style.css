@@ -378,8 +378,10 @@ body {
 }
 
 .item-flex {
-	display: inline-flex;
+	display: flex;
 	gap: 3px;
+	justify-content: right;
+	margin-top: 0.67em;
 }
 
 .icon-button, .item-input label {
