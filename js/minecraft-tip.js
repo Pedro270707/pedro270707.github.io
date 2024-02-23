@@ -300,6 +300,9 @@ class TextRenderer {
           textRenderingContext.charIndex++;
           break;
       }
+      ctx.save();
+      textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
+      ctx.restore();
       cursor++;
     }
   }
