@@ -271,6 +271,7 @@ class TextRenderer {
           break;
         case '§':
           cursor++;
+          if (cursor >= string.length) break;
           textRenderingContext.char = string[cursor];
           if (TextFormatting.formattingCodes[textRenderingContext.char]) {
             if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
@@ -323,7 +324,6 @@ class TextRenderer {
   }
 
   getRandomTextFrom(originalText) {
-    if (originalText == '') return originalText;
     let newText = '';
     for (const char of originalText) {
       const width = this.getWidth(char, false);
