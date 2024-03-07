@@ -323,6 +323,7 @@ class TextRenderer {
   }
 
   getRandomTextFrom(originalText) {
+    if (originalText == '') return originalText;
     let newText = '';
     for (const char of originalText) {
       const width = this.getWidth(char, false);
