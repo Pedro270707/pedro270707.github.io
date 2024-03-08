@@ -450,7 +450,7 @@ class TextFormatting {
   constructor() {
     this.formattingOptions = {}
 
-    this.addColorOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {}, false); // color options reset, so we do not want any code here
+    this.addColorOption(TextFormatting.FormattingOptions.RESET, () => {}, false); // color options reset, so we do not want any code here
     this.addColorOption(TextFormatting.FormattingOptions.COLOR, () => {}, () => 0xFFFFFF);
     this.addFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, (textRenderingContext, textRenderer, value) => {
       if (value) {
