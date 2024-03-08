@@ -1,3 +1,5 @@
+const testText = "Text with spaces\nLine break\nnothing§lbold§rreset§r§lbold\nnothing §jjeb_ §lbold jeb_ §r§lbold\n§r§l§jnormal jeb_\n§pbouncy§r §qtext§r §sshaky§r\n§j§l§q§p§severything\nnothing";
+
 var apng2webp = window.apng2webp.default;
 
 const downloadOverlay = document.getElementById("download-overlay");
