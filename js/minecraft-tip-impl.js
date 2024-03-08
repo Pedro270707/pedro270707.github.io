@@ -1,4 +1,4 @@
-const testText = "Text with spaces\nLine break\nnothing§lbold§rreset§r§lbold\nnothing §jjeb_ §lbold jeb_ §r§lbold\n§r§l§jnormal jeb_\n§pbouncy§r §qtext§r §sshaky§r\n§j§l§q§p§severything\nnothing";
+const testText = "Text with spaces\nLine break\nnothing§lbold§rreset§r§lbold\nnothing §jjeb_ §lbold jeb_ §r§lbold\n§r§l§jnormal jeb_\n§pbouncy§r §qtext§r §sshaky§r\n§j§l§q§p§severything\nnothing\n§kobfuscated\n§m§kstrikethrough obfuscated\n§j§k§l§m§n§o§p§q§sa";
 
 var apng2webp = window.apng2webp.default;
 
