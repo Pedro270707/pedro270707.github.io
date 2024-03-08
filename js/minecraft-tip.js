@@ -98,9 +98,17 @@ const styles = Object.freeze({
   undertale: new UndertaleTooltipStyle()
 });
 
+const ColorCodeView = Object.freeze({
+  NEVER: "never",
+  LAST_CHAR: "last_char",
+  ALWAYS: "always"
+});
+
 const settings = {
   style: styles.vanilla,
-  pixelScale: 2
+  pixelScale: 2,
+  colorCodeChar: '§',
+  colorCodeView: ColorCodeView.NEVER
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -183,6 +191,24 @@ class TextRenderer {
     const textRenderingContext = new TextRenderingContext(null, 0, this.canvas, formatting, -Infinity, -Infinity);
     const ctx = textRenderingContext.canvas.getContext('2d');
 
+    let charWidth = function(textRenderer, originalLeft) {
+      ctx.save();
+      if (shouldConsiderWeight) {
+        textRenderingContext.formatting.applyFormatting(textRenderingContext, textRenderer);
+        for (const renderFunction of textRenderingContext.setToRender) {
+          renderFunction(textRenderingContext, textRenderer, false);
+        }
+      } else {
+        setDefaultCanvasSettings(textRenderer.canvas);
+      }
+      const textMetrics = ctx.measureText(textRenderingContext.char);
+      let width = textMetrics.width + (textRenderingContext.left - originalLeft);
+      ctx.restore();
+      textRenderingContext.setToRender = [];
+      textRenderingContext.charIndex++;
+      return width;
+    }
+
     for (const line of lines) {
       let cursor = 0;
       let lineWidth = 0;
@@ -191,9 +217,21 @@ class TextRenderer {
         textRenderingContext.char = line[cursor];
         const originalLeft = textRenderingContext.left;
         switch (textRenderingContext.char) {
-          case '§':
+          case settings.colorCodeChar:
+            if (cursor + 1 >= line.length) {
+              if (settings.colorCodeView !== ColorCodeView.NEVER) {
+                lineWidth += charWidth(this, originalLeft);
+              }
+              break;
+            }
+            if (settings.colorCodeView === ColorCodeView.ALWAYS) {
+              lineWidth += charWidth(this, originalLeft);
+            }
             cursor++;
             textRenderingContext.char = line[cursor];
+            if (settings.colorCodeView === ColorCodeView.ALWAYS) {
+              lineWidth += charWidth(this, originalLeft);
+            }
             if (TextFormatting.formattingCodes[textRenderingContext.char]) {
               if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
                 textRenderingContext.formatting.reset(textRenderingContext);
@@ -215,20 +253,7 @@ class TextRenderer {
             textRenderingContext.charIndex++;
             break;
           default:
-            ctx.save();
-            if (shouldConsiderWeight) {
-              textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
-              for (const renderFunction of textRenderingContext.setToRender) {
-                renderFunction(textRenderingContext, this, false);
-              }
-            } else {
-              setDefaultCanvasSettings(this.canvas);
-            }
-            const textMetrics = ctx.measureText(textRenderingContext.char);
-            lineWidth += textMetrics.width + (textRenderingContext.left - originalLeft);
-            ctx.restore();
-            textRenderingContext.setToRender = [];
-            textRenderingContext.charIndex++;
+            lineWidth += charWidth(this, originalLeft);
             break;
         }
         cursor++;
@@ -251,7 +276,7 @@ class TextRenderer {
   }
 
   removeColorCodes(string) {
-    return string.replaceAll(/§./g, "");
+    return string.replaceAll(settings.colorCodeChar, "");
   }
 
   drawText(string, x, y, shadow, formatting = new TextFormatting()) {
@@ -269,10 +294,19 @@ class TextRenderer {
           textRenderingContext.left = 0;
           textRenderingContext.formatting.reset(textRenderingContext);
           break;
-        case '§':
+        case settings.colorCodeChar:
+          if (cursor + 1 >= string.length) {
+            if (settings.colorCodeView !== ColorCodeView.NEVER) this.drawChar(ctx, textRenderingContext);
+            break;
+          }
+          if (settings.colorCodeView === ColorCodeView.ALWAYS) {
+            this.drawChar(ctx, textRenderingContext);
+          }
           cursor++;
-          if (cursor >= string.length) break;
           textRenderingContext.char = string[cursor];
+          if (settings.colorCodeView === ColorCodeView.ALWAYS) {
+            this.drawChar(ctx, textRenderingContext);
+          }
           if (TextFormatting.formattingCodes[textRenderingContext.char]) {
             if (!textRenderingContext.formatting.isFormatting(TextFormatting.formattingCodes[textRenderingContext.char].type)) {
               textRenderingContext.formatting.reset(textRenderingContext);
@@ -281,34 +315,35 @@ class TextRenderer {
           }
           break;
         default:
-          ctx.save();
-          textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
-          if (textRenderingContext.shadow) {
-            const originalColor = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)();
-            const red = Math.round((originalColor >> 16) * (41/168));
-            const green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
-            const blue = Math.round((originalColor & 0xFF) * (41/168));
-
-            const textRenderingContextCopy = textRenderingContext.copy();
-            textRenderingContextCopy.x += settings.pixelScale;
-            textRenderingContextCopy.y += settings.pixelScale;
-            this.drawChar(textRenderingContextCopy, red << 16 | green << 8 | blue);
-          }
-          this.drawChar(textRenderingContext);
-          ctx.restore();
-          textRenderingContext.left += this.getWidth(textRenderingContext.char, false, textRenderingContext.formatting.copy()) * settings.pixelScale;
-          textRenderingContext.setToRender = [];
-          textRenderingContext.charIndex++;
+          this.drawChar(ctx, textRenderingContext);
           break;
       }
-      ctx.save();
-      textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
-      ctx.restore();
       cursor++;
     }
   }
 
-  drawChar(textRenderingContext, color = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)()) {
+  drawChar(ctx, textRenderingContext) {
+    ctx.save();
+    textRenderingContext.formatting.applyFormatting(textRenderingContext, this);
+    if (textRenderingContext.shadow) {
+      const originalColor = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)();
+      const red = Math.round((originalColor >> 16) * (41/168));
+      const green = Math.round(((originalColor >> 8) & 0xFF) * (41/168));
+      const blue = Math.round((originalColor & 0xFF) * (41/168));
+
+      const textRenderingContextCopy = textRenderingContext.copy();
+      textRenderingContextCopy.x += settings.pixelScale;
+      textRenderingContextCopy.y += settings.pixelScale;
+      this.drawCharInternal(textRenderingContextCopy, red << 16 | green << 8 | blue);
+    }
+    this.drawCharInternal(textRenderingContext);
+    ctx.restore();
+    textRenderingContext.left += this.getWidth(textRenderingContext.char, false, textRenderingContext.formatting.copy()) * settings.pixelScale;
+    textRenderingContext.setToRender = [];
+    textRenderingContext.charIndex++;
+  }
+
+  drawCharInternal(textRenderingContext, color = textRenderingContext.formatting.getFormattingOption(TextFormatting.FormattingOptions.COLOR)()) {
     const ctx = textRenderingContext.canvas.getContext('2d');
 
     ctx.save();
@@ -415,11 +450,7 @@ class TextFormatting {
   constructor() {
     this.formattingOptions = {}
 
-    this.addFormattingOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {
-      if (value) {
-        this.reset(textRenderingContext);
-      }
-    }, false);
+    this.addColorOption(TextFormatting.FormattingOptions.RESET, (textRenderingContext, textRenderer, value) => {}, false); // color options reset, so we do not want any code here
     this.addColorOption(TextFormatting.FormattingOptions.COLOR, () => {}, () => 0xFFFFFF);
     this.addFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, (textRenderingContext, textRenderer, value) => {
       if (value) {
@@ -455,7 +486,7 @@ class TextFormatting {
           textRenderingContextCopy.left -= settings.pixelScale;
           textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, false);
           textRenderingContextCopy.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, false);
-          if (shouldDraw) textRenderer.drawChar(textRenderingContextCopy);
+          if (shouldDraw) textRenderer.drawCharInternal(textRenderingContextCopy);
         });
       }
     }, false);
