@@ -170,7 +170,7 @@
 
 .minecraft-background {
 	position: relative;
-	height: 100vh;
+	height: 95vh;
 	background-color: #bfa7d4;
 	background-image: url("/assets/minecrafttooltips/clouds.png");
 	animation: clouds 30s linear infinite;
