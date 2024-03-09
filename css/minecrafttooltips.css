@@ -151,11 +151,8 @@
 }
 
 .saved-tooltip-text {
-	display: inline-block;
+	display: inline;
 	position: relative;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	max-width: 18em;
 	top: 0;
 	left: 0;
@@ -170,6 +167,13 @@
 	margin: 0.125em 0.25em;
 	cursor: pointer;
 	z-index: 9999;
+}
+
+.saved-tooltip-text > span {
+	display: inline-block;
+	max-width: 18em;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .saved-tooltip-text::before {

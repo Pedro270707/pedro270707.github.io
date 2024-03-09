@@ -150,9 +150,11 @@ function updateSavedTooltips() {
             let tooltipText = document.createElement("span");
             tooltipText.classList.add("saved-tooltip-text");
             tooltipText.classList.add("middle");
-            tooltipText.textContent = element;
+            let tooltipTextInner = document.createElement("span");
+            tooltipTextInner.textContent = element;
+            tooltipText.appendChild(tooltipTextInner);
             tooltipText.addEventListener("click", (e) => {
-                tooltipField.value = tooltipText.textContent;
+                tooltipField.value = tooltipTextInner.textContent;
             })
             domElement.appendChild(tooltipText);
             let removeTooltip = document.createElement("button");
