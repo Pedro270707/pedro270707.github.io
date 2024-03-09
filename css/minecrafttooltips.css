@@ -146,7 +146,7 @@
 
 .saved-tooltip {
 	display: inline-block;
-	width: 20em;
+	width: 19.75em;
 	flex: 1 1 auto;
 }
 
@@ -166,7 +166,6 @@
 	line-height: 1.25em;
 	margin: 0.125em 0.25em;
 	cursor: pointer;
-	z-index: 9999;
 }
 
 .saved-tooltip-text > span {
@@ -204,6 +203,7 @@
 	display: flex;
 	width: 45rem;
 	flex-wrap: wrap;
+	gap: 0.5em;
 }
 
 .text-line {
