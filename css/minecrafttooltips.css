@@ -144,6 +144,26 @@
 	display: none;
 }
 
+.saved-tooltip-text {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 20em;
+	font-family: Minecraft;
+	padding: 0.25em;
+	margin-right: 0.5em;
+	margin-bottom: 0.25em;
+	cursor: pointer;
+	font-size: 16px;
+	background-color: rgba(0,0,0,0.7529411765);
+}
+
+.saved-tooltips {
+	display: block;
+	width: 45rem;
+}
+
 .text-line {
 	position: relative;
 	display: inline-block;

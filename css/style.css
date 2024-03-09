@@ -443,14 +443,21 @@ body {
 }
 
 .center {
-	margin-left: auto;
-	margin-right: auto;
 	text-align: center;
 }
 
 .center-flex {
     left: 50%;
     transform: translateX(-50%);
+}
+
+.center, .center-notext {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.middle {
+	vertical-align: middle;
 }
 
 .main-page-link {
@@ -743,6 +750,10 @@ body {
 
 .checkbox-container input[type="checkbox"]:checked:disabled:before {
 	box-shadow: none;
+}
+
+.block {
+	display: block;
 }
 
 .pixelated {
