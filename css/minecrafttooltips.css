@@ -144,24 +144,62 @@
 	display: none;
 }
 
+.saved-tooltip {
+	display: inline-block;
+	width: 20em;
+	flex: 1 1 auto;
+}
+
 .saved-tooltip-text {
 	display: inline-block;
+	position: relative;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 20em;
-	font-family: Minecraft;
-	padding: 0.25em;
-	margin-right: 0.5em;
-	margin-bottom: 0.25em;
-	cursor: pointer;
+	max-width: 18em;
+	top: 0;
+	left: 0;
+	background-color: #100010;
+	background-color: rgba(16, 0, 16, 0.94);
+	padding: 0.375em;
+	font-family: Minecraft, sans-serif;
 	font-size: 16px;
-	background-color: rgba(0,0,0,0.7529411765);
+	word-spacing: 4px;
+	white-space: nowrap;
+	line-height: 1.25em;
+	margin: 0.125em 0.25em;
+	cursor: pointer;
+	z-index: 9999;
+}
+
+.saved-tooltip-text::before {
+	content: "";
+	position: absolute;
+	top: 0.125em;
+	right: -0.125em;
+	bottom: 0.125em;
+	left: -0.125em;
+	border: 0.15em solid #100010;
+	border-style: none solid;
+	border-color: rgba(16, 0, 16, 0.94);
+}
+
+.saved-tooltip-text::after {
+	content: "";
+	position: absolute;
+	top: 0.125em;
+	right: 0;
+	bottom: 0.125em;
+	left: 0;
+	border: 0.125em solid #2D0A63;
+	border-image: -webkit-linear-gradient(rgba(80, 0, 255, 0.31), rgba(40, 0, 127, 0.31)) 1;
+	border-image: linear-gradient(rgba(80, 0, 255, 0.31), rgba(40, 0, 127, 0.31)) 1;
 }
 
 .saved-tooltips {
-	display: block;
+	display: flex;
 	width: 45rem;
+	flex-wrap: wrap;
 }
 
 .text-line {
