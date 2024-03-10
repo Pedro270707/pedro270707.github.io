@@ -169,18 +169,22 @@ class TextRenderer {
 
     this.characterWidthsMap = new Map();
 
-    document.fonts.ready.then(() => {
+    let updateMap = function(textRenderer) {
+      textRenderer.characterWidthsMap.clear();
       for (let charCode = 33; charCode <= 512; charCode++) {
         const char = String.fromCodePoint(charCode);
-        const width = this.getWidth(char, false);
+        const width = textRenderer.getWidth(char, false);
       
-        if (!this.characterWidthsMap.has(width)) {
-          this.characterWidthsMap.set(width, []);
+        if (!textRenderer.characterWidthsMap.has(width)) {
+          textRenderer.characterWidthsMap.set(width, []);
         }
       
-        this.characterWidthsMap.get(width).push(char);
+        textRenderer.characterWidthsMap.get(width).push(char);
       }
-    });
+    }
+
+    updateMap(this);
+    document.fonts.ready.then(() => updateMap(this));
   }
 
   getWidth(string, shouldConsiderWeight = true, formatting = new TextFormatting()) {
