@@ -145,49 +145,51 @@ document.addEventListener("DOMContentLoaded", updateSavedTooltips);
 function updateSavedTooltips() {
     savedTooltips.innerHTML = "";
     let json = localStorage.getItem("minecraft-saved-tooltips");
-    if (json !== null) {
-        json = JSON.parse(json);
-        json["values"].forEach(element => {
-            let domElement = document.createElement("div");
-            domElement.classList.add("saved-tooltip");
-            let tooltipText = document.createElement("span");
-            tooltipText.classList.add("saved-tooltip-text");
-            tooltipText.classList.add("middle");
-            let tooltipTextInner = document.createElement("span");
-            tooltipTextInner.textContent = element;
-            tooltipText.appendChild(tooltipTextInner);
-            tooltipText.addEventListener("click", (e) => {
-                tooltipField.value = tooltipTextInner.textContent;
-            })
-            tooltipText.dataset.mctitle = element.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
-
-            tooltipText.addEventListener('mouseenter', (e) => {
-                if (!e.target.dataset.mctitle) return;
-                followerTooltip.classList.remove("hidden");
-                setTooltipText(followerTooltip, tooltipText.dataset.mctitle);
-            });
-            
-            tooltipText.addEventListener('mouseleave', (e) => {
-                followerTooltip.classList.add("hidden");
-            });
-
-            domElement.appendChild(tooltipText);
-            let removeTooltip = document.createElement("button");
-            removeTooltip.classList.add("icon-button");
-            removeTooltip.classList.add("middle");
-            removeTooltip.innerHTML = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve"><g><path d="M349.2,349.2c-5.9,5.9-13.5,8.8-21.2,8.8c-7.7,0-15.4-2.9-21.2-8.8L185.6,228.1L65.2,348.5 c-5.9,5.8-13.5,8.8-21.2,8.8s-15.3-2.9-21.2-8.8c-11.7-11.7-11.7-30.7,0-42.4l120.4-120.4L24.9,67.4c-11.7-11.7-11.7-30.7,0-42.4 c11.7-11.7,30.7-11.7,42.4,0l118.3,118.3L304.6,24.3c11.7-11.7,30.7-11.7,42.4,0c11.7,11.7,11.7,30.7,0,42.4L228.1,185.6 l121.1,121.1C360.9,318.4,360.9,337.4,349.2,349.2z"></path></g></svg>';
-            removeTooltip.addEventListener("click", (e) => {
-                const index = Array.from(savedTooltips.children).indexOf(domElement);
-                let json = localStorage.getItem("minecraft-saved-tooltips");
-                if (json !== null) {
-                    json = JSON.parse(json);
-                    json["values"].splice(index, 1);
-                    localStorage.setItem("minecraft-saved-tooltips", JSON.stringify(json))
-                }
-                savedTooltips.removeChild(domElement);
-            });
-            domElement.appendChild(removeTooltip);
-            savedTooltips.appendChild(domElement);
-        });
+    if (json === null) {
+        json = '{"values":["§00§11§22§33§44§55§66§77§88§99\n§aa§bb§cc§dd§ee§ff§jj\n§kk§r§ll§r§mm§r§nn§r§oo§r§pp§r§qq§r§ss"]}';
+        localStorage.setItem("minecraft-saved-tooltips", json);
     }
+    json = JSON.parse(json);
+    json["values"].forEach(element => {
+        let domElement = document.createElement("div");
+        domElement.classList.add("saved-tooltip");
+        let tooltipText = document.createElement("span");
+        tooltipText.classList.add("saved-tooltip-text");
+        tooltipText.classList.add("middle");
+        let tooltipTextInner = document.createElement("span");
+        tooltipTextInner.textContent = element;
+        tooltipText.appendChild(tooltipTextInner);
+        tooltipText.addEventListener("click", (e) => {
+            tooltipField.value = tooltipTextInner.textContent;
+        })
+        tooltipText.dataset.mctitle = element.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
+
+        tooltipText.addEventListener('mouseenter', (e) => {
+            if (!e.target.dataset.mctitle) return;
+            followerTooltip.classList.remove("hidden");
+            setTooltipText(followerTooltip, tooltipText.dataset.mctitle);
+        });
+        
+        tooltipText.addEventListener('mouseleave', (e) => {
+            followerTooltip.classList.add("hidden");
+        });
+
+        domElement.appendChild(tooltipText);
+        let removeTooltip = document.createElement("button");
+        removeTooltip.classList.add("icon-button");
+        removeTooltip.classList.add("middle");
+        removeTooltip.innerHTML = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve"><g><path d="M349.2,349.2c-5.9,5.9-13.5,8.8-21.2,8.8c-7.7,0-15.4-2.9-21.2-8.8L185.6,228.1L65.2,348.5 c-5.9,5.8-13.5,8.8-21.2,8.8s-15.3-2.9-21.2-8.8c-11.7-11.7-11.7-30.7,0-42.4l120.4-120.4L24.9,67.4c-11.7-11.7-11.7-30.7,0-42.4 c11.7-11.7,30.7-11.7,42.4,0l118.3,118.3L304.6,24.3c11.7-11.7,30.7-11.7,42.4,0c11.7,11.7,11.7,30.7,0,42.4L228.1,185.6 l121.1,121.1C360.9,318.4,360.9,337.4,349.2,349.2z"></path></g></svg>';
+        removeTooltip.addEventListener("click", (e) => {
+            const index = Array.from(savedTooltips.children).indexOf(domElement);
+            let json = localStorage.getItem("minecraft-saved-tooltips");
+            if (json !== null) {
+                json = JSON.parse(json);
+                json["values"].splice(index, 1);
+                localStorage.setItem("minecraft-saved-tooltips", JSON.stringify(json))
+            }
+            savedTooltips.removeChild(domElement);
+        });
+        domElement.appendChild(removeTooltip);
+        savedTooltips.appendChild(domElement);
+    });
 }
