@@ -124,8 +124,8 @@ const settings = {
 document.addEventListener('mousemove', (e) => {
   let cursorFollowers = document.getElementsByClassName('follow-cursor');
   for (let i = 0; i < cursorFollowers.length; i++) {
-    cursorFollowers.item(i).style.left = (e.clientX + 10) + 'px';
-    cursorFollowers.item(i).style.top = (e.clientY - cursorFollowers.item(i).height - 5) + 'px';
+    cursorFollowers.item(i).style.left = (e.pageX + 10) + 'px';
+    cursorFollowers.item(i).style.bottom = (document.documentElement.scrollHeight - (e.pageY - 5)) + 'px';
   }
 });
 
