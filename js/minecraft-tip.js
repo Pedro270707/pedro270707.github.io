@@ -607,3 +607,16 @@ class .minecraft-item and disappears otherwise.
 //   });
 // }
 // document.body.appendChild(followerTooltip);
+
+/*
+Also put this in your CSS.
+*/
+// .tooltip {
+// 	image-rendering: pixelated;
+// 	z-index: 10;
+// }
+
+// .follow-cursor {
+// 	position: fixed;
+// 	z-index: 11;
+// }
