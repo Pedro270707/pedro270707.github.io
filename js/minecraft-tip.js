@@ -615,8 +615,12 @@ Also put this in your CSS.
 // 	image-rendering: pixelated;
 // 	z-index: 10;
 // }
-
+//
 // .follow-cursor {
 // 	position: fixed;
 // 	z-index: 11;
+// }
+//
+// .hidden {
+//  display: none !important;
 // }
