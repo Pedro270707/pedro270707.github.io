@@ -752,6 +752,20 @@ body {
 	box-shadow: none;
 }
 
+.center-relative {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.footer.fixed {
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 0;
+}
+
 .block {
 	display: block;
 }

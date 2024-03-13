@@ -26,6 +26,13 @@
 	font-weight: normal;
 }
 
+.minecraft-side {
+	width: 100%;
+	min-height: 60dvh;
+  	box-sizing: border-box;
+  	margin-bottom: 10px;
+}
+
 .info-bubble {
 	position: relative;
 }
@@ -110,13 +117,18 @@
 }
 
 .minecraft-text-input {
-	width: 40rem;
+	width: 100%;
+    height: 2.25rem;
+    box-sizing: border-box;
 }
 
 .text-input-wrapper {
 	display: inline-flex;
-	flex-direction: column;
-	gap: 5px;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 
 .tip-line {
@@ -204,6 +216,7 @@
 	width: 45rem;
 	flex-wrap: wrap;
 	gap: 0.5em;
+	margin-top: 1rem;
 }
 
 .text-line {
@@ -223,48 +236,50 @@
 	width: 0.75em;
 }
 
-.minecraft-background, .minecraft-landscape, .minecraft-background-glow {
-	width: 100%;
+.minecraft-background, .minecraft-background::before {
 	background-size: 480px;
 	image-rendering: pixelated;
-	z-index: -1;
 }
 
 .minecraft-background {
 	position: relative;
-	height: 95vh;
 	background-color: #bfa7d4;
 	background-image: url("/assets/minecrafttooltips/clouds.png");
 	animation: clouds 30s linear infinite;
-	text-align: center;
-	line-height: 100vh;
 }
 
-.minecraft-landscape {
+.minecraft-background::before {
+	content: "";
 	position: absolute;
 	bottom: 0;
+	width: 100%;
 	height: 480px;
 	background-image: url("/assets/minecrafttooltips/background.png");
+	transform: translateX(-100%);
+	left: 100%;
 }
 
-.minecraft-background-glow {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	background-image: url("/assets/minecrafttooltips/background_glow.png");
+.minecraft-background * {
+	z-index: 1;
 }
 
-.minecraft-background-text {
-	margin: 0;
-	line-height: 1.5;
-	display: inline-block;
-	vertical-align: middle;
-	color: #ffffff;
-	text-shadow: 0 0 5px #000;
+.minecraft-flex {
+	display: flex;
+	flex-wrap: wrap;
 }
 
-.minecraft-background-text h1 {
-	margin: 0;
+@media screen and (min-width: 900px) {
+	.minecraft-side {
+		height: 100dvh;
+		padding: 1rem;
+		box-sizing: border-box;
+		margin-bottom: 0;
+	}
+
+	.minecraft-flex {
+		flex-wrap: nowrap;
+		flex-direction: row;
+	}
 }
 
 .minecraft-text-output-container {

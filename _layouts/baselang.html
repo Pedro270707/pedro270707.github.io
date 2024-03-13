@@ -3,7 +3,7 @@ layout: base
 ---
 
 {{ content }}
-<div class="footer">
+<div class="footer{% if page.footer-fixed %} fixed{% endif %}">
 	<div class="footer-language-select">
 		<a href="#" onclick="localStorage.language = 'en'; reloadLanguage();" class="button">English</a> 
 		<a href="#" onclick="localStorage.language = 'pt'; reloadLanguage();" class="button">Português</a>
