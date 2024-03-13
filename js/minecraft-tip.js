@@ -114,18 +114,35 @@ const ColorCodeView = Object.freeze({
   ALWAYS: "always"
 });
 
+const AddressedOverflow = Object.freeze({
+  NONE: Object.freeze({name: "none", top: false, right: false}),
+  TOP: Object.freeze({name: "top", top: true, right: false}),
+  RIGHT: Object.freeze({name: "right", top: false, right: true}),
+  TOP_RIGHT: Object.freeze({name: "top_right", top: true, right: true})
+});
+
 const settings = {
   style: styles.vanilla,
   pixelScale: 2,
   colorCodeChar: '§',
-  colorCodeView: ColorCodeView.NEVER
+  colorCodeView: ColorCodeView.NEVER,
+  addressedOverflow: AddressedOverflow.TOP_RIGHT
 }
 
 document.addEventListener('mousemove', (e) => {
   let cursorFollowers = document.getElementsByClassName('follow-cursor');
   for (let i = 0; i < cursorFollowers.length; i++) {
-    cursorFollowers.item(i).style.left = (e.clientX + 10) + 'px';
-    cursorFollowers.item(i).style.bottom = (window.innerHeight - (e.clientY - 5)) + 'px';
+    cursorFollowers.item(i).style.left = cursorFollowers.item(i).style.right = cursorFollowers.item(i).style.top = cursorFollowers.item(i).style.bottom = null;
+    if (e.clientX + 10 + cursorFollowers.item(i).width > window.innerWidth && settings.addressedOverflow.right) {
+      cursorFollowers.item(i).style.right = (window.innerWidth - (e.clientX - 10)) + 'px';
+    } else {
+      cursorFollowers.item(i).style.left = (e.clientX + 10) + 'px';
+    }
+    if (e.clientY - 5 - cursorFollowers.item(i).height < 0 && settings.addressedOverflow.top) {
+      cursorFollowers.item(i).style.top = (e.clientY + 5) + 'px';
+    } else {
+      cursorFollowers.item(i).style.bottom = (window.innerHeight - (e.clientY - 5)) + 'px';
+    }
   }
 });
 
