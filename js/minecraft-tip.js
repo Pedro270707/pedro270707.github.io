@@ -129,21 +129,30 @@ const settings = {
   addressedOverflow: AddressedOverflow.TOP_RIGHT
 }
 
-document.addEventListener('mousemove', (e) => {
+let mouseX = 0;
+let mouseY = 0;
+
+function updateFollowerPositions() {
   let cursorFollowers = document.getElementsByClassName('follow-cursor');
   for (let i = 0; i < cursorFollowers.length; i++) {
     cursorFollowers.item(i).style.left = cursorFollowers.item(i).style.right = cursorFollowers.item(i).style.top = cursorFollowers.item(i).style.bottom = null;
-    if (e.clientX + 10 + cursorFollowers.item(i).width > window.innerWidth && settings.addressedOverflow.right) {
-      cursorFollowers.item(i).style.right = (window.innerWidth - (e.clientX - 10)) + 'px';
+    if (mouseX + 10 + cursorFollowers.item(i).width > window.innerWidth && settings.addressedOverflow.right) {
+      cursorFollowers.item(i).style.right = (window.innerWidth - (mouseX - 10)) + 'px';
     } else {
-      cursorFollowers.item(i).style.left = (e.clientX + 10) + 'px';
+      cursorFollowers.item(i).style.left = (mouseX + 10) + 'px';
     }
-    if (e.clientY - 5 - cursorFollowers.item(i).height < 0 && settings.addressedOverflow.top) {
-      cursorFollowers.item(i).style.top = (e.clientY + 5) + 'px';
+    if (mouseY - 5 - cursorFollowers.item(i).height < 0 && settings.addressedOverflow.top) {
+      cursorFollowers.item(i).style.top = (mouseY + 5) + 'px';
     } else {
-      cursorFollowers.item(i).style.bottom = (window.innerHeight - (e.clientY - 5)) + 'px';
+      cursorFollowers.item(i).style.bottom = (window.innerHeight - (mouseY - 5)) + 'px';
     }
   }
+}
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  updateFollowerPositions();
 });
 
 function setDefaultCanvasSettings(canvas) {
@@ -177,6 +186,7 @@ function updateCanvasSize(canvas, textRenderer, text = canvas.dataset.text) {
 	setDefaultCanvasSettings(canvas);
   canvas.width = (textRenderer.getWidth(text) + settings.style.paddingLeft + settings.style.paddingRight) * settings.pixelScale;
   canvas.height = (textRenderer.getHeight(text) + settings.style.paddingTop + settings.style.paddingBottom) * settings.pixelScale;
+  updateFollowerPositions();
 }
 
 function createTooltip(text = "", followCursor = false) {
