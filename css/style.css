@@ -547,7 +547,9 @@ body {
 	position: relative;
 	bottom: 0;
 	text-align: center;
-	width: 100%;
+	display: inline-block;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .footer-language-select {
@@ -759,11 +761,8 @@ body {
 	transform: translate(-50%, -50%);
 }
 
-.footer.fixed {
+.fixed {
 	position: fixed;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 0;
 }
 
 .block {
