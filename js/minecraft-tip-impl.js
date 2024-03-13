@@ -34,6 +34,7 @@ setInterval(() => {
         new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
             setTooltipText(tooltip, str);
         });
+        tooltip.style.position = tooltip.style.left = tooltip.style.transform = null;
     } else {
         if (tooltipField.value.startsWith("style:") && styles[tooltipField.value.substring("style:".length)]) {
             settings.style = styles[tooltipField.value.substring("style:".length)];
@@ -45,6 +46,13 @@ setInterval(() => {
         }
         const unescapedValue = tooltipField.value.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
         setTooltipText(tooltip, unescapedValue);
+        if (tooltip.clientWidth > tooltip.parentElement.clientWidth) {
+            tooltip.style.position = "relative";
+            tooltip.style.left = ((tooltip.parentElement.clientWidth - tooltip.clientWidth) / 2) + "px";
+            tooltip.style.transform = 'scale(' + (tooltip.parentElement.clientWidth / tooltip.clientWidth) + ')';
+        } else {
+            tooltip.style.position = tooltip.style.left = tooltip.style.transform = null;
+        }
     }
 }, 50);
 
