@@ -754,11 +754,10 @@ body {
 	box-shadow: none;
 }
 
-.center-relative {
+.center-top-relative {
 	position: relative;
 	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translateY(-50%);
 }
 
 .fixed {
