@@ -138,7 +138,7 @@ saveTooltipButton.addEventListener("click", (e) => {
     if (tooltipField.value === '') return;
     let json = localStorage.getItem("minecraft-saved-tooltips");
     if (json === null) {
-        json = '{"values":["' + tooltipField.value + '"]}';
+        json = '{"values":["' + tooltipField.value.replace(/\n/g, '\\n') + '"]}';
         localStorage.setItem("minecraft-saved-tooltips", json);
     } else {
         json = JSON.parse(json);
@@ -154,7 +154,7 @@ function updateSavedTooltips() {
     savedTooltips.innerHTML = "";
     let json = localStorage.getItem("minecraft-saved-tooltips");
     if (json === null) {
-        json = '{"values":["§00§11§22§33§44§55§66§77§88§99\n§aa§bb§cc§dd§ee§ff§jj\n§kk§r§ll§r§mm§r§nn§r§oo§r§pp§r§qq§r§ss"]}';
+        json = '{"values":["§00§11§22§33§44§55§66§77§88§99\\n§aa§bb§cc§dd§ee§ff§jj\\n§kk§r§ll§r§mm§r§nn§r§oo§r§pp§r§qq§r§ss"]}';
         localStorage.setItem("minecraft-saved-tooltips", json);
     }
     json = JSON.parse(json);
