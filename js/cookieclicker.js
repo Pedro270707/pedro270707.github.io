@@ -6,6 +6,19 @@ var workerButtonText = document.getElementById("hire-worker-text");
 var upgradeClickerButtonText = document.getElementById("upgrade-clicker-text");
 
 console.log("Loaded");
+
+if (!localStorage.getItem("cookie-clicker")) {
+	localStorage.setItem("cookie-clicker", defaultCookieClickerData());
+} else {
+	let json = JSON.parse(localStorage.getItem("cookie-clicker"));
+	cookieAmount = json["cookies"];
+	workerAmount = json["workers"];
+	clickerLevel = json["clicker-level"];
+	workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
+	clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
+	recountAll();
+}
+
 if (cookieAmount == undefined) {
 	var cookieAmount = 0;
 }
@@ -26,6 +39,21 @@ if (clickerCost == undefined) {
 	var clickerCost = 10;
 }
 
+function defaultCookieClickerData() {
+	return '{"cookies":0,"workers":0,"clicker-level":1}'
+}
+
+function recountAll() {
+	recountCookies();
+	recountWorkers();
+	recountClickerLevel();
+}
+
+function recountClickerLevel() {
+	setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
+	setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
+}
+
 function recountCookies() {
 	switch (cookieAmount) {
 		case 0:
@@ -40,6 +68,9 @@ function recountCookies() {
 		default:
 			setCookieString('cookieclicker-pluralcookies', cookieAmount);
 	}
+	let json = JSON.parse(localStorage.getItem("cookie-clicker"));
+	json["cookies"] = cookieAmount;
+	localStorage.setItem("cookie-clicker", JSON.stringify(json));
 }
 
 function recountWorkers() {
@@ -56,6 +87,9 @@ function recountWorkers() {
 		default:
 			setWorkerString('cookieclicker-pluralworkers', workerAmount);
 	}
+	let json = JSON.parse(localStorage.getItem("cookie-clicker"));
+	json["workers"] = workerAmount;
+	localStorage.setItem("cookie-clicker", JSON.stringify(json));
 }
 
 function cookieClicked() {
@@ -69,7 +103,7 @@ function hireWorker() {
 		workerAmount += 1;
 		recountCookies();
 		recountWorkers();
-		workerCost = Math.ceil(Math.pow(workerCost / 1.3, 1.2));
+		workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
 		translate.getKeyWrapped('cookieclicker-hireworkerbutton', workerCost).then(str => {
 			workerButtonText.innerHTML = str;
 		});
@@ -86,11 +120,12 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
-		
-		clickerCost = Math.ceil(Math.pow(clickerCost / 1.3, 1.25));
-		setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
+		clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
+		recountClickerLevel();
 	}
+	let json = JSON.parse(localStorage.getItem("cookie-clicker"));
+	json["clicker-level"] = clickerLevel;
+	localStorage.setItem("cookie-clicker", JSON.stringify(json));
 }
 
 function setCookieString(key, cookieAmount) {
