@@ -14,30 +14,28 @@ if (!localStorage.getItem("cookie-clicker")) {
 	cookieAmount = json["cookies"];
 	workerAmount = json["workers"];
 	clickerLevel = json["clicker-level"];
-	workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
-	clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
-	recountAll();
 }
+recountAll();
 
-if (cookieAmount == undefined) {
-	var cookieAmount = 0;
-}
+// if (cookieAmount == undefined) {
+// 	var cookieAmount = 0;
+// }
 
-if (workerAmount == undefined) {
-	var workerAmount = 0;
-}
+// if (workerAmount == undefined) {
+// 	var workerAmount = 0;
+// }
 
-if (clickerLevel == undefined) {
-	var clickerLevel = 1;
-}
+// if (clickerLevel == undefined) {
+// 	var clickerLevel = 1;
+// }
 
-if (workerCost == undefined) {
-	var workerCost = 10;
-}
+// if (workerCost == undefined) {
+// 	var workerCost = 10;
+// }
 
-if (clickerCost == undefined) {
-	var clickerCost = 10;
-}
+// if (clickerCost == undefined) {
+// 	var clickerCost = 10;
+// }
 
 function defaultCookieClickerData() {
 	return '{"cookies":0,"workers":0,"clicker-level":1}'
@@ -47,9 +45,12 @@ function recountAll() {
 	recountCookies();
 	recountWorkers();
 	recountClickerLevel();
+	workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
+	clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
 }
 
 function recountClickerLevel() {
+	clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
 	setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
 	setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
 }
@@ -74,6 +75,10 @@ function recountCookies() {
 }
 
 function recountWorkers() {
+	workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
+	translate.getKeyWrapped('cookieclicker-hireworkerbutton', workerCost).then(str => {
+		workerButtonText.innerHTML = str;
+	});
 	switch (workerAmount) {
 		case 0:
 			setWorkerString('cookieclicker-zeroworkers', workerAmount);
@@ -103,10 +108,6 @@ function hireWorker() {
 		workerAmount += 1;
 		recountCookies();
 		recountWorkers();
-		workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
-		translate.getKeyWrapped('cookieclicker-hireworkerbutton', workerCost).then(str => {
-			workerButtonText.innerHTML = str;
-		});
 		
 		setInterval(function () {
 			cookieAmount++
@@ -120,7 +121,6 @@ function upgradeClicker() {
 		cookieAmount -= clickerCost
 		recountCookies();
 		clickerLevel += 1;
-		clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
 		recountClickerLevel();
 	}
 	let json = JSON.parse(localStorage.getItem("cookie-clicker"));
