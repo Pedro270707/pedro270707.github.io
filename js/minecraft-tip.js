@@ -1,4 +1,4 @@
-class VanillaTooltipStyle {
+class JavaTooltipStyle {
   constructor() {
     this.paddingLeft = 4;
     this.paddingRight = 4;
@@ -66,6 +66,35 @@ class BetaTooltipStyle {
   }
 }
 
+class BedrockTooltipStyle {
+  constructor() {
+    this.paddingLeft = 4;
+    this.paddingRight = 4;
+    this.paddingTop = 3;
+    this.paddingBottom = 3;
+    this.lineSpace = 2;
+    this.fontSize = 8;
+    this.wordSpacing = 4;
+    this.font = 'Minecraft';
+    this.shadow = true;
+  }
+
+  render(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "rgba(0,0,0,0.5)";
+  
+    ctx.fillRect(0, settings.pixelScale, settings.pixelScale, canvas.height - (2 * settings.pixelScale));
+    ctx.fillRect(settings.pixelScale, 0, canvas.width - (2 * settings.pixelScale), canvas.height);
+    ctx.fillRect(canvas.width - settings.pixelScale, settings.pixelScale, settings.pixelScale, canvas.height - (2 * settings.pixelScale));
+  }
+
+  getLineHeight(line) {
+    return line == 1 ? this.fontSize + this.lineSpace + 2 : this.fontSize + this.lineSpace;
+  }
+}
+
 class UndertaleTooltipStyle {
   constructor() {
     this.paddingLeft = 13;
@@ -104,7 +133,8 @@ class UndertaleTooltipStyle {
 
 const styles = Object.freeze({
   beta: new BetaTooltipStyle(),
-  vanilla: new VanillaTooltipStyle(),
+  java: new JavaTooltipStyle(),
+  bedrock: new BedrockTooltipStyle(),
   undertale: new UndertaleTooltipStyle()
 });
 
@@ -122,7 +152,7 @@ const AddressedOverflow = Object.freeze({
 });
 
 const settings = {
-  style: styles.vanilla,
+  style: styles.java,
   pixelScale: 2,
   colorCodeChar: '§',
   colorCodeView: ColorCodeView.NEVER,
@@ -484,7 +514,24 @@ class TextFormatting {
     d: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFF55FF), type: TextFormatting.FormattingOptions.COLOR},
     e: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFF55), type: TextFormatting.FormattingOptions.COLOR},
     f: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xFFFFFF), type: TextFormatting.FormattingOptions.COLOR},
-    j: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => {
+    g: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xDDD605), type: TextFormatting.FormattingOptions.COLOR},
+    h: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xE3D4D1), type: TextFormatting.FormattingOptions.COLOR},
+    i: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xCECACA), type: TextFormatting.FormattingOptions.COLOR},
+    j: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x443A3B), type: TextFormatting.FormattingOptions.COLOR},
+    k: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, true), type: TextFormatting.FormattingOptions.OBFUSCATED},
+    l: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, true), type: TextFormatting.FormattingOptions.BOLD},
+    m: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
+    ḿ: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x971607), type: TextFormatting.FormattingOptions.COLOR}, // Bedrock M
+    n: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
+    ń: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xB4684D), type: TextFormatting.FormattingOptions.COLOR}, // Bedrock N
+    o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
+    p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0xDEB12D), type: TextFormatting.FormattingOptions.COLOR},
+    q: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x47A036), type: TextFormatting.FormattingOptions.COLOR},
+    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RESET, true), type: TextFormatting.FormattingOptions.RESET},
+    s: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x2CBAA8), type: TextFormatting.FormattingOptions.COLOR},
+    t: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x21497B), type: TextFormatting.FormattingOptions.COLOR},
+    u: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => 0x9A5CC6), type: TextFormatting.FormattingOptions.COLOR},
+    v: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.COLOR, () => {
       const time = performance.now() * 0.001;
       const r = (Math.sin(time) + 1) * 127.5;
       const g = (Math.sin(time + (Math.PI / 2)) + 1) * 127.5;
@@ -492,15 +539,9 @@ class TextFormatting {
 
       return r << 16 | g << 8 | b;
     }), type: TextFormatting.FormattingOptions.COLOR},
-    k: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.OBFUSCATED, true), type: TextFormatting.FormattingOptions.OBFUSCATED},
-    l: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.BOLD, true), type: TextFormatting.FormattingOptions.BOLD},
-    m: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, true), type: TextFormatting.FormattingOptions.STRIKETHROUGH},
-    n: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.UNDERLINE, true), type: TextFormatting.FormattingOptions.UNDERLINE},
-    o: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.ITALIC, true), type: TextFormatting.FormattingOptions.ITALIC},
-    p: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, true), type: TextFormatting.FormattingOptions.VERTICAL_BOBBING},
-    q: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, true), type: TextFormatting.FormattingOptions.HORIZONTAL_BOBBING},
-    r: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RESET, true), type: TextFormatting.FormattingOptions.RESET},
-    s: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, true), type: TextFormatting.FormattingOptions.RANDOM_BOBBING}
+    w: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.VERTICAL_BOBBING, true), type: TextFormatting.FormattingOptions.VERTICAL_BOBBING},
+    x: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, true), type: TextFormatting.FormattingOptions.HORIZONTAL_BOBBING},
+    y: {formatFunction: (textRenderingContext) => textRenderingContext.formatting.setFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, true), type: TextFormatting.FormattingOptions.RANDOM_BOBBING}
   }
 
   constructor() {
