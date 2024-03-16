@@ -17,29 +17,14 @@ if (!localStorage.getItem("cookie-clicker")) {
 }
 recountAll();
 
-// if (cookieAmount == undefined) {
-// 	var cookieAmount = 0;
-// }
-
-// if (workerAmount == undefined) {
-// 	var workerAmount = 0;
-// }
-
-// if (clickerLevel == undefined) {
-// 	var clickerLevel = 1;
-// }
-
-// if (workerCost == undefined) {
-// 	var workerCost = 10;
-// }
-
-// if (clickerCost == undefined) {
-// 	var clickerCost = 10;
-// }
-
 function defaultCookieClickerData() {
 	return '{"cookies":0,"workers":0,"clicker-level":1}'
 }
+
+setInterval(function () {
+	cookieAmount += workerAmount;
+	recountCookies();
+}, 1000);
 
 function recountAll() {
 	recountCookies();
@@ -108,11 +93,6 @@ function hireWorker() {
 		workerAmount += 1;
 		recountCookies();
 		recountWorkers();
-		
-		setInterval(function () {
-			cookieAmount++
-			recountCookies();
-		}, 1000);
 	}
 }
 
