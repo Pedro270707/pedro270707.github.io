@@ -347,13 +347,6 @@ class TextRenderer {
   }
 
   getLineHeight(line) {
-    // return (line * 10) + (line > 0 && settings.style.firstLineIsHigher ? 2 : 0);
-    // line 0: (0)
-    // line 1: (0) + (10 + 2)
-    // line 2: (0) + (10 + 2) + (10)
-    // line 3: (0) + (10 + 2) + (10) + (10)
-    // line 4: (0) + (10 + 2) + (10) + (10) + (10)
-
     let height = -settings.style.getLineHeight(0);
     for (let i = 0; i <= line; i++) {
       height += settings.style.getLineHeight(i);
