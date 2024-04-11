@@ -157,7 +157,7 @@ const settings = {
   colorCodeChar: '§',
   colorCodeView: ColorCodeView.NEVER,
   addressedOverflow: AddressedOverflow.TOP_RIGHT
-}
+};
 
 let mouseX = 0;
 let mouseY = 0;
@@ -248,7 +248,7 @@ class TextRenderer {
       
         textRenderer.characterWidthsMap.get(width).push(char);
       }
-    }
+    };
 
     updateMap(this);
     document.fonts.ready.then(() => updateMap(this));
@@ -278,7 +278,7 @@ class TextRenderer {
       textRenderingContext.setToRender = [];
       textRenderingContext.charIndex++;
       return width;
-    }
+    };
 
     for (const line of lines) {
       let cursor = 0;
@@ -347,13 +347,6 @@ class TextRenderer {
   }
 
   getLineHeight(line) {
-    // return (line * 10) + (line > 0 && settings.style.firstLineIsHigher ? 2 : 0);
-    // line 0: (0)
-    // line 1: (0) + (10 + 2)
-    // line 2: (0) + (10 + 2) + (10)
-    // line 3: (0) + (10 + 2) + (10) + (10)
-    // line 4: (0) + (10 + 2) + (10) + (10) + (10)
-
     let height = -settings.style.getLineHeight(0);
     for (let i = 0; i <= line; i++) {
       height += settings.style.getLineHeight(i);
@@ -545,7 +538,7 @@ class TextFormatting {
   }
 
   constructor() {
-    this.formattingOptions = {}
+    this.formattingOptions = {};
 
     this.addColorOption(TextFormatting.FormattingOptions.RESET, () => {}, false); // color options reset, so we do not want any code here
     this.addColorOption(TextFormatting.FormattingOptions.COLOR, () => {}, () => 0xFFFFFF);
@@ -592,7 +585,7 @@ class TextFormatting {
         textRenderingContext.setToRender.push((textRenderingContext, textRenderer, shouldDraw) => {
           const ctx = textRenderingContext.canvas.getContext('2d');
           if (shouldDraw) ctx.fillRect((textRenderingContext.x + textRenderingContext.left) - settings.pixelScale, (textRenderingContext.y + textRenderer.getLineHeight(textRenderingContext.line) * settings.pixelScale) + settings.pixelScale, textRenderer.getWidth(textRenderingContext.char) * settings.pixelScale + settings.pixelScale, settings.pixelScale);
-        })
+        });
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.STRIKETHROUGH, (textRenderingContext, textRenderer, value) => {
