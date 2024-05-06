@@ -441,11 +441,11 @@ class TextRenderer {
     let newText = '';
     for (const char of originalText) {
       const width = this.getWidth(char, false);
-      if (this.characterWidthsMap.has(width)) {
+      if (char != ' ' && this.characterWidthsMap.has(width)) {
         const charactersWithSameWidth = this.characterWidthsMap.get(width);
         newText += charactersWithSameWidth[Math.floor(Math.random() * charactersWithSameWidth.length)];
       } else {
-        newText += originalText;
+        newText += char;
       }
     }
     return newText;
