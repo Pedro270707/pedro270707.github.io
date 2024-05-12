@@ -15,7 +15,7 @@ class JavaTooltipStyle {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "rgba(16,0,16,0.94)";
+    ctx.fillStyle = "rgba(16, 0, 16, 0.9411764705882353)";
   
     ctx.fillRect(0, settings.pixelScale, 2 * settings.pixelScale, canvas.height - (2 * settings.pixelScale));
     ctx.fillRect(canvas.width - (2 * settings.pixelScale), settings.pixelScale, canvas.width, canvas.height - (2 * settings.pixelScale));
@@ -25,13 +25,13 @@ class JavaTooltipStyle {
     ctx.fillRect(2 * settings.pixelScale, canvas.height - (2 * settings.pixelScale), canvas.width - (4 * settings.pixelScale), settings.pixelScale);
   
     let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, "rgba(80,0,255,0.31)");
-    gradient.addColorStop(1, "rgba(40,0,127,0.31)");
+    gradient.addColorStop(0, "rgba(50, 0, 255, 0.3137254901960784)");
+    gradient.addColorStop(1, "rgba(40, 0, 127, 0.3137254901960784)");
     ctx.fillStyle = gradient;
     ctx.fillRect(settings.pixelScale, settings.pixelScale, canvas.width - (2 * settings.pixelScale), canvas.height - (2 * settings.pixelScale));
     ctx.clearRect(2 * settings.pixelScale, 2 * settings.pixelScale, canvas.width - (4 * settings.pixelScale), canvas.height - (4 * settings.pixelScale));
   
-    ctx.fillStyle = "rgba(16,0,16,0.94)";
+    ctx.fillStyle = "rgba(16, 0, 16, 0.9411764705882353)";
     ctx.fillRect(2 * settings.pixelScale, 2 * settings.pixelScale, canvas.width - (4 * settings.pixelScale), canvas.height - (4 * settings.pixelScale));
   }
 
