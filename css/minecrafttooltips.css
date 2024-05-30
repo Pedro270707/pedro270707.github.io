@@ -185,6 +185,7 @@
 	max-width: 18em;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	color: #ffffff;
 }
 
 .saved-tooltip-text::before {
