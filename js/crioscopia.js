@@ -63,6 +63,7 @@ translate.addChangeListener(() => {
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
+    ctx.font = "2em sans-serif";
     ctx.fillText(cryoscopyText, 10, 10);
 
     if (solventTapOpen && solventVolumeLiters < 35) {
@@ -104,6 +105,8 @@ translate.addChangeListener(() => {
     ctx.fillText(molesOfSalt.toFixed(5) + " mol", canvas.width / 2 - 245, canvas.height / 2 - 385);
     ctx.textAlign = "right";
     ctx.fillText(solventVolumeLiters.toFixed(5) + " L", canvas.width / 2 + 245, canvas.height / 2 - 385);
+    ctx.textAlign = "left";
+    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toPrecision(3)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toPrecision(3)} °C`, canvas.width / 2 + 310, canvas.height / 2 - 385);
 
     ctx.fillStyle = isDarkColor(addColors(solvents[currentSolvent].color, frozen ? 0x777777 : 0)) ? "#ffffff" : "#000000";
     ctx.textAlign = "center";
@@ -182,7 +185,7 @@ function getSolventMass() {
 }
 
 function getMolality() {
-    return molesOfSalt / getSolventMass();
+    return getSolventMass() == 0 ? 0 : molesOfSalt / getSolventMass();
 }
 
 function getFreezingTemperature() {
@@ -255,7 +258,7 @@ translate.translateString('crioscopia.default').then(str => {
 // Solvent
 let solventControlContainer = document.createElement("div");
 let solventControlName = document.createElement("label");
-solventControlName.for = "solvent-control";
+solventControlName.setAttribute("for", "solvent-control");
 translate.translateString('crioscopia.solventControl').then(str => {
     solventControlName.innerHTML = str;
     solventControlName.dataset.string = '{"translate":"crioscopia.solventControl"}';
