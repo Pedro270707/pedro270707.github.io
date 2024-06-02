@@ -75,7 +75,7 @@ translate.addChangeListener(() => {
     
     if (soluteTapOpen && !tooSalty) {
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(canvas.width / 2 - 263, canvas.height / 2 - 371, 14, 718);
+        ctx.fillRect(canvas.width / 2 - 261, canvas.height / 2 - 371, 10, 718);
         addSalt(0.03125);
     } else {
         soluteTapOpen = false;
