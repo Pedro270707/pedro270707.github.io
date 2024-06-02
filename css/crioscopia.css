@@ -1,0 +1,70 @@
+.controls {
+    width: 10em;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    color: #ffffff;
+    background-color: #000000;
+    padding: 1em;
+}
+
+.controls input[type="range"] {
+    width: 100%;
+}
+
+.controls * {
+    display: block;
+    max-width: 100%;
+}
+
+.controls > * {
+    margin: 0.5em;
+}
+
+.tap {
+    display: block;
+    position: absolute;
+    width: 3em;
+    height: 1em;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.tap.top-right {
+    top: calc(45vh - 389px);
+    right: calc(50% - 303px);
+}
+
+.tap.top-left {
+    top: calc(45vh - 389px);
+    left: calc(50% - 303px);
+}
+
+.tap.bottom-right {
+    top: calc(45vh + 334px);
+    right: calc(50% - 357px);
+}
+
+.tap::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 1em;
+    height: 2em;
+    background-color: #ffffff;
+}
+
+.tap.top-right::before {
+    top: 0;
+    right: 0;
+}
+
+.tap.top-left::before {
+    top: 0;
+    left: 0;
+}
+
+.tap.bottom-right::before {
+    top: 0;
+    right: 0;
+}

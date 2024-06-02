@@ -57,5 +57,17 @@
   "senha-correctinwrongplace": "means that there is a correct character in the wrong place.",
   "senha-wrongcharacter": "means that the character is completely wrong.",
   "senha-gamestarted": "New game started! Random sequence: %s",
+  "crioscopia.title": "Cryoscopy",
+  "crioscopia.temperatureControl": "Temperature: %s°C",
+  "crioscopia.default": "Default",
+  "crioscopia.frozen": "Frozen",
+  "crioscopia.tooSalty": "Too Salty!",
+  "crioscopia.solventControl": "Solvent",
+  "crioscopia.solvent.water": "Water",
+  "crioscopia.solvent.methanol": "Methanol",
+  "crioscopia.solvent.ethanol": "Ethanol",
+  "crioscopia.solvent.propanone": "Propanone",
+  "crioscopia.solvent.ethanenitrile": "Ethanenitrile",
+  "crioscopia.solvent.methanamide": "Methanamide",
   "footer-text": "[created by Pedro270707]"
 }

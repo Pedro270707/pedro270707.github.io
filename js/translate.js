@@ -22,6 +22,7 @@ if (localStorage.language == undefined) {
 class Translate {
 	constructor(language) {
 		this.language = language;
+		this.changeListeners = [];
 	}
 	
 	async translateString(string, ...args) {
@@ -59,6 +60,10 @@ class Translate {
 
 		return translatedString;
 	}
+
+	addChangeListener(listener) {
+		this.changeListeners.push(listener);
+	}
 	
 	async reloadLoc() {
 		this.file = await fetch('/language/' + (this.language ? this.language : localStorage.language) + '.json');
@@ -85,6 +90,9 @@ class Translate {
 					currentElement.ariaLabel = str;
 				});
 			}
+		}
+		for (let listener of this.changeListeners) {
+			listener();
 		}
 	}
 	
