@@ -55,7 +55,7 @@ translate.addChangeListener(() => {
     }
 
     let frozen = temperatureKelvin <= getFreezingTemperature() && solventVolumeLiters > 0 && !emptyTapOpen;
-    let tooSalty = molesOfSalt == maxSaltAmount() && solventVolumeLiters > 0;
+    let tooSalty = molesOfSalt == getMaxSaltAmount() && solventVolumeLiters > 0;
 
     ctx.fillStyle = "#1f1f1f";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -173,8 +173,8 @@ function addSolvent(amount) {
 
 function addSalt(amount) {
     molesOfSalt += amount;
-    if (molesOfSalt > maxSaltAmount()) {
-        molesOfSalt = maxSaltAmount();
+    if (molesOfSalt > getMaxSaltAmount()) {
+        molesOfSalt = getMaxSaltAmount();
     } else if (molesOfSalt < 0) {
         molesOfSalt = 0;
     }
@@ -192,7 +192,7 @@ function getFreezingTemperature() {
     return solvents[currentSolvent].freezing_point - solvents[currentSolvent].cryoscopic_constant * getMolality();
 }
 
-function maxSaltAmount() {
+function getMaxSaltAmount() {
     return solvents[currentSolvent].solubility * solventVolumeLiters;
 }
 
