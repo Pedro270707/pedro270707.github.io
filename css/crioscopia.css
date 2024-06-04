@@ -6,6 +6,7 @@
     color: #ffffff;
     background-color: #000000;
     padding: 1em;
+    font-family: sans-serif;
 }
 
 .controls input[type="range"] {
@@ -24,8 +25,8 @@
 .tap {
     display: block;
     position: absolute;
-    width: 3em;
-    height: 1em;
+    width: 54px;
+    height: 18px;
     background-color: #ffffff;
     cursor: pointer;
 }
@@ -49,8 +50,8 @@
     content: '';
     display: block;
     position: absolute;
-    width: 1em;
-    height: 2em;
+    width: 18px;
+    height: 36px;
     background-color: #ffffff;
 }
 
