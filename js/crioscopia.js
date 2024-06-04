@@ -1,9 +1,10 @@
+let container = document.getElementById("canvas-container");
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight * 0.9;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
 }
 
 let solvents = [
@@ -204,19 +205,19 @@ solventTap.classList.add("tap", "top-right");
 solventTap.addEventListener("click", (event) => {
     solventTapOpen = !solventTapOpen;
 });
-document.body.appendChild(solventTap);
+container.appendChild(solventTap);
 let soluteTap = document.createElement("div");
 soluteTap.classList.add("tap", "top-left");
 soluteTap.addEventListener("click", (event) => {
     soluteTapOpen = !soluteTapOpen;
 });
-document.body.appendChild(soluteTap);
+container.appendChild(soluteTap);
 let emptyTap = document.createElement("div");
 emptyTap.classList.add("tap", "bottom-right");
 emptyTap.addEventListener("click", (event) => {
     emptyTapOpen = !emptyTapOpen;
 });
-document.body.appendChild(emptyTap);
+container.appendChild(emptyTap);
 
 let controls = document.createElement("div");
 controls.classList.add("controls");
