@@ -109,17 +109,20 @@ translate.addChangeListener(() => {
     ctx.textAlign = "left";
     ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toPrecision(3)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toPrecision(3)} °C`, canvas.width / 2 + 310, canvas.height / 2 - 385);
 
-    ctx.fillStyle = isDarkColor(addColors(solvents[currentSolvent].color, frozen ? 0x777777 : 0)) ? "#ffffff" : "#000000";
     ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = "2em sans-serif";
-    if (frozen) {
-        ctx.fillText(frozenText, canvas.width / 2, canvas.height / 2 + 350 - solventVolumeLiters * 10);
-    }
     if (tooSalty) {
+        ctx.fillStyle = "#ffffff";
         let text = tooSaltyText;
         let metrics = ctx.measureText(frozenText);
-        ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 350 - solventVolumeLiters * 10 - metrics.fontBoundingBoxAscent - metrics.fontBoundingBoxDescent);
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 385);
+    }
+    
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `${Math.min(solventVolumeLiters * 20, 36)}px sans-serif`;
+    if (frozen) {
+        ctx.fillStyle = isDarkColor(addColors(solvents[currentSolvent].color, frozen ? 0x777777 : 0)) ? "#ffffff" : "#000000";
+        ctx.fillText(frozenText, canvas.width / 2, canvas.height / 2 + 350 - solventVolumeLiters * 10);
     }
 
     requestAnimationFrame(draw);
