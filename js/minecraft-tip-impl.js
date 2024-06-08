@@ -169,7 +169,7 @@ function updateSavedTooltips() {
         tooltipTextInner.textContent = element;
         tooltipText.appendChild(tooltipTextInner);
         tooltipText.addEventListener("click", (e) => {
-            tooltipField.value = tooltipTextInner.textContent;
+            tooltipField.value = tooltipTextInner.textContent.replace(/\n/g, "\\n");
         })
         tooltipText.dataset.mctitle = element.replace(/\\n/g, "\n").replace(/\\\n/g, "\\n");
 
