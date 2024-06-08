@@ -668,6 +668,12 @@ class TextFormatting {
   }
 }
 
+// Automatically turns any canvas.tooltip elements with the data-text attribute into a tooltip
+for (let element of document.getElementsByClassName("tooltip")) {
+  if (element.nodeName !== "CANVAS" || !element.dataset.text) continue;
+  drawTooltip(element);
+}
+
 /*
 Uncomment the following to automatically add a tooltip to the page
 which follows the mouse and changes its contents if the element has

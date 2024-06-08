@@ -30,6 +30,7 @@ for (let i = 0; i < minecraftItems.length; i++) {
 document.body.appendChild(followerTooltip);
 
 setInterval(() => {
+    if (!tooltip) return;
     if (tooltipField.value === '') {
         new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
             setTooltipText(tooltip, str);
