@@ -689,9 +689,7 @@ class .minecraft-item and disappears otherwise.
 //   minecraftItems.item(i).addEventListener('mouseenter', (e) => {
 //     if (!e.target.dataset.mctitle) return;
 //     followerTooltip.classList.remove("hidden");
-//     getTextFromJSON(e.target.dataset.mctitle).get().then(str => {
-//       setTooltipText(followerTooltip, str);
-//     });
+//     setTooltipText(followerTooltip, e.target.dataset.mctitle);
 //   });
 
 //   minecraftItems.item(i).addEventListener('mouseleave', (e) => {
