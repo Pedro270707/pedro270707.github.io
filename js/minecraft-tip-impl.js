@@ -5,10 +5,9 @@ var apng2webp = window.apng2webp.default;
 const downloadOverlay = document.getElementById("download-overlay");
 const tooltipField = document.getElementById("minecraft-text-input");
 let tooltip;
-new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
-    tooltip = createTooltip(str, false);
-    document.getElementById("tooltip-output").appendChild(tooltip);
-});
+
+tooltip = createTooltip(translate.translateString("minecrafttooltips-defaulttooltip"), false);
+document.getElementById("tooltip-output").appendChild(tooltip);
 
 const followerTooltip = createTooltip("Follower tooltip", true);
 followerTooltip.classList.add("hidden");
@@ -18,9 +17,7 @@ for (let i = 0; i < minecraftItems.length; i++) {
   minecraftItems.item(i).addEventListener('mouseenter', (e) => {
     if (!e.target.dataset.mctitle) return;
     followerTooltip.classList.remove("hidden");
-    getTextFromJSON(e.target.dataset.mctitle).get().then(str => {
-      setTooltipText(followerTooltip, str);
-    });
+    setTooltipText(getTextFromJSON(e.target.dataset.mctitle).get(), str);
   });
 
   minecraftItems.item(i).addEventListener('mouseleave', (e) => {
@@ -32,9 +29,7 @@ document.body.appendChild(followerTooltip);
 setInterval(() => {
     if (!tooltip) return;
     if (tooltipField.value === '') {
-        new TranslatableText("minecrafttooltips-defaulttooltip").get().then(str => {
-            setTooltipText(tooltip, str);
-        });
+        setTooltipText(tooltip, translate.translateString("minecrafttooltips-defaulttooltip"));
         tooltip.style.position = tooltip.style.left = tooltip.style.transform = null;
     } else {
         if (tooltipField.value.startsWith("style:") && styles[tooltipField.value.substring("style:".length)]) {

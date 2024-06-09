@@ -26,30 +26,6 @@ let solventTapOpen = false;
 let soluteTapOpen = false;
 let emptyTapOpen = false;
 
-let tooSaltyText = "Too Salty!";
-translate.translateString('crioscopia.tooSalty').then(str => {
-    tooSaltyText = str;
-});
-let frozenText = "Frozen";
-translate.translateString('crioscopia.frozen').then(str => {
-    frozenText = str;
-});
-let cryoscopyText = "Cryoscopy";
-translate.translateString('crioscopia.title').then(str => {
-    cryoscopyText = str;
-});
-translate.addChangeListener(() => {
-    translate.translateString('crioscopia.tooSalty').then(str => {
-        tooSaltyText = str;
-    });
-    translate.translateString('crioscopia.frozen').then(str => {
-        frozenText = str;
-    });
-    translate.translateString('crioscopia.title').then(str => {
-        cryoscopyText = str;
-    });
-});
-
 (function draw() {
     if (currentSolvent > solvents.length - 1 || currentSolvent < 0) {
         changeSolvent(0);
@@ -65,7 +41,7 @@ translate.addChangeListener(() => {
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.font = "2em sans-serif";
-    ctx.fillText(cryoscopyText, 10, 10);
+    ctx.fillText(translate.translateString('crioscopia.title'), 10, 10);
 
     if (solventTapOpen && solventVolumeLiters < 35) {
         ctx.fillStyle = "#" + solvents[currentSolvent].color.toString(16).padStart(6, "0");
@@ -112,8 +88,7 @@ translate.addChangeListener(() => {
     ctx.textAlign = "center";
     if (tooSalty) {
         ctx.fillStyle = "#ffffff";
-        let text = tooSaltyText;
-        let metrics = ctx.measureText(frozenText);
+        let text = translate.translateString('crioscopia.tooSalty');
         ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 385);
     }
     
@@ -122,7 +97,7 @@ translate.addChangeListener(() => {
     ctx.font = `${Math.min(solventVolumeLiters * 20, 36)}px sans-serif`;
     if (frozen) {
         ctx.fillStyle = isDarkColor(addColors(solvents[currentSolvent].color, frozen ? 0x777777 : 0)) ? "#ffffff" : "#000000";
-        ctx.fillText(frozenText, canvas.width / 2, canvas.height / 2 + 350 - solventVolumeLiters * 10);
+        ctx.fillText(translate.translateString('crioscopia.frozen'), canvas.width / 2, canvas.height / 2 + 350 - solventVolumeLiters * 10);
     }
 
     requestAnimationFrame(draw);
@@ -228,10 +203,8 @@ controls.classList.add("controls");
 // Temperature
 let temperatureControlContainer = document.createElement("div");
 let temperatureControlName = document.createElement("div");
-translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2)).then(str => {
-    temperatureControlName.innerHTML = str;
-    temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
-});
+temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
+temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
 let temperatureControl = document.createElement("input");
 temperatureControl.type = "range";
 temperatureControl.min = -273.15;
@@ -240,42 +213,32 @@ temperatureControl.value = 0;
 temperatureControl.step = 0.05;
 temperatureControl.addEventListener("input", (event) => {
     temperatureKelvin = Number.parseFloat(event.target.value) + 273.15;
-    translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2)).then(str => {
-        temperatureControlName.innerHTML = str;
-        temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
-    });
+    temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
+    temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
 });
 let defaultTemperatureBtn = document.createElement("button");
 defaultTemperatureBtn.addEventListener("click", (event) => {
     temperatureControl.value = 0;
     temperatureKelvin = temperatureControl.value + 273.15;
-    translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2)).then(str => {
-        temperatureControlName.innerHTML = str;
-        temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
-    });
+    temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
+    temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
 });
-translate.translateString('crioscopia.default').then(str => {
-    defaultTemperatureBtn.innerHTML = str;
-    defaultTemperatureBtn.dataset.string = '{"translate":"crioscopia.default"}';
-});
+defaultTemperatureBtn.innerHTML = translate.translateString('crioscopia.default');
+defaultTemperatureBtn.dataset.string = '{"translate":"crioscopia.default"}';
 
 // Solvent
 let solventControlContainer = document.createElement("div");
 let solventControlName = document.createElement("label");
 solventControlName.setAttribute("for", "solvent-control");
-translate.translateString('crioscopia.solventControl').then(str => {
-    solventControlName.innerHTML = str;
-    solventControlName.dataset.string = '{"translate":"crioscopia.solventControl"}';
-});
+solventControlName.innerHTML = translate.translateString('crioscopia.solventControl');
+solventControlName.dataset.string = '{"translate":"crioscopia.solventControl"}';
 let solventControl = document.createElement("select");
 solventControl.id = "solvent-control";
 for (let i in solvents) {
     let solventOption = document.createElement("option");
     solventOption.value = i.toString();
-    translate.translateString('crioscopia.solvent.' + solvents[i].name).then(str => {
-        solventOption.innerHTML = str;
-        solventOption.dataset.string = `{"translate":"crioscopia.solvent.${solvents[i].name}"}`;
-    });
+    solventOption.innerHTML = translate.translateString('crioscopia.solvent.' + solvents[i].name);
+    solventOption.dataset.string = `{"translate":"crioscopia.solvent.${solvents[i].name}"}`;
     solventControl.appendChild(solventOption);
 }
 solventControl.addEventListener("input", (event) => {

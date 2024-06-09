@@ -79,9 +79,9 @@ function startNewGame(pAmountOfCharacters = 5) {
     victoryText.classList.add("invisible");
     amountOfCharacters = pAmountOfCharacters;
     randomSequence = getRandomCharacterSequence(amountOfCharacters);
-    translate.translateString("senha-gamestarted", randomSequence).then(str => {
-        console.log(str);
-    });
+    translate.whenLoaded(() => {
+        console.log(translate.translateString("senha-gamestarted", randomSequence));
+    })
     setElementString(document.getElementById("valid-characters"), new TranslatableText("senha-validcharacters", validCharacters));
     amountOfCharactersInput.max = validCharacters.length;
     updateKeyboard();

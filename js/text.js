@@ -21,26 +21,22 @@ class LiteralText {
         };
     }
 
-    async get() {
+    get() {
         let key = this.key;
         const promises = [];
     
         for (let i = 1; i <= this.args.length; i++) {
             const placeholder = "%" + i + "$s";
-            const argPromise = this.args[i - 1].get();
+            const str = this.args[i - 1].get();
     
-            argPromise.then(str => {
-                if (key.includes(placeholder)) {
-                    key = key.replace(placeholder, str);
-                } else {
-                    key = key.replace("%s", str);
-                }
-            });
-    
-            await argPromise;
+            if (key.includes(placeholder)) {
+                key = key.replace(placeholder, str);
+            } else {
+                key = key.replace("%s", str);
+            }
         }
     
-        return Promise.resolve(key);
+        return key;
     }
 }
 
@@ -67,8 +63,8 @@ class TranslatableText {
         };
     }
 
-    async get() {
-        return await translate.translateString(this.key, ...this.args);
+    get() {
+        return translate.translateString(this.key, ...this.args);
     }
 }
 
@@ -101,32 +97,26 @@ function getTextFromJSON(jsonObject) {
     }
 }
 
-async function setElementString(element, text) {
+function setElementString(element, text) {
     if (text instanceof LiteralText || text instanceof TranslatableText) {
         text = JSON.stringify(text);
     }
     element.dataset.string = text;
-    getTextFromJSON(text).get().then(str => {
-        element.innerHTML = str;
-    });
+    element.innerHTML = getTextFromJSON(text).get();
 }
 
-async function setElementPlaceholder(element, text) {
+function setElementPlaceholder(element, text) {
     if (text instanceof LiteralText || text instanceof TranslatableText) {
         text = JSON.stringify(text);
     }
     element.dataset.placeholder = text;
-    getTextFromJSON(text).get().then(str => {
-        element.placeholder = str;
-    });
+    element.placeholder = getTextFromJSON(text).get();
 }
 
-async function setElementAriaLabel(element, text) {
+function setElementAriaLabel(element, text) {
     if (text instanceof LiteralText || text instanceof TranslatableText) {
         text = JSON.stringify(text);
     }
     element.dataset.ariaLabel = text;
-    getTextFromJSON(text).get().then(str => {
-        element.ariaLabel = str;
-    });
+    element.ariaLabel = getTextFromJSON(text).get();
 }
