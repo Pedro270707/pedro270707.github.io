@@ -83,7 +83,7 @@ let emptyTapOpen = false;
     ctx.textAlign = "right";
     ctx.fillText(solventVolumeLiters.toFixed(5) + " L", canvas.width / 2 + 245, canvas.height / 2 - 385);
     ctx.textAlign = "left";
-    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toPrecision(3)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toPrecision(3)} °C`, canvas.width / 2 + 310, canvas.height / 2 - 385);
+    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + 310, canvas.height / 2 - 385);
 
     ctx.textAlign = "center";
     if (tooSalty) {
