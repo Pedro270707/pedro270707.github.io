@@ -72,13 +72,13 @@ class Translate {
 	}
 	
 	async reloadLoc() {
-		this.file = await fetch('/language/' + (this.language || localStorage.language) + '.json');
-		this.file = await this.file.clone().json();
+		this.defaultFile = await fetch('/language/' + Translate.DEFAULT_LANGUAGE + '.json');
+		this.defaultFile = await this.defaultFile.clone().json();
 		if ((this.language || localStorage.language) === Translate.DEFAULT_LANGUAGE) {
-			this.defaultFile = this.file;
+			this.file = this.defaultFile;
 		} else {
-			this.defaultFile = await fetch('/language/' + Translate.DEFAULT_LANGUAGE + '.json');
-			this.defaultFile = await this.defaultFile.clone().json();
+			this.file = await fetch('/language/' + (this.language || localStorage.language) + '.json');
+			this.file = await this.file.clone().json();
 		}
 		let allElements = document.getElementsByTagName('*');
 		for (let currentElement of allElements) {
