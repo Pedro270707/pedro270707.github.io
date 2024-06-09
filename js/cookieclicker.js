@@ -61,9 +61,7 @@ function recountCookies() {
 
 function recountWorkers() {
 	workerCost = Math.ceil(Math.pow(workerAmount / 1.75, 2));
-	translate.getKeyWrapped('cookieclicker-hireworkerbutton', workerCost).then(str => {
-		workerButtonText.innerHTML = str;
-	});
+	workerButtonText.innerHTML = translate.getKeyWrapped('cookieclicker-hireworkerbutton', workerCost);
 	switch (workerAmount) {
 		case 0:
 			setWorkerString('cookieclicker-zeroworkers', workerAmount);
