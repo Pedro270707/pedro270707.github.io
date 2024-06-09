@@ -58,7 +58,7 @@
   "senha-wrongcharacter": "significa um caractere completamente errado.",
   "senha-gamestarted": "Um novo jogo começou! Sequência aleatória: %s",
   "crioscopia.title": "Crioscopia",
-  "crioscopia.temperatureControl": "Temperatura: %s°C",
+  "crioscopia.temperatureControl": "Temperatura: %s °C",
   "crioscopia.default": "Padrão",
   "crioscopia.frozen": "Congelada",
   "crioscopia.tooSalty": "Sal demais!",

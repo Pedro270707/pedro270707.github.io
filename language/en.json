@@ -58,7 +58,7 @@
   "senha-wrongcharacter": "means that the character is completely wrong.",
   "senha-gamestarted": "New game started! Random sequence: %s",
   "crioscopia.title": "Cryoscopy",
-  "crioscopia.temperatureControl": "Temperature: %s°C",
+  "crioscopia.temperatureControl": "Temperature: %s °C",
   "crioscopia.default": "Default",
   "crioscopia.frozen": "Frozen",
   "crioscopia.tooSalty": "Too Salty!",
