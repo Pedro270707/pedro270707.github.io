@@ -26,6 +26,10 @@ let solventTapOpen = false;
 let soluteTapOpen = false;
 let emptyTapOpen = false;
 
+translate.addChangeListener(() => {
+    console.log("Changed!");
+});
+
 (function draw() {
     if (currentSolvent > solvents.length - 1 || currentSolvent < 0) {
         changeSolvent(0);

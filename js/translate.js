@@ -24,31 +24,11 @@ class Translate {
 		this.language = language;
 		this.changeListeners = [];
 		this.loadFunctions = [];
-		fetch('/language/' + (this.language ? this.language : localStorage.language) + '.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch translation file');
-                }
-                return response.clone().json();
-            })
-			.then(json => {
-				this.file = json;
-				for (let listener of this.changeListeners) {
-					listener(true);
-				}
-				for (let loadFunction of this.loadFunctions) {
-					loadFunction(true);
-				}
-			})
-            .catch(error => {
-                console.error(error);
-				for (let listener of this.changeListeners) {
-					listener(false);
-				}
-				for (let loadFunction of this.loadFunctions) {
-					loadFunction(false);
-				}
-            });
+		this.reloadLoc().then(file => {
+			for (let loadFunction of this.loadFunctions) {
+				loadFunction();
+			}
+		});
 	}
 	
 	translateString(string, ...args) {
@@ -89,7 +69,7 @@ class Translate {
 		if (!this.file || !this.file.ok) {
 			this.loadFunctions.push(loadFunction);
 		} else {
-			loadFunction(true);
+			loadFunction();
 		}
 	}
 	
@@ -115,8 +95,9 @@ class Translate {
 			}
 		}
 		for (let listener of this.changeListeners) {
-			listener(true);
+			listener();
 		}
+		return this.file;
 	}
 	
 	getKeyWrapped(key, ...args) {
