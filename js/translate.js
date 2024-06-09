@@ -16,10 +16,12 @@ switch (urlParams.get('lang')) {
 }
 
 if (localStorage.language == undefined) {
-	localStorage.language = 'pt';
+	localStorage.language = Translate.DEFAULT_LANGUAGE;
 }
 
 class Translate {
+	static DEFAULT_LANGUAGE = 'pt';
+
 	constructor(language) {
 		this.language = language;
 		this.changeListeners = [];
@@ -32,27 +34,23 @@ class Translate {
 	}
 	
 	translateString(string, ...args) {
-		if (!this.file) {
-			return string;
-		}
 		let translatedString = string;
 
-        const promises = [];
-
-		const fileJson = this.file;
-		if (fileJson[string] != null) {
-			translatedString = fileJson[string];
+		if (this.file && this.file[string]) {
+			translatedString = this.file[string];
+		} else if (this.defaultFile && this.defaultFile[string]) {
+			translatedString = this.defaultFile[string];
 		}
 
 		for (let i = 1; i <= args.length; i++) {
-			const placeholder = "%" + i + "$s";
+			const placeholder = '%' + i + '$s';
 			if (!(args[i - 1] instanceof LiteralText || args[i - 1] instanceof TranslatableText)) args[i - 1] = new LiteralText(args[i - 1]);
 			const str = args[i - 1].get();
 
 			if (translatedString.includes(placeholder)) {
 				translatedString = translatedString.replace(placeholder, str);
 			} else {
-				translatedString = translatedString.replace("%s", str);
+				translatedString = translatedString.replace('%s', str);
 			}
 		}
 
@@ -60,12 +58,12 @@ class Translate {
 	}
 
 	addChangeListener(listener) {
-		if (typeof listener !== 'function') throw new Error("translate.js change listener must be a function");
+		if (typeof listener !== 'function') throw new Error('translate.js change listener must be a function');
 		this.changeListeners.push(listener);
 	}
 
 	whenLoaded(loadFunction) {
-		if (typeof loadFunction !== 'function') throw new Error("translate.js load function must be a function");
+		if (typeof loadFunction !== 'function') throw new Error('translate.js load function must be a function');
 		if (!this.file || !this.file.ok) {
 			this.loadFunctions.push(loadFunction);
 		} else {
@@ -74,13 +72,19 @@ class Translate {
 	}
 	
 	async reloadLoc() {
-		this.file = await fetch('/language/' + (this.language ? this.language : localStorage.language) + '.json');
+		this.file = await fetch('/language/' + (this.language || localStorage.language) + '.json');
 		this.file = await this.file.clone().json();
-		let allElements = document.getElementsByTagName("*");
+		if ((this.language || localStorage.language) === Translate.DEFAULT_LANGUAGE) {
+			this.defaultFile = this.file;
+		} else {
+			this.defaultFile = await fetch('/language/' + Translate.DEFAULT_LANGUAGE + '.json');
+			this.defaultFile = await this.defaultFile.clone().json();
+		}
+		let allElements = document.getElementsByTagName('*');
 		for (let currentElement of allElements) {
-			const keyAttribute = currentElement.getAttribute("data-string");
-			const placeholderKeyAttribute = currentElement.getAttribute("data-placeholder");
-			const ariaLabelKeyAttribute = currentElement.getAttribute("data-aria-label");
+			const keyAttribute = currentElement.getAttribute('data-string');
+			const placeholderKeyAttribute = currentElement.getAttribute('data-placeholder');
+			const ariaLabelKeyAttribute = currentElement.getAttribute('data-aria-label');
 
 			if (keyAttribute !== null) {
 				currentElement.innerHTML = getTextFromJSON(keyAttribute).get();
@@ -101,7 +105,7 @@ class Translate {
 	}
 	
 	getKeyWrapped(key, ...args) {
-		return "<span data-string='" + JSON.stringify(new TranslatableText(key, ...args)) + "'>" + (this.translateString(key, ...args)) + "</span>";
+		return `<span data-string='${JSON.stringify(new TranslatableText(key, ...args))}'>${(this.translateString(key, ...args))}</span>`;
 	}
 }
 
