@@ -150,7 +150,7 @@ function updateSavedTooltips() {
     savedTooltips.innerHTML = "";
     let json = localStorage.getItem("minecraft-saved-tooltips");
     if (json === null) {
-        json = '{"values":["§00§11§22§33§44§55§66§77§88§99\\n§aa§bb§cc§dd§ee§ff§jj\\n§kk§r§ll§r§mm§r§nn§r§oo§r§pp§r§qq§r§ss"]}';
+        json = '{"values":["Formatting codes:\\n§00§11§22§33§44§55§66§77§88§99\\n§aa§bb§cc§dd§ee§ff§gg§hh§ii§jj§r§kk\\n§ll§r§mm§r§nn§r§oo§r§pp§qq§rr§ss§tt§uu§vv\\n§ww§r§xx§r§yy\\nUse the paragraph\\ncharacter with the\\nrespective code"]}';
         localStorage.setItem("minecraft-saved-tooltips", json);
     }
     json = JSON.parse(json);
