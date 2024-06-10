@@ -15,7 +15,7 @@ switch (urlParams.get('lang')) {
 		break;
 }
 
-if (localStorage.language == undefined) {
+if (localStorage.language === undefined) {
 	localStorage.language = Translate.DEFAULT_LANGUAGE;
 }
 
