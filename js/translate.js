@@ -10,8 +10,10 @@ switch (urlParams.get('lang')) {
 	case 'pt':
 		localStorage.language = 'pt';
 		break;
-	case 'sl':
-		localStorage.language = 'sl';
+	default:
+		if (urlParams.get('lang')) {
+			localStorage.language = urlParams.get('lang');
+		}
 		break;
 }
 
@@ -113,4 +115,21 @@ var translate = new Translate();
 
 function reloadLanguage() {
     translate.reloadLoc();
+}
+
+function changeLanguage(language) {
+	localStorage.language = language;
+	reloadLanguage();
+    let url = new URL(window.location.href);
+    let params = new URLSearchParams(url.search);
+
+    params.delete('lang');
+
+    let newUrl = url.origin + url.pathname + (params.toString() ? '?' + params.toString() : '') + '#';
+
+    if (new URL(newUrl).origin === window.location.origin) {
+        window.history.pushState({ path: newUrl }, '', newUrl);
+    } else {
+        console.error("The new URL's origin does not match the current origin");
+    }
 }

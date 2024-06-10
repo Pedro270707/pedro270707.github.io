@@ -5,9 +5,9 @@ layout: base
 {{ content }}
 <div class="footer{% if page.footer-fixed %} fixed{% endif %}">
 	<div class="footer-language-select">
-		<a href="#" onclick="localStorage.language = 'en'; reloadLanguage();" class="button">English</a> 
-		<a href="#" onclick="localStorage.language = 'pt'; reloadLanguage();" class="button">Português</a>
-		<a href="#" onclick="localStorage.language = 'sl'; reloadLanguage();" class="button">Slovenščina</a>
+		<a href="#" onclick="changeLanguage('en');" class="button">English</a> 
+		<a href="#" onclick="changeLanguage('pt');" class="button">Português</a>
+		<a href="#" onclick="changeLanguage('sl');" class="button">Slovenščina</a>
 	</div>
 	<p class="minor"><span data-string='{"translate":"footer-text"}'>[criado por Pedro270707]</span> (<a class="minor" href="https://github.com/Pedro270707/pedro270707.github.io">GitHub</a>)</p>
 </div>
