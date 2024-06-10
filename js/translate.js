@@ -66,7 +66,7 @@ class Translate {
 
 	whenLoaded(loadFunction) {
 		if (typeof loadFunction !== 'function') throw new Error('translate.js load function must be a function');
-		if (!this.file || !this.file.ok) {
+		if (!this.file) {
 			this.loadFunctions.push(loadFunction);
 		} else {
 			loadFunction();
