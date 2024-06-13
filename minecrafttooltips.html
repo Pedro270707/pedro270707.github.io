@@ -23,10 +23,10 @@ footer-fixed: true
 			<div id="tooltip-output" class="center"></div>
 
 			<div id="recording-text" class="center hidden" style="margin-top: 1rem; margin-bottom: 1rem;">
-				<span data-string='{"translate":"minecrafttooltips-recording"}'></span> <span id="recording-percentage">0</span>%
+				<span data-translate-string='{"translate":"minecrafttooltips-recording"}'></span> <span id="recording-percentage">0</span>%
 			</div>
 			
-			<div class="download-tooltip-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-downloadtooltip"}'>
+			<div class="download-tooltip-wrapper info-bubble" data-translate-aria-label='{"translate":"minecrafttooltips-downloadtooltip"}'>
 				<button class="icon-button" id="download-tooltip" onclick="downloadOverlay.classList.toggle('hidden')">
 					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 					viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
@@ -42,47 +42,47 @@ footer-fixed: true
 	</div>
 
 	<div class="minecraft-side">
-		<span data-string='{"translate":"minecrafttooltips-title"}'>Gerador de nomes do Minecraft</span>
+		<span data-translate-string='{"translate":"minecrafttooltips-title"}'>Gerador de nomes do Minecraft</span>
 
 		<div class="text-input-wrapper center">
-			<input type="text" data-placeholder='{"translate":"minecrafttooltips-defaulttooltip"}' id="minecraft-text-input" name="Texto do Minecraft" class="text-input minecraft-text-input">
-			<!--<input type="text" data-placeholder='{"translate":"minecrafttooltips-itemquantity"}' id="item-count-input" name="Número de itens" class="minecraft-text-input">-->
-			<button class="button" id="save-tooltip" data-string='{"translate":"minecrafttooltips-save"}'>Salvar</button>
+			<input type="text" data-translate-placeholder='{"translate":"minecrafttooltips-defaulttooltip"}' id="minecraft-text-input" name="Texto do Minecraft" class="text-input minecraft-text-input">
+			<!--<input type="text" data-translate-placeholder='{"translate":"minecrafttooltips-itemquantity"}' id="item-count-input" name="Número de itens" class="minecraft-text-input">-->
+			<button class="button" id="save-tooltip" data-translate-string='{"translate":"minecrafttooltips-save"}'>Salvar</button>
 		</div>
 
-		<span class="minor" data-string='{"translate":"minecrafttooltips-savedtooltips"}'>Nomes salvos</span>
+		<span class="minor" data-translate-string='{"translate":"minecrafttooltips-savedtooltips"}'>Nomes salvos</span>
 		<div id="saved-tooltips" class="saved-tooltips center-notext"></div>
 
 		<div class="download-overlay hidden" id="download-overlay">
 			<div class="download-overlay-background" id="download-overlay-background"></div>
 			<div class="download-overlay-window">
 				<!--
-				<span class="minor"><span data-string='{"translate":"minecrafttooltips-imageresolution"}'>resolução da imagem:</span> <span id="image-resolution">1</span>x</span> <span class="warning info-bubble" id="resolution-warning" data-aria-label='{"translate":"minecrafttooltips-resolutionwarning"}'>!</span><br>
+				<span class="minor"><span data-translate-string='{"translate":"minecrafttooltips-imageresolution"}'>resolução da imagem:</span> <span id="image-resolution">1</span>x</span> <span class="warning info-bubble" id="resolution-warning" data-translate-aria-label='{"translate":"minecrafttooltips-resolutionwarning"}'>!</span><br>
 				<input type="range" min="1" max="50" value="1" class="slider" id="resolution-slider">
 				-->
 
-				<span class="minor" data-string='{"translate":"minecrafttooltips-duration"}'></span>
+				<span class="minor" data-translate-string='{"translate":"minecrafttooltips-duration"}'></span>
 				<form id="tooltip-duration" action="">
 					<label class="radio-input">
 						<input type="radio" name="tooltip-duration" id="download-tooltip-static" value="0" checked>
-						<span data-string='{"translate":"minecrafttooltips-downloadtooltipstatic"}'></label>
+						<span data-translate-string='{"translate":"minecrafttooltips-downloadtooltipstatic"}'></label>
 					</label>
 					<br>
 					<label class="radio-input">
 						<input type="radio" name="tooltip-duration" id="download-tooltip-full-loop" value="6283.185307179586">
-						<span data-string='{"translate":"minecrafttooltips-downloadtooltipfullloop"}'></label>
+						<span data-translate-string='{"translate":"minecrafttooltips-downloadtooltipfullloop"}'></label>
 					</label>
 					<br>
 					<label class="radio-input">
 						<input type="radio" name="tooltip-duration" id="download-tooltip-custom" value="0">
-						<span data-string='{"translate":"minecrafttooltips-downloadtooltipcustom"}'></label>
+						<span data-translate-string='{"translate":"minecrafttooltips-downloadtooltipcustom"}'></label>
 						<input class="text-input" type="number" id="download-tooltip-custom-input" name="download-tooltip-custom-input" step="0.1" min="0">
 					</label>
 				</form>
 
 				<br>
 
-				<div class="download-overlay-download-button-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-downloadtooltip-png"}'>
+				<div class="download-overlay-download-button-wrapper info-bubble" data-translate-aria-label='{"translate":"minecrafttooltips-downloadtooltip-png"}'>
 					<button class="icon-button" id="download-overlay-download-button" onclick="recordPNG(exportFile); downloadOverlay.classList.add('hidden')">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
 							<path d="M344.1,207.5c-16.6,0-30,13.4-30,30v76.6h-254v-76.6c0-16.6-13.4-30-30-30s-30,13.4-30,30v106.6c0,16.6,13.4,30,30,30h314
@@ -94,7 +94,7 @@ footer-fixed: true
 					</button>
 				</div>
 
-				<div class="download-overlay-download-button-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-downloadtooltip-webp"}'>
+				<div class="download-overlay-download-button-wrapper info-bubble" data-translate-aria-label='{"translate":"minecrafttooltips-downloadtooltip-webp"}'>
 					<button class="icon-button" id="download-overlay-download-button" onclick="recordPNG(exportWebP); downloadOverlay.classList.add('hidden')">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
 							<path d="M344.1,207.5c-16.6,0-30,13.4-30,30v76.6h-254v-76.6c0-16.6-13.4-30-30-30s-30,13.4-30,30v106.6c0,16.6,13.4,30,30,30h314
@@ -106,7 +106,7 @@ footer-fixed: true
 					</button>
 				</div>
 
-				<div class="download-overlay-close-button-wrapper info-bubble" data-aria-label='{"translate":"minecrafttooltips-close"}'>
+				<div class="download-overlay-close-button-wrapper info-bubble" data-translate-aria-label='{"translate":"minecrafttooltips-close"}'>
 					<button class="icon-button" id="close-button" onclick="downloadOverlay.classList.add('hidden')">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.1 374.1" style="fill: currentColor; width: 15px;" xml:space="preserve">
 							<g>

@@ -84,20 +84,12 @@ class Translate {
 		}
 		let allElements = document.getElementsByTagName('*');
 		for (let currentElement of allElements) {
-			const keyAttribute = currentElement.getAttribute('data-string');
-			const placeholderKeyAttribute = currentElement.getAttribute('data-placeholder');
-			const ariaLabelKeyAttribute = currentElement.getAttribute('data-aria-label');
-
-			if (keyAttribute !== null) {
-				currentElement.innerHTML = getTextFromJSON(keyAttribute).get();
-			}
-
-			if (placeholderKeyAttribute !== null) {
-				currentElement.placeholder = getTextFromJSON(placeholderKeyAttribute).get();
-			}
-
-			if (ariaLabelKeyAttribute !== null) {
-				currentElement.ariaLabel = getTextFromJSON(ariaLabelKeyAttribute).get();
+			for (let attribute of currentElement.attributes) {
+				if (attribute.name === "data-translate-string") {
+					currentElement.innerHTML = getTextFromJSON(attribute.value).get();
+				} else if (attribute.name.startsWith("data-translate-")) {
+					currentElement[attribute.name.substring("data-translate-".length)] = getTextFromJSON(attribute.value).get();
+				}
 			}
 		}
 		for (let listener of this.changeListeners) {
@@ -107,7 +99,7 @@ class Translate {
 	}
 	
 	getKeyWrapped(key, ...args) {
-		return `<span data-string='${JSON.stringify(new TranslatableText(key, ...args))}'>${(this.translateString(key, ...args))}</span>`;
+		return `<span data-translate-string='${JSON.stringify(new TranslatableText(key, ...args))}'>${(this.translateString(key, ...args))}</span>`;
 	}
 }
 
