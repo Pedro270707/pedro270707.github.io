@@ -6,7 +6,11 @@ const generateTooltipImage = (req, res) => {
         if (Object.hasOwnProperty.call(req.query, key)) {
             const value = req.query[key];
             
-            canvas.setAttribute("data-setting-" + key, value);
+            if (key === 'text') {
+                canvas.dataset.text = value;
+            } else {
+                canvas.setAttribute("data-setting-" + key, value);
+            }
         }
     }
 
