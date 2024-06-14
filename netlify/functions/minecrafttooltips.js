@@ -1,5 +1,5 @@
-import { createCanvas } from 'canvas';
-import { TextRenderer, drawTooltip } from '../../modules/minecraft-tip';
+const { createCanvas } = require('canvas');
+const { TextRenderer, drawTooltip } = require('../../modules/minecraft-tip');
 
 const generateTooltipImage = (req, res) => {
     const canvas = createCanvas(16, 16);
