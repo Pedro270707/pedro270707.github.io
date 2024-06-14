@@ -93,7 +93,7 @@ class Translate {
 			if (attribute.name === "data-translate-string") {
 				element.innerHTML = getTextFromJSON(attribute.value).get();
 			} else if (attribute.name.startsWith("data-translate-")) {
-				element[attribute.name.substring("data-translate-".length)] = getTextFromJSON(attribute.value).get();
+				element.setAttribute(attribute.name.substring("data-translate-".length), getTextFromJSON(attribute.value).get());
 			}
 		}
 	}
