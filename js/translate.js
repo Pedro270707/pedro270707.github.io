@@ -1,26 +1,3 @@
-const urlParams = new URLSearchParams(window.location.search);
-switch (urlParams.get('lang')) {
-	case 'en-us':
-	case 'en-uk':
-	case 'en':
-		localStorage.language = 'en';
-		break;
-	case 'br':
-	case 'pt-br':
-	case 'pt':
-		localStorage.language = 'pt';
-		break;
-	default:
-		if (urlParams.get('lang')) {
-			localStorage.language = urlParams.get('lang');
-		}
-		break;
-}
-
-if (localStorage.language === undefined) {
-	localStorage.language = Translate.DEFAULT_LANGUAGE;
-}
-
 class Translate {
 	static DEFAULT_LANGUAGE = 'pt';
 
@@ -101,6 +78,29 @@ class Translate {
 	getKeyWrapped(key, ...args) {
 		return `<span data-translate-string='${JSON.stringify(new TranslatableText(key, ...args))}'>${(this.translateString(key, ...args))}</span>`;
 	}
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+switch (urlParams.get('lang')) {
+	case 'en-us':
+	case 'en-uk':
+	case 'en':
+		localStorage.language = 'en';
+		break;
+	case 'br':
+	case 'pt-br':
+	case 'pt':
+		localStorage.language = 'pt';
+		break;
+	default:
+		if (urlParams.get('lang')) {
+			localStorage.language = urlParams.get('lang');
+		}
+		break;
+}
+
+if (localStorage.language === undefined) {
+	localStorage.language = Translate.DEFAULT_LANGUAGE;
 }
 
 var translate = new Translate();
