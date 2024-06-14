@@ -202,7 +202,7 @@ function setTooltipText(canvas, str) {
   canvas.dataset.text = str;
 }
 
-function drawTooltip(canvas, textRenderer) {
+function drawTooltip(canvas, textRenderer, keepRendering = true) {
   if (!textRenderer) {
     setDefaultCanvasSettings(canvas);
     textRenderer = new TextRenderer(canvas);
@@ -216,7 +216,7 @@ function drawTooltip(canvas, textRenderer) {
   setDefaultCanvasSettings(canvas);
   textRenderer.drawText(str, styles[getSetting("style", canvas)].paddingLeft * getSetting("pixelScale", canvas), (styles[getSetting("style", canvas)].paddingTop + styles[getSetting("style", canvas)].fontSize) * getSetting("pixelScale", canvas), styles[getSetting("style", canvas)].shadow);
 
-  requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
+  if (keepRendering) requestAnimationFrame(() => drawTooltip(canvas, textRenderer));
 }
 
 function updateCanvasSize(canvas, textRenderer, text = canvas.dataset.text) {
