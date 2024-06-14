@@ -96,27 +96,3 @@ function getTextFromJSON(jsonObject) {
         }
     }
 }
-
-function setElementString(element, text) {
-    if (text instanceof LiteralText || text instanceof TranslatableText) {
-        text = JSON.stringify(text);
-    }
-    element.dataset.string = text;
-    element.innerHTML = getTextFromJSON(text).get();
-}
-
-function setElementPlaceholder(element, text) {
-    if (text instanceof LiteralText || text instanceof TranslatableText) {
-        text = JSON.stringify(text);
-    }
-    element.dataset.placeholder = text;
-    element.placeholder = getTextFromJSON(text).get();
-}
-
-function setElementAriaLabel(element, text) {
-    if (text instanceof LiteralText || text instanceof TranslatableText) {
-        text = JSON.stringify(text);
-    }
-    element.dataset.ariaLabel = text;
-    element.ariaLabel = getTextFromJSON(text).get();
-}

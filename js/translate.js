@@ -59,15 +59,16 @@ class Translate {
 			this.file = await fetch('/language/' + (this.language || localStorage.language) + '.json');
 			this.file = await this.file.clone().json();
 		}
-		let allElements = document.getElementsByTagName('*');
-		for (let currentElement of allElements) {
-			for (let attribute of currentElement.attributes) {
-				if (attribute.name === "data-translate-string") {
-					currentElement.innerHTML = getTextFromJSON(attribute.value).get();
-				} else if (attribute.name.startsWith("data-translate-")) {
-					currentElement[attribute.name.substring("data-translate-".length)] = getTextFromJSON(attribute.value).get();
-				}
+		let reloadElements = () => {
+			let allElements = document.getElementsByTagName('*');
+			for (let currentElement of allElements) {
+				this.#updateElement(currentElement);
 			}
+		};
+		if (document.readyState === 'loading') {
+			document.addEventListener("DOMContentLoaded", reloadElements);
+		} else {
+			reloadElements();
 		}
 		for (let listener of this.changeListeners) {
 			listener();
@@ -77,6 +78,24 @@ class Translate {
 	
 	getKeyWrapped(key, ...args) {
 		return `<span data-translate-string='${JSON.stringify(new TranslatableText(key, ...args))}'>${(this.translateString(key, ...args))}</span>`;
+	}
+
+	setAttribute(element, attribute, text) {
+		if (text instanceof LiteralText || text instanceof TranslatableText) {
+			text = JSON.stringify(text);
+		}
+		element.setAttribute("data-translate-" + attribute, text);
+		this.#updateElement(element);
+	}
+
+	#updateElement(element) {
+		for (let attribute of element.attributes) {
+			if (attribute.name === "data-translate-string") {
+				element.innerHTML = getTextFromJSON(attribute.value).get();
+			} else if (attribute.name.startsWith("data-translate-")) {
+				element[attribute.name.substring("data-translate-".length)] = getTextFromJSON(attribute.value).get();
+			}
+		}
 	}
 }
 

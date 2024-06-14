@@ -82,7 +82,7 @@ function startNewGame(pAmountOfCharacters = 5) {
     translate.whenLoaded(() => {
         console.log(translate.translateString("senha-gamestarted", randomSequence));
     })
-    setElementString(document.getElementById("valid-characters"), new TranslatableText("senha-validcharacters", validCharacters));
+    translate.setAttribute(document.getElementById("valid-characters"), "string", new TranslatableText("senha-validcharacters", validCharacters));
     amountOfCharactersInput.max = validCharacters.length;
     updateKeyboard();
     addNewCharacterSlotArray();
@@ -157,7 +157,7 @@ document.addEventListener("keyup", (event) => {
         let charactersInSlotArray = getCharacterSlotArrayAsString();
         if (!charactersInSlotArray.includes(' ') && !hasDuplicateLetters(charactersInSlotArray)) {
             numberOfAttempts++;
-            setElementString(victoryText, new TranslatableText("senha-victory", numberOfAttempts));
+            translate.setAttribute(victoryText, "string", new TranslatableText("senha-victory", numberOfAttempts));
             if (charactersInSlotArray !== randomSequence) {
                 addNewGuessesArray(getCorrectInWrongPlace(charactersInSlotArray), getCorrectInCorrectPlace(charactersInSlotArray));
                 addNewCharacterSlotArray();

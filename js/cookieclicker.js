@@ -36,8 +36,8 @@ function recountAll() {
 
 function recountClickerLevel() {
 	clickerCost = Math.ceil(Math.pow(clickerLevel / 1.5, 2));
-	setElementString(clickerLevelCounter, new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
-	setElementString(upgradeClickerButtonText, new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
+	translate.setAttribute(clickerLevelCounter, "string", new TranslatableText("cookieclicker-clickerlevel", clickerLevel));
+	translate.setAttribute(upgradeClickerButtonText, "string", new TranslatableText("cookieclicker-clickerlevelbutton", clickerCost));
 }
 
 function recountCookies() {
@@ -107,9 +107,9 @@ function upgradeClicker() {
 }
 
 function setCookieString(key, cookieAmount) {
-	setElementString(cookieCounter, new TranslatableText(key, cookieAmount));
+	translate.setAttribute(cookieCounter, "string", new TranslatableText(key, cookieAmount));
 }
 
 function setWorkerString(key, workerAmount) {
-	setElementString(workerCounter, new TranslatableText(key, workerAmount));
+	translate.setAttribute(workerCounter, "string", new TranslatableText(key, workerAmount));
 }

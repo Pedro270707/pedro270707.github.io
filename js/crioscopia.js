@@ -203,8 +203,7 @@ controls.classList.add("controls");
 // Temperature
 let temperatureControlContainer = document.createElement("div");
 let temperatureControlName = document.createElement("div");
-temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
-temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
+translate.setAttribute(temperatureControlName, "string", new TranslatableText("crioscopia.temperatureControl", (temperatureKelvin - 273.15).toFixed(2)));
 let temperatureControl = document.createElement("input");
 temperatureControl.type = "range";
 temperatureControl.min = -273.15;
@@ -213,32 +212,27 @@ temperatureControl.value = 0;
 temperatureControl.step = 0.05;
 temperatureControl.addEventListener("input", (event) => {
     temperatureKelvin = Number.parseFloat(event.target.value) + 273.15;
-    temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
-    temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
+    translate.setAttribute(temperatureControlName, "string", new TranslatableText("crioscopia.temperatureControl", (temperatureKelvin - 273.15).toFixed(2)));
 });
 let defaultTemperatureBtn = document.createElement("button");
 defaultTemperatureBtn.addEventListener("click", (event) => {
     temperatureControl.value = 0;
     temperatureKelvin = temperatureControl.value + 273.15;
-    temperatureControlName.innerHTML = translate.translateString('crioscopia.temperatureControl', (temperatureKelvin - 273.15).toFixed(2));
-    temperatureControlName.dataset.string = `{"translate":"crioscopia.temperatureControl","with":[{"text":"${(temperatureKelvin - 273.15).toFixed(2)}"}]}`;
+    translate.setAttribute(temperatureControlName, "string", new TranslatableText("crioscopia.temperatureControl", (temperatureKelvin - 273.15).toFixed(2)));
 });
-defaultTemperatureBtn.innerHTML = translate.translateString('crioscopia.default');
-defaultTemperatureBtn.dataset.string = '{"translate":"crioscopia.default"}';
+translate.setAttribute(defaultTemperatureBtn, "string", new TranslatableText("crioscopia.default"));
 
 // Solvent
 let solventControlContainer = document.createElement("div");
 let solventControlName = document.createElement("label");
 solventControlName.setAttribute("for", "solvent-control");
-solventControlName.innerHTML = translate.translateString('crioscopia.solventControl');
-solventControlName.dataset.string = '{"translate":"crioscopia.solventControl"}';
+translate.setAttribute(solventControlName, "string", new TranslatableText("crioscopia.solventControl"));
 let solventControl = document.createElement("select");
 solventControl.id = "solvent-control";
 for (let i in solvents) {
     let solventOption = document.createElement("option");
     solventOption.value = i.toString();
-    solventOption.innerHTML = translate.translateString('crioscopia.solvent.' + solvents[i].name);
-    solventOption.dataset.string = `{"translate":"crioscopia.solvent.${solvents[i].name}"}`;
+    translate.setAttribute(solventOption, "string", new TranslatableText("crioscopia.solvent." + solvents[i].name));
     solventControl.appendChild(solventOption);
 }
 solventControl.addEventListener("input", (event) => {
