@@ -4,7 +4,8 @@
   "description": "My website!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "LD_PRELOAD=/var/task/node_modules/canvas/build/Release/libz.so.1 node canvas",
+    "test": "LD_PRELOAD=/var/task/node_modules/canvas/build/Release/libz.so.1 mocha"
   },
   "keywords": [],
   "author": "",
