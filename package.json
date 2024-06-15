@@ -4,7 +4,7 @@
   "description": "My website!",
   "main": "index.js",
   "scripts": {
-    "start": "LD_PRELOAD=/var/task/node_modules/canvas/build/Release/libz.so.1 node canvas",
+    "start": "LD_PRELOAD=/var/task/node_modules/canvas/build/Release/libz.so.1",
     "test": "LD_PRELOAD=/var/task/node_modules/canvas/build/Release/libz.so.1 mocha"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "canvas": "^2.11.2",
+    "mocha": "^10.4.0",
     "zlib": "^1.0.5"
   }
 }
