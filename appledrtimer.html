@@ -1,0 +1,44 @@
+<style>
+    body {
+        color: #ffffff;
+        font-size: 48px;
+        font-family: monospace;
+    }
+    
+    #overlay {
+        text-align: center;
+    }
+</style>
+<div id="overlay">
+    <div>STREAMED FOR:</div>
+    <div class="time">
+        <div id="hours">Calculating...</div>
+        <div id="minutes">Calculating...</div>
+        <div id="seconds">Calculating...</div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hours = document.getElementById('hours');
+        const minutes = document.getElementById('minutes');
+        const seconds = document.getElementById('seconds');
+    
+        const targetDate = new Date(Date.UTC(2024, 5, 28, 13, 30, 0));
+    
+        function updateTimeDifference() {
+            const now = new Date();
+            const difference = now - targetDate;
+    
+            const hours = Math.floor(difference / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+            hours.textContent = hours + 'h';
+            minutes.textContent = minutes + 'm';
+            seconds.textContent = seconds + 's';
+        }
+    
+        setInterval(updateTimeDifference, 200);
+        updateTimeDifference();
+    });
+</script>

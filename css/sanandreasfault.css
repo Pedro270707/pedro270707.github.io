@@ -1,0 +1,272 @@
+:root {
+    --background-color: #d7c876;
+    --secondary-color: #ffffff;
+    --tertiary-color: #dddddd;
+}
+
+@font-face {
+    font-family: 'Morning Breeze';
+    src: url("/assets/Morning-Breeze-Font/MorningBreeze.otf") format("opentype");
+
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Morning Breeze';
+    src: url("/assets/Morning-Breeze-Font/MorningBreeze-Bold.otf") format("opentype");
+
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Morning Breeze';
+    src: url("/assets/Morning-Breeze-Font/MorningBreeze-Italic.otf") format("opentype");
+
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Morning Breeze';
+    src: url("/assets/Morning-Breeze-Font/MorningBreeze-Light.otf") format("opentype");
+
+    font-weight: lighter;
+}
+
+.game-container {
+    display: block;
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    width: 100dvw;
+    background-color: var(--background-color);
+    background-image: linear-gradient(180deg, transparent, var(--background-color) 70%), url('https://upload.wikimedia.org/wikipedia/commons/0/04/Kluft-photo-Carrizo-Plain-Nov-2007-Img_0327.jpg');
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.game-container * {
+    font-family: 'Morning Breeze';
+    color: var(--secondary-color);
+}
+
+.game-container h1,
+.game-container h2,
+.game-container span,
+.game-container .sanandreas-button {
+    animation: squiggly 2.5s linear infinite;
+
+}
+
+.game-container h1 {
+    font-size: 4rem;
+}
+
+.game-container h2 {
+    font-size: 3rem;
+    margin: 1rem 0;
+}
+
+.title {
+    text-transform: uppercase;
+}
+
+.sanandreas-button {
+    border: 0.5rem solid var(--secondary-color);
+    border-radius: 1rem;
+    font-size: 3rem;
+    padding: 1rem;
+    background: none;
+    font-weight: bold;
+    transition: 0.125s ease-in-out all;
+    box-shadow: 0 0 rgba(0, 0, 0, 0.25);
+}
+
+.sanandreas-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    cursor: pointer;
+}
+
+.sanandreas-button:active {
+    filter: brightness(0.5);
+    box-shadow: 0 -1rem rgba(0, 0, 0, 0.25);
+    transform: translateY(1rem);
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+}
+
+.title-screen-container, .game-screen-container, .end-screen-container {
+    transition: 1s ease-in-out top;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.game-container > * {
+    top: 150vh;
+    top: 150dvh;
+}
+
+.game-container > .active ~ * {
+    top: -150vh;
+    top: -150dvh;
+}
+
+.game-container > .active {
+    top: 50vh;
+    top: 50dvh;
+}
+
+.question-card {
+    --secondary-color: #000000;
+    --background-color: #ffffdd;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: linear-gradient(90deg, transparent 1rem, #ff0000 1rem, #ff0000 1.125rem, transparent 1.125rem), linear-gradient(180deg, transparent 47%, rgba(0, 0, 0, 0.125) 47%, rgba(0, 0, 0, 0.125) calc(47% + 0.125rem), transparent calc(47% + 0.125rem)), linear-gradient(0deg, var(--background-color), var(--background-color));
+    background-size: 100% 2rem;
+    padding: 2rem;
+    width: 35rem;
+    max-width: 100vw;
+    max-width: 100dvw;
+    height: 50rem;
+    max-height: 100vh;
+    max-height: 100dvh;
+    border-radius: 1rem;
+    box-shadow: 1rem 0 1rem rgba(0, 0, 0, 0.25);
+    position: relative;
+    transition: all 0.25s ease-in-out;
+}
+
+.question-card.hard {
+    --background-color: #ffd0d0;
+}
+
+.question-card.hard::before {
+    content: '🔥';
+    position: absolute;
+    font-size: 10rem;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%) rotateZ(-22.5deg);
+}
+
+.question-card.active {
+    z-index: 5;
+}
+
+.question-card:not(.active) {
+    transform: scale(0.8);
+}
+
+.question-card:not(.active)::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background-color: transparent;
+}
+
+.question-card-answer {
+    text-align: left;
+}
+
+.game-screen-container {
+    display: grid;
+    grid-template-columns: repeat(5, 10vw);
+    justify-items: center;
+}
+
+.question-card__1 {
+    z-index: 4;
+}
+
+.question-card__2 {
+    z-index: 3;
+}
+
+.question-card__3 {
+    z-index: 2;
+}
+
+.question-card__4 {
+    z-index: 1;
+}
+
+@keyframes squiggly {
+    0% {
+        filter: url('#squiggly-0');
+    }
+
+    6.25% {
+        filter: url('#squiggly-1');
+    }
+
+    12.5% {
+        filter: url('#squiggly-2');
+    }
+
+    18.75% {
+        filter: url('#squiggly-3');
+    }
+
+    25% {
+        filter: url('#squiggly-4');
+    }
+
+    31.25% {
+        filter: url('#squiggly-5');
+    }
+
+    37.5% {
+        filter: url('#squiggly-6');
+    }
+
+    43.75% {
+        filter: url('#squiggly-7');
+    }
+
+    50% {
+        filter: url('#squiggly-8');
+    }
+
+    56.25% {
+        filter: url('#squiggly-9');
+    }
+
+    62.5% {
+        filter: url('#squiggly-10');
+    }
+
+    68.75% {
+        filter: url('#squiggly-11');
+    }
+
+    75% {
+        filter: url('#squiggly-12');
+    }
+
+    81.25% {
+        filter: url('#squiggly-13');
+    }
+
+    87.5% {
+        filter: url('#squiggly-14');
+    }
+
+    93.75% {
+        filter: url('#squiggly-15');
+    }
+
+    100% {
+        filter: url('#squiggly-16');
+    }
+}
