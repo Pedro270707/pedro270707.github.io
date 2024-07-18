@@ -119,9 +119,13 @@ document.addEventListener("DOMContentLoaded", () => {
         questionResults = [];
         const possibleQuestions = [];
         possibleQuestions.push(...questions);
+        const possibleHardQuestions = [];
+        possibleHardQuestions.push(...hardQuestions);
         gameScreenContainer.innerHTML = '';
         for (let i = 0; i < 5; i++) {
-            createQuestionCard(i === 4 ? popRandomItem(hardQuestions, questions) : popRandomItem(possibleQuestions, questions), i === 4);
+            let question = i === 4 ? popRandomItem(possibleHardQuestions, hardQuestions) : popRandomItem(possibleQuestions, questions);
+            if (i === 4) console.log(question);
+            createQuestionCard(question, i === 4);
         }
         timeLeftUntilStart = gameScreenTime;
         gameState = GameState.GAME_SCREEN;
