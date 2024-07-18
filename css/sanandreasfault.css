@@ -65,7 +65,7 @@
 }
 
 .game-container h2 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin: 1rem 0;
 }
 
@@ -125,7 +125,7 @@
     --background-color: #ffffdd;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1rem;
     background: linear-gradient(90deg, transparent 1rem, #ff0000 1rem, #ff0000 1.125rem, transparent 1.125rem), linear-gradient(180deg, transparent 47%, rgba(0, 0, 0, 0.125) 47%, rgba(0, 0, 0, 0.125) calc(47% + 0.125rem), transparent calc(47% + 0.125rem)), linear-gradient(0deg, var(--background-color), var(--background-color));
     background-size: 100% 2rem;
@@ -156,7 +156,7 @@
 }
 
 .question-card.active {
-    z-index: 5;
+    z-index: 9999 !important;
 }
 
 .question-card:not(.active) {
@@ -181,24 +181,7 @@
 
 .game-screen-container {
     display: grid;
-    grid-template-columns: repeat(5, 10vw);
     justify-items: center;
-}
-
-.question-card__1 {
-    z-index: 4;
-}
-
-.question-card__2 {
-    z-index: 3;
-}
-
-.question-card__3 {
-    z-index: 2;
-}
-
-.question-card__4 {
-    z-index: 1;
 }
 
 @keyframes squiggly {

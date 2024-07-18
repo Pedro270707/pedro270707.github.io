@@ -49,6 +49,7 @@ let gameState = GameState.START_SCREEN;
 let timeLeftUntilStart = 0;
 const endScreenTime = 200;
 const gameScreenTime = 600;
+const numberOfQuestions = 5;
 const questions = [
     new QuizQuestion('sanandreasfault.questions.0', new QuizOptions(
         new QuizOption('sanandreasfault.questions.0.answer.0', false),
@@ -56,6 +57,13 @@ const questions = [
         new QuizOption('sanandreasfault.questions.0.answer.2', false),
         new QuizOption('sanandreasfault.questions.0.answer.3', true),
         new QuizOption('sanandreasfault.questions.0.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.1', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.1.answer.0', false),
+        new QuizOption('sanandreasfault.questions.1.answer.1', true),
+        new QuizOption('sanandreasfault.questions.1.answer.2', false),
+        new QuizOption('sanandreasfault.questions.1.answer.3', false),
+        new QuizOption('sanandreasfault.questions.1.answer.4', false)
     ))
 ];
 const hardQuestions = [
@@ -77,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const startButton = document.getElementById('start-button');
 
     setInterval(() => {
-        if (gameState === GameState.GAME_SCREEN && questionResults.length === 5) {
+        if (gameState === GameState.GAME_SCREEN && questionResults.length === numberOfQuestions) {
             endGame();
         }
         if (timeLeftUntilStart === 0) {
@@ -110,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let i = 0; i < questionResults.length; i++) {
             if (questionResults[i]) correctAmount++;
         }
-        translate.setAttribute(title, 'string', correctAmount === 5 ? new TranslatableText('sanandreasfault.end.perfect') : new TranslatableText('sanandreasfault.end', new LiteralText(correctAmount)));
+        translate.setAttribute(title, 'string', correctAmount === numberOfQuestions ? new TranslatableText('sanandreasfault.end.perfect') : new TranslatableText('sanandreasfault.end', new LiteralText(correctAmount), new LiteralText(numberOfQuestions)));
         endScreenContainer.appendChild(title);
         gameState = GameState.END_SCREEN;
     }
@@ -122,11 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const possibleHardQuestions = [];
         possibleHardQuestions.push(...hardQuestions);
         gameScreenContainer.innerHTML = '';
-        for (let i = 0; i < 5; i++) {
-            let question = i === 4 ? popRandomItem(possibleHardQuestions, hardQuestions) : popRandomItem(possibleQuestions, questions);
-            if (i === 4) console.log(question);
-            createQuestionCard(question, i === 4);
+        for (let i = 0; i < numberOfQuestions; i++) {
+            const hard = i === numberOfQuestions - 1;
+            let question = hard ? popRandomItem(possibleHardQuestions, hardQuestions) : popRandomItem(possibleQuestions, questions);
+            createQuestionCard(question, hard);
         }
+        gameScreenContainer.style.gridTemplateColumns = `repeat(${numberOfQuestions}, ${50 / numberOfQuestions}vw)`
         timeLeftUntilStart = gameScreenTime;
         gameState = GameState.GAME_SCREEN;
     }
@@ -146,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let index = gameScreenContainer.getElementsByClassName('question-card').length;
         const card = document.createElement('div');
         card.classList.add('question-card', 'question-card__' + (index + 1));
+        card.style.zIndex = numberOfQuestions - (index + 1);
         if (hard) {
             card.classList.add('hard');
         }
@@ -160,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
             translate.setAttribute(button, 'string', new TranslatableText(question.options.get(i).option));
             button.addEventListener('click', (event) => {
                 questionResults.push(question.options.get(i).isAnswer);
+                timeLeftUntilStart = gameScreenTime;
             });
             card.appendChild(button);
         }
