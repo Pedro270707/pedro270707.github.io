@@ -184,6 +184,40 @@
     justify-items: center;
 }
 
+.game-question-results {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    background: linear-gradient(180deg, transparent calc(50% - 0.125rem), var(--secondary-color) calc(50% - 0.125rem), var(--secondary-color) calc(50% + 0.125rem), transparent calc(50% + 0.125rem));
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    transition: all 0.25s ease-in-out;
+    opacity: 0;
+}
+
+.game-question-results.active {
+    opacity: 1;
+}
+
+.question-result {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+    border: 0.25rem solid var(--secondary-color);
+    background-color: var(--background-color);
+}
+
+.question-result.correct {
+    background-color: #28c928;
+}
+
+.question-result.incorrect {
+    background-color: #e95151;
+}
+
 @keyframes squiggly {
     0% {
         filter: url('#squiggly-0');

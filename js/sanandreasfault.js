@@ -4,12 +4,6 @@ const GameState = Object.freeze({
     END_SCREEN: 2
 });
 
-const QuestionResults = Object.freeze({
-    NO_ANSWER: 'no_answer',
-    INCORRECT: 'incorrect',
-    CORRECT: 'correct'
-});
-
 class QuizOption {
     constructor(option, isAnswer) {
         this.option = option;
@@ -83,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameScreenContainer = document.getElementById('game-screen-container');
     const endScreenContainer = document.getElementById('end-screen-container');
     const startButton = document.getElementById('start-button');
+    const gameQuestionResults = document.getElementById('game-question-results');
 
     setInterval(() => {
         if (gameState === GameState.GAME_SCREEN && questionResults.length === numberOfQuestions) {
@@ -109,6 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 gameScreenContainer.children[i].classList.remove('active');
             }
         }
+        if (gameState === GameState.START_SCREEN) {
+            gameQuestionResults.classList.remove('active');
+        } else {
+            gameQuestionResults.classList.add('active');
+        }
+        updateQuestionResultElement();
     }, 50);
 
     function endGame() {
@@ -175,6 +176,18 @@ document.addEventListener("DOMContentLoaded", () => {
             card.appendChild(button);
         }
         gameScreenContainer.appendChild(card);
+    }
+
+    function updateQuestionResultElement() {
+        gameQuestionResults.innerHTML = '';
+        for (let i = 0; i < numberOfQuestions; i++) {
+            const result = document.createElement('span');
+            result.classList.add('question-result');
+            if (questionResults.length > i) {
+                result.classList.add(questionResults[i] ? 'correct' : 'incorrect');
+            }
+            gameQuestionResults.appendChild(result);
+        }
     }
 
     if (startButton !== null) {
