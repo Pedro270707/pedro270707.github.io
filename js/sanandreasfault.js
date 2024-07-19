@@ -58,6 +58,13 @@ const questions = [
         new QuizOption('sanandreasfault.questions.1.answer.2', false),
         new QuizOption('sanandreasfault.questions.1.answer.3', false),
         new QuizOption('sanandreasfault.questions.1.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.2', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.2.answer.0', false),
+        new QuizOption('sanandreasfault.questions.2.answer.1', true),
+        new QuizOption('sanandreasfault.questions.2.answer.2', false),
+        new QuizOption('sanandreasfault.questions.2.answer.3', false),
+        new QuizOption('sanandreasfault.questions.2.answer.4', false)
     ))
 ];
 const hardQuestions = [
@@ -67,6 +74,13 @@ const hardQuestions = [
         new QuizOption('sanandreasfault.questions.hard.0.answer.2', false),
         new QuizOption('sanandreasfault.questions.hard.0.answer.3', false),
         new QuizOption('sanandreasfault.questions.hard.0.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.hard.1', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.hard.1.answer.0', false),
+        new QuizOption('sanandreasfault.questions.hard.1.answer.1', false),
+        new QuizOption('sanandreasfault.questions.hard.1.answer.2', false),
+        new QuizOption('sanandreasfault.questions.hard.1.answer.3', false),
+        new QuizOption('sanandreasfault.questions.hard.1.answer.4', true)
     ))
 ];
 let questionResults = [];
