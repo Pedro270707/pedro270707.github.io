@@ -93,6 +93,13 @@ const questions = [
         new QuizOption('sanandreasfault.questions.6.answer.2', false),
         new QuizOption('sanandreasfault.questions.6.answer.3', false),
         new QuizOption('sanandreasfault.questions.6.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.7', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.7.answer.0', false),
+        new QuizOption('sanandreasfault.questions.7.answer.1', false),
+        new QuizOption('sanandreasfault.questions.7.answer.2', false),
+        new QuizOption('sanandreasfault.questions.7.answer.3', true),
+        new QuizOption('sanandreasfault.questions.7.answer.4', false)
     ))
 ];
 const hardQuestions = [
