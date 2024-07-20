@@ -127,10 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const endScreenContainer = document.getElementById('end-screen-container');
     const startButton = document.getElementById('start-button');
     const gameQuestionResults = document.getElementById('game-question-results');
+    const endScreenTitle = document.getElementById('end-screen-title');
+    const backToTitleButton = document.getElementById('back-to-title-button');
 
     setInterval(() => {
         if (gameState === GameState.GAME_SCREEN && questionResults.length === numberOfQuestions) {
             endGame();
+            return;
         }
         if (timeLeftUntilStart === 0) {
             gameState = GameState.START_SCREEN;
@@ -139,37 +142,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (gameContainer === null) return;
         for (let i = 0; i < gameContainer.children.length; i++) {
-            if (i === gameState) {
-                gameContainer.children[i].classList.add('active');
-            } else {
-                gameContainer.children[i].classList.remove('active');
-            }
+            gameContainer.children[i].classList.toggle('active', i === gameState);
         }
         if (gameScreenContainer === null) return;
         for (let i = 0; i < gameScreenContainer.children.length; i++) {
-            if (i === questionResults.length) {
-                gameScreenContainer.children[i].classList.add('active');
-            } else {
-                gameScreenContainer.children[i].classList.remove('active');
+            gameScreenContainer.children[i].classList.toggle('active', i === questionResults.length);
+            if (i < questionResults.length) {
+                gameScreenContainer.children[i].classList.add(questionResults[i] ? 'correct' : 'incorrect');
             }
         }
-        if (gameState === GameState.START_SCREEN) {
-            gameQuestionResults.classList.remove('active');
-        } else {
-            gameQuestionResults.classList.add('active');
-        }
+        gameQuestionResults.classList.toggle('active', gameState !== GameState.START_SCREEN);
         updateQuestionResultElement();
     }, 50);
 
     function endGame() {
-        endScreenContainer.innerHTML = '';
-        const title = document.createElement('h1');
         let correctAmount = 0;
         for (let i = 0; i < questionResults.length; i++) {
             if (questionResults[i]) correctAmount++;
         }
-        translate.setAttribute(title, 'string', correctAmount === numberOfQuestions ? new TranslatableText('sanandreasfault.end.perfect') : new TranslatableText('sanandreasfault.end', new LiteralText(correctAmount), new LiteralText(numberOfQuestions)));
-        endScreenContainer.appendChild(title);
+        translate.setAttribute(endScreenTitle, 'string', correctAmount === numberOfQuestions ? new TranslatableText('sanandreasfault.end.perfect') : new TranslatableText('sanandreasfault.end', new LiteralText(correctAmount), new LiteralText(numberOfQuestions)));
         gameState = GameState.END_SCREEN;
     }
 
@@ -242,6 +233,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (startButton !== null) {
         startButton.addEventListener('click', (event) => {
             startGame();
+        });
+    }
+    if (backToTitleButton !== null) {
+        backToTitleButton.addEventListener('click', (event) => {
+            gameState = GameState.START_SCREEN;
         });
     }
 });

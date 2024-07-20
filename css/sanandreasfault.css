@@ -127,11 +127,12 @@
 .question-card {
     --secondary-color: #000000;
     --background-color: #ffffdd;
+    --paper-margin: #ff0000;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 1rem;
-    background: linear-gradient(90deg, transparent 1rem, #ff0000 1rem, #ff0000 1.125rem, transparent 1.125rem), linear-gradient(180deg, transparent 47%, rgba(0, 0, 0, 0.125) 47%, rgba(0, 0, 0, 0.125) calc(47% + 0.125rem), transparent calc(47% + 0.125rem)), linear-gradient(0deg, var(--background-color), var(--background-color));
+    background: linear-gradient(90deg, transparent 1rem, var(--paper-margin) 1rem, var(--paper-margin) 1.125rem, transparent 1.125rem), linear-gradient(180deg, transparent 47%, rgba(0, 0, 0, 0.125) 47%, rgba(0, 0, 0, 0.125) calc(47% + 0.125rem), transparent calc(47% + 0.125rem)), linear-gradient(0deg, var(--background-color), var(--background-color));
     background-size: 100% 2rem;
     padding: 2rem;
     min-width: 35rem;
@@ -144,6 +145,10 @@
     box-shadow: 1rem 0 1rem rgba(0, 0, 0, 0.25);
     position: relative;
     transition: all 0.25s ease-in-out;
+}
+
+.question-card.correct {
+    --paper-margin: #28c928;
 }
 
 .question-card.hard {

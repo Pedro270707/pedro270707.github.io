@@ -133,5 +133,6 @@
   "sanandreasfault.questions.hard.1.answer.4": "380",
   "sanandreasfault.end": "You got %s/%s questions correct",
   "sanandreasfault.end.perfect": "You got every question correct!",
+  "sanandreasfault.backtotitle": "Restart",
   "footer-text": "[created by Pedro270707]"
 }
