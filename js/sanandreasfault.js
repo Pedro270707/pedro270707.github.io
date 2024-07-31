@@ -100,6 +100,48 @@ const questions = [
         new QuizOption('sanandreasfault.questions.7.answer.2', false),
         new QuizOption('sanandreasfault.questions.7.answer.3', true),
         new QuizOption('sanandreasfault.questions.7.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.8', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.8.answer.0', false),
+        new QuizOption('sanandreasfault.questions.8.answer.1', false),
+        new QuizOption('sanandreasfault.questions.8.answer.2', true),
+        new QuizOption('sanandreasfault.questions.8.answer.3', false),
+        new QuizOption('sanandreasfault.questions.8.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.9', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.9.answer.0', false),
+        new QuizOption('sanandreasfault.questions.9.answer.1', false),
+        new QuizOption('sanandreasfault.questions.9.answer.2', false),
+        new QuizOption('sanandreasfault.questions.9.answer.3', false),
+        new QuizOption('sanandreasfault.questions.9.answer.4', true)
+    )),
+    new QuizQuestion('sanandreasfault.questions.10', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.10.answer.0', false),
+        new QuizOption('sanandreasfault.questions.10.answer.1', false),
+        new QuizOption('sanandreasfault.questions.10.answer.2', false),
+        new QuizOption('sanandreasfault.questions.10.answer.3', false),
+        new QuizOption('sanandreasfault.questions.10.answer.4', true)
+    )),
+    new QuizQuestion('sanandreasfault.questions.11', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.11.answer.0', true),
+        new QuizOption('sanandreasfault.questions.11.answer.1', false),
+        new QuizOption('sanandreasfault.questions.11.answer.2', false),
+        new QuizOption('sanandreasfault.questions.11.answer.3', false),
+        new QuizOption('sanandreasfault.questions.11.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.12', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.12.answer.0', true),
+        new QuizOption('sanandreasfault.questions.12.answer.1', false),
+        new QuizOption('sanandreasfault.questions.12.answer.2', false),
+        new QuizOption('sanandreasfault.questions.12.answer.3', false),
+        new QuizOption('sanandreasfault.questions.12.answer.4', false)
+    )),
+    new QuizQuestion('sanandreasfault.questions.13', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.13.answer.0', false),
+        new QuizOption('sanandreasfault.questions.13.answer.1', false),
+        new QuizOption('sanandreasfault.questions.13.answer.2', true),
+        new QuizOption('sanandreasfault.questions.13.answer.3', false),
+        new QuizOption('sanandreasfault.questions.13.answer.4', false)
     ))
 ];
 const hardQuestions = [
@@ -116,6 +158,13 @@ const hardQuestions = [
         new QuizOption('sanandreasfault.questions.hard.1.answer.2', false),
         new QuizOption('sanandreasfault.questions.hard.1.answer.3', false),
         new QuizOption('sanandreasfault.questions.hard.1.answer.4', true)
+    )),
+    new QuizQuestion('sanandreasfault.questions.hard.2', new QuizOptions(
+        new QuizOption('sanandreasfault.questions.hard.2.answer.0', false),
+        new QuizOption('sanandreasfault.questions.hard.2.answer.1', false),
+        new QuizOption('sanandreasfault.questions.hard.2.answer.2', true),
+        new QuizOption('sanandreasfault.questions.hard.2.answer.3', false),
+        new QuizOption('sanandreasfault.questions.hard.2.answer.4', false)
     ))
 ];
 let questionResults = [];
