@@ -189,7 +189,7 @@ let widgets = [
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.font = "1em sans-serif";
-    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + 310, canvas.height / 2 - 385);
+    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + containerWidth / 2 + 10, canvas.height / 2 - containerHeight / 2);
 
     ctx.textAlign = "center";
     if (isTooSalty()) {
