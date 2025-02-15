@@ -14,6 +14,8 @@ function resizeCanvas() {
     containerHeight = Math.min(600, container.clientHeight - 200);
 }
 
+let constantDensity = true;
+
 // Cryoscopic constant: K · kg / mol
 // Ebulioscopic constant: K · kg / mol
 // Freezing point: K
@@ -25,28 +27,23 @@ let currentSolvent = 0;
 let temperatureKelvin = 273.15;
 
 let solvents = [
-    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, van_t_hoff_factor: 1, freezing_point: 273.15, boiling_point: 100.15, density: () => 1, solubility: 6.1, color: 0x5883d8},
-    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, van_t_hoff_factor: 1, freezing_point: 158.65, boiling_point: 351.55, density: () => 0.789, solubility: 5, color: 0xff5733},
-    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, van_t_hoff_factor: 1, freezing_point: 278.68, boiling_point: 353.2, density: () => 0.87, solubility: 7.3, color: 0x050303},
-    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, van_t_hoff_factor: 1, freezing_point: 209.7, boiling_point: 334.30, density: () => {
-        const temperature1 = 253.15, density1 = 1.564;
-        const temperature2 = 298.15, density2 = 1.489;
-        const temperature3 = 333.15, density3 = 1.394;
-
-        if (temperatureKelvin <= temperature1) {
-            const slope = (density2 - density1) / (temperature2 - temperature1);
-            return density1 + slope * (temperatureKelvin - temperature1);
-        } else if (temperatureKelvin < temperature2) {
-            const slope = (density2 - density1) / (temperature2 - temperature1);
-            return density1 + slope * (temperatureKelvin - temperature1);
-        } else if (temperatureKelvin <= temperature3) {
-            const slope = (density3 - density2) / (temperature3 - temperature2);
-            return density2 + slope * (temperatureKelvin - temperature2);
-        } else {
-            const slope = (density3 - density2) / (temperature3 - temperature2);
-            return density3 + slope * (temperatureKelvin - temperature3);
-        }
-    }, solubility: 4.6, color: 0x3498db},
+    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, van_t_hoff_factor: 1, freezing_point: 273.15, boiling_point: 373.13, density: [
+        { temperature: 273.15, density: 0.96188791 },
+        { temperature: 277.133035, density: 0.99997495 },
+        { temperature: 298.15, density: 0.99704702 },
+        { temperature: 368.15, density: 0.96188791 },
+    ], solubility: 5, color: 0x5883d8},
+    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, van_t_hoff_factor: 1, freezing_point: 158.65, boiling_point: 351.55, density: [
+        { temperature: 293.15, density: 0.78945}
+    ], solubility: 5, color: 0xff5733},
+    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, van_t_hoff_factor: 1, freezing_point: 278.68, boiling_point: 353.2, density: [
+        { temperature: 273.15, density: 0.8765}
+    ], solubility: 5, color: 0x050303},
+    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, van_t_hoff_factor: 1, freezing_point: 209.7, boiling_point: 334.30, density: [
+        { temperature: 253.15, density: 1.564 },
+        { temperature: 298.15, density: 1.489 },
+        { temperature: 333.15, density: 1.394 },
+    ], solubility: 5, color: 0x3498db},
 ];
 
 let solventVolumeLiters = 0;
@@ -201,6 +198,18 @@ let widgets = [
 
     ctx.fillStyle = "#" + addColors(solvents[currentSolvent].color, isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
     ctx.fillRect(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35, containerWidth, solventVolumeLiters * containerHeight / 35);
+    if (temperatureKelvin > getBoilingTemperature() && solventVolumeLiters > 0) {
+        addSolvent(-0.0625);
+        if (molesOfSalt > getMaxSaltAmount()) {
+            molesOfSalt = getMaxSaltAmount();
+        }
+        const gradient = ctx.createLinearGradient(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35 - 100, canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35);
+        gradient.addColorStop(1, "#" + solvents[currentSolvent].color.toString(16).padStart(6, "0"));
+        gradient.addColorStop(0, "#" + solvents[currentSolvent].color.toString(16).padStart(6, "0") + "00");
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35 - 100, containerWidth, 100)
+    }
 
     // Container outline
     ctx.strokeStyle = "#ffffff";
@@ -213,6 +222,7 @@ let widgets = [
     ctx.textBaseline = "top";
     ctx.font = "1em sans-serif";
     ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + containerWidth / 2 + 10, canvas.height / 2 - containerHeight / 2);
+    ctx.fillText(`ΔTf = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + containerWidth / 2 + 10, canvas.height / 2 - containerHeight / 2 + 30);
 
     ctx.textAlign = "center";
     if (isTooSalty()) {
@@ -317,7 +327,34 @@ function addSalt(amount) {
 }
 
 function getSolventMass() {
-    return solvents[currentSolvent].density() * solventVolumeLiters;
+    let densityData = solvents[currentSolvent].density;
+
+    densityData.sort((a, b) => a.temperature - b.temperature);
+    let density = getDensity(densityData);
+
+    return density * solventVolumeLiters;
+}
+
+function getDensity(data) {
+    if (data.length === 0) {
+        return 0;
+    } else if (data.length === 1) {
+        return data[0];
+    } else if (constantDensity) {
+        return (data[0].density + data[data.length - 1].density) / 2
+    } else if (temperatureKelvin <= data[0].temperature) {
+        return data[0].density;
+    } else if (temperatureKelvin >= data[data.length - 1].temperature) {
+        return data[data.length - 1].density;
+    } else {
+        for (let i = 0; i < data.length - 1; i++) {
+            if (temperatureKelvin >= data[i].temperature && temperatureKelvin <= data[i + 1].temperature) {
+                const diff = temperatureKelvin - data[i].temperature;
+                const slope = (data[i + 1].density - data[i].density) / (data[i + 1].temperature - data[i].temperature);
+                return data[i].density + slope * diff;
+            }
+        }
+    }
 }
 
 function getMolality() {
@@ -326,6 +363,10 @@ function getMolality() {
 
 function getFreezingTemperature() {
     return solvents[currentSolvent].freezing_point - solvents[currentSolvent].cryoscopic_constant * getMolality();
+}
+
+function getBoilingTemperature() {
+    return solvents[currentSolvent].boiling_point + solvents[currentSolvent].ebulioscopic_constant * getMolality();
 }
 
 function getMaxSaltAmount() {
@@ -345,7 +386,7 @@ translate.setAttribute(temperatureControlName, "string", new TranslatableText("c
 let temperatureControl = document.createElement("input");
 temperatureControl.type = "range";
 temperatureControl.min = -273.15;
-temperatureControl.max = 20;
+temperatureControl.max = 300;
 temperatureControl.value = 0;
 temperatureControl.step = 0.05;
 temperatureControl.addEventListener("input", (event) => {
@@ -377,13 +418,29 @@ solventControl.addEventListener("input", (event) => {
     changeSolvent(Number.parseFloat(event.target.value));
 });
 
+// Constant density
+let constantDensityContainer = document.createElement("div");
+let constantDensityName = document.createElement("label");
+constantDensityName.setAttribute("for", "constant-density");
+translate.setAttribute(constantDensityName, "string", new TranslatableText("crioscopia.constantDensity"));
+let constantDensityCheckbox = document.createElement("input");
+constantDensityCheckbox.id = "constant-density";
+constantDensityCheckbox.type = "checkbox";
+constantDensityCheckbox.checked = true;
+constantDensityCheckbox.addEventListener("change", (event) => {
+    constantDensity = constantDensityCheckbox.checked;
+});
+
 temperatureControlContainer.appendChild(temperatureControlName);
 temperatureControlContainer.appendChild(temperatureControl);
 temperatureControlContainer.appendChild(defaultTemperatureBtn);
 solventControlContainer.appendChild(solventControlName);
 solventControlContainer.appendChild(solventControl);
+constantDensityContainer.appendChild(constantDensityName);
+constantDensityContainer.appendChild(constantDensityCheckbox);
 controls.appendChild(temperatureControlContainer);
 controls.appendChild(solventControlContainer);
+controls.appendChild(constantDensityContainer);
 document.body.appendChild(controls);
 
 canvas.addEventListener('click', (event) => {

@@ -67,6 +67,7 @@
   "crioscopia.solvent.ethanol": "Ethanol",
   "crioscopia.solvent.benzene": "Benzene",
   "crioscopia.solvent.trichloromethane": "Trichloromethane",
+  "crioscopia.constantDensity": "Constant Density",
   "sanandreasfault.title": "San Andreas Fault",
   "sanandreasfault.start": "Start!",
   "sanandreasfault.questions.0": "What is the approximate length of the San Andreas Fault?",

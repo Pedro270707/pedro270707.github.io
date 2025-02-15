@@ -67,6 +67,7 @@
   "crioscopia.solvent.ethanol": "Etanol",
   "crioscopia.solvent.benzene": "Benzeno",
   "crioscopia.solvent.trichloromethane": "Triclorometano",
+  "crioscopia.constantDensity": "Densidade constante",
   "sanandreasfault.title": "Falha de San Andreas",
   "sanandreasfault.start": "Iniciar!",
   "sanandreasfault.questions.0": "Qual é o comprimento aproximado da falha de San Andreas?",
