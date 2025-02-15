@@ -14,17 +14,40 @@ function resizeCanvas() {
     containerHeight = Math.min(600, container.clientHeight - 200);
 }
 
-let solvents = [
-    {name: "water", cryoscopic_constant: 1.86, freezing_point: 273.15, boiling_point: 100.15, density: 1, solubility: 6.1, color: 0x5883d8},
-    {name: "methanol", cryoscopic_constant: 1.98, freezing_point: 175.65, boiling_point: 337.85, density: 0.791, solubility: 5.5, color: 0xfed330},
-    {name: "ethanol", cryoscopic_constant: 1.99, freezing_point: 158.65, boiling_point: 351.55, density: 0.789, solubility: 5, color: 0xff5733},
-    {name: "propanone", cryoscopic_constant: 1.99, freezing_point: 178.35, boiling_point: 329.35, density: 0.791, solubility: 7.3, color: 0x9b59b6},
-    {name: "ethanenitrile", cryoscopic_constant: 3.9, freezing_point: 227.15, boiling_point: 354.75, density: 0.786, solubility: 4.6, color: 0x3498db},
-    {name: "methanamide", cryoscopic_constant: 3.79, freezing_point: 275.7, boiling_point: 483.15, density: 1.133, solubility: 5.5, color: 0xf39c12},
-];
+// Cryoscopic constant: K · kg / mol
+// Ebulioscopic constant: K · kg / mol
+// Freezing point: K
+// Boiling point: K
+// Density: kg/L
+// Solubility: Random Value™. Doesn't actually represent accurate solubility, but just how much salt can be added.
 
 let currentSolvent = 0;
 let temperatureKelvin = 273.15;
+
+let solvents = [
+    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, van_t_hoff_factor: 1, freezing_point: 273.15, boiling_point: 100.15, density: () => 1, solubility: 6.1, color: 0x5883d8},
+    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, van_t_hoff_factor: 1, freezing_point: 158.65, boiling_point: 351.55, density: () => 0.789, solubility: 5, color: 0xff5733},
+    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, van_t_hoff_factor: 1, freezing_point: 278.68, boiling_point: 353.2, density: () => 0.87, solubility: 7.3, color: 0x050303},
+    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, van_t_hoff_factor: 1, freezing_point: 209.7, boiling_point: 334.30, density: () => {
+        const temperature1 = 253.15, density1 = 1.564;
+        const temperature2 = 298.15, density2 = 1.489;
+        const temperature3 = 333.15, density3 = 1.394;
+
+        if (temperatureKelvin <= temperature1) {
+            const slope = (density2 - density1) / (temperature2 - temperature1);
+            return density1 + slope * (temperatureKelvin - temperature1);
+        } else if (temperatureKelvin < temperature2) {
+            const slope = (density2 - density1) / (temperature2 - temperature1);
+            return density1 + slope * (temperatureKelvin - temperature1);
+        } else if (temperatureKelvin <= temperature3) {
+            const slope = (density3 - density2) / (temperature3 - temperature2);
+            return density2 + slope * (temperatureKelvin - temperature2);
+        } else {
+            const slope = (density3 - density2) / (temperature3 - temperature2);
+            return density3 + slope * (temperatureKelvin - temperature3);
+        }
+    }, solubility: 4.6, color: 0x3498db},
+];
 
 let solventVolumeLiters = 0;
 let molesOfSalt = 0;
@@ -294,7 +317,7 @@ function addSalt(amount) {
 }
 
 function getSolventMass() {
-    return solvents[currentSolvent].density * solventVolumeLiters;
+    return solvents[currentSolvent].density() * solventVolumeLiters;
 }
 
 function getMolality() {
@@ -371,8 +394,6 @@ canvas.addEventListener('click', (event) => {
         }
     }
 }, false);
-
-canvas.onselectstart = function () { return false; }
 
 function getMousePos(event) {
     const rect = canvas.getBoundingClientRect();
