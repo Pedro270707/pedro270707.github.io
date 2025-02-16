@@ -199,7 +199,7 @@ let widgets = [
     ctx.fillStyle = "#" + addColors(solvents[currentSolvent].color, isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
     ctx.fillRect(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35, containerWidth, solventVolumeLiters * containerHeight / 35);
     if (temperatureKelvin > getBoilingTemperature() && solventVolumeLiters > 0) {
-        addSolvent(-0.0625);
+        addSolvent(-0.0625 * (temperatureKelvin - getBoilingTemperature()) / 200); // Simplification
         if (molesOfSalt > getMaxSaltAmount()) {
             molesOfSalt = getMaxSaltAmount();
         }
