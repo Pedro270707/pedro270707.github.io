@@ -260,7 +260,7 @@ let widgets = [
         return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTc = Kc · W" : `ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`
     })),
     new TextWidget({x: () => canvas.width / 2 + containerWidth / 2 + 10, y: () => canvas.height / 2 - containerHeight / 2 + 30}, ((widget) => {
-        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTf = Kf · W" : `ΔTf = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`
+        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTe = Ke · W" : `ΔTe = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`
     }))
 ];
 
