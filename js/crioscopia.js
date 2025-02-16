@@ -53,31 +53,67 @@ let solventTapOpen = false;
 let soluteTapOpen = false;
 let emptyTapOpen = false;
 
-class TapWidget {
-    constructor(img, pos) {
-        this.img = img;
+class Widget {
+    constructor(pos, width, height) {
         this.pos = pos;
-        this.open = false;
+        this.width = width;
+        this.height = height;
+    }
+
+    getWidth() {
+    }
+
+    getHeight() {
+    }
+
+    getMaxWidth() {
+        return this.getWidth();
+    }
+
+    getMaxHeight() {
+        return this.getHeight();
     }
 
     draw() {
-        drawImage(ctx, this.img, this.pos.x(), this.pos.y());
+    }
+
+    onHover(mouseX, mouseY) {
     }
 
     isHoveredOver(mouseX, mouseY) {
-        return mouseX >= this.pos.x() && mouseY >= this.pos.y() && mouseX < this.pos.x() + this.img.width && mouseY < this.pos.y() + this.img.height;
+        return mouseX >= this.pos.x() && mouseY >= this.pos.y() && mouseX < this.pos.x() + this.getMaxWidth() && mouseY < this.pos.y() + this.getMaxHeight();
+    }
+
+    allowsFreezing() {
+        return true;
+    }
+}
+
+class TapWidget extends Widget {
+    constructor(img, pos) {
+        super(pos);
+        this.img = img;
+        this.open = false;
+    }
+
+    getWidth() {
+        return this.img.width;
+    }
+
+    getHeight() {
+        return this.img.height;
     }
 
     onHover(mouseX, mouseY) {
         canvas.style.cursor = "pointer";
     }
 
-    click(mouseX, mouseY) {
-        this.open = !this.open;
-        return true;
+    draw() {
+        drawImage(ctx, this.img, this.pos.x(), this.pos.y());
     }
 
-    allowsFreezing() {
+    click(mouseX, mouseY) {
+        this.open = !this.open;
         return true;
     }
 }
@@ -168,10 +204,64 @@ class EmptyTapWidget extends TapWidget {
     }
 }
 
+class TextWidget extends Widget {
+    constructor(pos, text, font = "1em sans-serif") {
+        super(pos);
+        this.text = text;
+        this.font = font;
+        this.width = 0;
+        this.height = 0;
+        this.maxWidth = 0;
+        this.maxHeight = 0;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    getMaxWidth() {
+        return this.maxWidth;
+    }
+
+    getMaxHeight() {
+        return this.maxHeight;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.font = this.font;
+        const measure = ctx.measureText(this.text(this));
+        this.width = measure.width;
+        this.height = measure.actualBoundingBoxDescent + measure.actualBoundingBoxAscent;
+        this.maxWidth = Math.max(this.maxWidth, this.width);
+        this.maxHeight = Math.max(this.maxHeight , this.height);
+
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        if (this.isHoveredOver(mousePos.x, mousePos.y)) {
+            ctx.fillStyle = "#ffff00";
+        } else {
+            ctx.fillStyle = "#ffffff";
+        }
+        ctx.fillText(this.text(this), this.pos.x(), this.pos.y());
+        ctx.restore();
+    }
+}
+
 let widgets = [
     new SolventTapWidget({x: () => canvas.width / 2 + containerWidth / 2 - 122, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
     new SoluteTapWidget({x: () => canvas.width / 2 - containerWidth / 2, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
-    new EmptyTapWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 - 60})
+    new EmptyTapWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 - 60}),
+    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2 + 10, y: () => canvas.height / 2 - containerHeight / 2}, ((widget) => {
+        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTc = Kc · W" : `ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`
+    })),
+    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2 + 10, y: () => canvas.height / 2 - containerHeight / 2 + 30}, ((widget) => {
+        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTf = Kf · W" : `ΔTf = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`
+    }))
 ];
 
 (function draw() {
@@ -215,14 +305,6 @@ let widgets = [
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 6;
     ctx.strokeRect(canvas.width / 2 - containerWidth / 2, canvas.height / 2 - containerHeight / 2, containerWidth, containerHeight);
-
-    // Labels
-    ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-    ctx.font = "1em sans-serif";
-    ctx.fillText(`ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + containerWidth / 2 + 10, canvas.height / 2 - containerHeight / 2);
-    ctx.fillText(`ΔTf = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`, canvas.width / 2 + containerWidth / 2 + 10, canvas.height / 2 - containerHeight / 2 + 30);
 
     ctx.textAlign = "center";
     if (isTooSalty()) {
