@@ -23,31 +23,39 @@ let constantDensity = true;
 // Density: kg/L
 // Solubility: Random Value™. Doesn't actually represent accurate solubility, but just how much salt can be added.
 
-let currentSolvent = 0;
-let temperatureKelvin = 273.15;
-
 let solvents = [
-    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, van_t_hoff_factor: 1, freezing_point: 273.15, boiling_point: 373.13, density: [
+    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, freezing_point: 273.15, boiling_point: 373.13, density: [
         { temperature: 273.15, density: 0.96188791 },
         { temperature: 277.133035, density: 0.99997495 },
         { temperature: 298.15, density: 0.99704702 },
         { temperature: 368.15, density: 0.96188791 },
     ], solubility: 5, color: 0x5883d8},
-    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, van_t_hoff_factor: 1, freezing_point: 158.65, boiling_point: 351.55, density: [
+    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, freezing_point: 158.65, boiling_point: 351.55, density: [
         { temperature: 293.15, density: 0.78945}
     ], solubility: 5, color: 0xff5733},
-    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, van_t_hoff_factor: 1, freezing_point: 278.68, boiling_point: 353.2, density: [
+    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, freezing_point: 278.68, boiling_point: 353.2, density: [
         { temperature: 273.15, density: 0.8765}
     ], solubility: 5, color: 0x050303},
-    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, van_t_hoff_factor: 1, freezing_point: 209.7, boiling_point: 334.30, density: [
+    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, freezing_point: 209.7, boiling_point: 334.30, density: [
         { temperature: 253.15, density: 1.564 },
         { temperature: 298.15, density: 1.489 },
         { temperature: 333.15, density: 1.394 },
     ], solubility: 5, color: 0x3498db},
 ];
 
+let solutes = [
+    {name: "glucose", van_t_hoff_factor: 1},
+    {name: "sodium_chloride", van_t_hoff_factor: 2},
+    {name: "calcium_chloride", van_t_hoff_factor: 3},
+    {name: "potassium_ferrocyanide", van_t_hoff_factor: 4}
+]
+
+let currentSolvent = 0;
+let currentSolute = 0;
+let temperatureKelvin = 273.15;
+
 let solventVolumeLiters = 0;
-let molesOfSalt = 0;
+let soluteMoles = 0;
 
 let solventTapOpen = false;
 let soluteTapOpen = false;
@@ -74,6 +82,14 @@ class Widget {
         return this.getHeight();
     }
 
+    getMinX() {
+        return this.pos.x();
+    }
+
+    getMinY() {
+        return this.pos.y();
+    }
+
     draw() {
     }
 
@@ -81,7 +97,7 @@ class Widget {
     }
 
     isHoveredOver(mouseX, mouseY) {
-        return mouseX >= this.pos.x() && mouseY >= this.pos.y() && mouseX < this.pos.x() + this.getMaxWidth() && mouseY < this.pos.y() + this.getMaxHeight();
+        return mouseX >= this.getMinX() && mouseY >= this.getMinY() && mouseX < this.getMinX() + this.getMaxWidth() && mouseY < this.getMinY() + this.getMaxHeight();
     }
 
     allowsFreezing() {
@@ -174,7 +190,7 @@ class SoluteTapWidget extends TapWidget {
         ctx.textAlign = "left";
         ctx.textBaseline = "top";
         ctx.font = "1em sans-serif";
-        ctx.fillText(molesOfSalt.toFixed(5) + " mol", this.pos.x() + 70, this.pos.y() + 20);
+        ctx.fillText(soluteMoles.toFixed(5) + " mol", this.pos.x() + 70, this.pos.y() + 20);
     }
 }
 
@@ -192,7 +208,7 @@ class EmptyTapWidget extends TapWidget {
         if (this.open && solventVolumeLiters > 0) {
             ctx.fillStyle = "#" + solvents[currentSolvent].color.toString(16).padStart(6, "0");
             ctx.fillRect(this.pos.x() + 85, this.pos.y() + 68, 30, canvas.height - this.pos.y() - 68);
-            addSalt(-0.0625 * molesOfSalt / solventVolumeLiters);
+            addSalt(-0.0625 * soluteMoles / solventVolumeLiters);
             addSolvent(-0.0625);
         } else {
             this.open = false;
@@ -205,10 +221,13 @@ class EmptyTapWidget extends TapWidget {
 }
 
 class TextWidget extends Widget {
-    constructor(pos, text, font = "1em sans-serif") {
+    constructor(pos, text, settings = {}) {
         super(pos);
         this.text = text;
-        this.font = font;
+        this.font = settings.font || ((widget) => "1em sans-serif");
+        this.textAlign = settings.textAlign || ((widget) => "left");
+        this.textBaseline = settings.textBaseline || ((widget) => "top");
+        this.fillStyle = settings.fillStyle || ((widget) => "#ffffff");
         this.width = 0;
         this.height = 0;
         this.maxWidth = 0;
@@ -231,22 +250,27 @@ class TextWidget extends Widget {
         return this.maxHeight;
     }
 
+    getMinX() {
+        if (this.textAlign(this) === "right") {
+            return super.getMinX() - this.maxWidth;
+        }
+        return super.getMinX();
+    }
+
     draw() {
         ctx.save();
-        ctx.font = this.font;
+        
+        ctx.font = this.font(this);
+        ctx.textAlign = this.textAlign(this);
+        ctx.textBaseline = this.textBaseline(this);
+        ctx.fillStyle = this.fillStyle(this);
+
         const measure = ctx.measureText(this.text(this));
         this.width = measure.width;
         this.height = measure.actualBoundingBoxDescent + measure.actualBoundingBoxAscent;
         this.maxWidth = Math.max(this.maxWidth, this.width);
         this.maxHeight = Math.max(this.maxHeight , this.height);
 
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        if (this.isHoveredOver(mousePos.x, mousePos.y)) {
-            ctx.fillStyle = "#ffff00";
-        } else {
-            ctx.fillStyle = "#ffffff";
-        }
         ctx.fillText(this.text(this), this.pos.x(), this.pos.y());
         ctx.restore();
     }
@@ -256,12 +280,12 @@ let widgets = [
     new SolventTapWidget({x: () => canvas.width / 2 + containerWidth / 2 - 122, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
     new SoluteTapWidget({x: () => canvas.width / 2 - containerWidth / 2, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
     new EmptyTapWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 - 60}),
-    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2 + 10, y: () => canvas.height / 2 - containerHeight / 2}, ((widget) => {
-        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTc = Kc · W" : `ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality()).toFixed(5)} °C`
-    })),
-    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2 + 10, y: () => canvas.height / 2 - containerHeight / 2 + 30}, ((widget) => {
-        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTe = Ke · W" : `ΔTe = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality()).toFixed(5)} °C`
-    }))
+    new TextWidget({x: () => canvas.width / 2 - containerWidth / 2 - 10, y: () => canvas.height / 2 - containerHeight / 2}, ((widget) => {
+        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTc = Kc · W · i" : `ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} · ${solutes[currentSolute].van_t_hoff_factor} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor).toFixed(5)} °C`
+    }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}),
+    new TextWidget({x: () => canvas.width / 2 - containerWidth / 2 - 10, y: () => canvas.height / 2 - containerHeight / 2 + 30}, ((widget) => {
+        return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTe = Ke · W · i" : `ΔTe = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} · ${solutes[currentSolute].van_t_hoff_factor} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor).toFixed(5)} °C`
+    }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"})
 ];
 
 (function draw() {
@@ -290,8 +314,8 @@ let widgets = [
     ctx.fillRect(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35, containerWidth, solventVolumeLiters * containerHeight / 35);
     if (temperatureKelvin > getBoilingTemperature() && solventVolumeLiters > 0) {
         addSolvent(-0.0625 * (temperatureKelvin - getBoilingTemperature()) / 200); // Simplification
-        if (molesOfSalt > getMaxSaltAmount()) {
-            molesOfSalt = getMaxSaltAmount();
+        if (soluteMoles > getMaxSaltAmount()) {
+            soluteMoles = getMaxSaltAmount();
         }
         const gradient = ctx.createLinearGradient(canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35 - 100, canvas.width / 2 - containerWidth / 2, canvas.height / 2 + containerHeight / 2 - solventVolumeLiters * containerHeight / 35);
         gradient.addColorStop(1, "#" + solvents[currentSolvent].color.toString(16).padStart(6, "0"));
@@ -349,7 +373,7 @@ function isFrozen() {
 }
 
 function isTooSalty() {
-    return molesOfSalt == getMaxSaltAmount() && solventVolumeLiters > 0;
+    return soluteMoles == getMaxSaltAmount() && solventVolumeLiters > 0;
 }
 
 function isDarkColor(hex) {
@@ -387,7 +411,13 @@ function addColors(first, second) {
 function changeSolvent(solvent) {
     currentSolvent = solvent;
     solventVolumeLiters = 0;
-    molesOfSalt = 0;
+    soluteMoles = 0;
+}
+
+function changeSolute(solute) {
+    currentSolute = solute;
+    solventVolumeLiters = 0;
+    soluteMoles = 0;
 }
 
 function addSolvent(amount) {
@@ -400,11 +430,11 @@ function addSolvent(amount) {
 }
 
 function addSalt(amount) {
-    molesOfSalt += amount;
-    if (molesOfSalt > getMaxSaltAmount()) {
-        molesOfSalt = getMaxSaltAmount();
-    } else if (molesOfSalt < 0) {
-        molesOfSalt = 0;
+    soluteMoles += amount;
+    if (soluteMoles > getMaxSaltAmount()) {
+        soluteMoles = getMaxSaltAmount();
+    } else if (soluteMoles < 0) {
+        soluteMoles = 0;
     }
 }
 
@@ -440,15 +470,15 @@ function getDensity(data) {
 }
 
 function getMolality() {
-    return getSolventMass() == 0 ? 0 : molesOfSalt / getSolventMass();
+    return getSolventMass() == 0 ? 0 : soluteMoles / getSolventMass();
 }
 
 function getFreezingTemperature() {
-    return solvents[currentSolvent].freezing_point - solvents[currentSolvent].cryoscopic_constant * getMolality();
+    return solvents[currentSolvent].freezing_point - solvents[currentSolvent].cryoscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor;
 }
 
 function getBoilingTemperature() {
-    return solvents[currentSolvent].boiling_point + solvents[currentSolvent].ebulioscopic_constant * getMolality();
+    return solvents[currentSolvent].boiling_point + solvents[currentSolvent].ebulioscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor;
 }
 
 function getMaxSaltAmount() {
@@ -500,6 +530,23 @@ solventControl.addEventListener("input", (event) => {
     changeSolvent(Number.parseFloat(event.target.value));
 });
 
+// Solute
+let soluteControlContainer = document.createElement("div");
+let soluteControlName = document.createElement("label");
+soluteControlName.setAttribute("for", "solute-control");
+translate.setAttribute(soluteControlName, "string", new TranslatableText("crioscopia.soluteControl"));
+let soluteControl = document.createElement("select");
+soluteControl.id = "solute-control";
+for (let i in solutes) {
+    let soluteOption = document.createElement("option");
+    soluteOption.value = i.toString();
+    translate.setAttribute(soluteOption, "string", new TranslatableText("crioscopia.solute." + solutes[i].name));
+    soluteControl.appendChild(soluteOption);
+}
+soluteControl.addEventListener("input", (event) => {
+    changeSolute(Number.parseFloat(event.target.value));
+});
+
 // Constant density
 let constantDensityContainer = document.createElement("div");
 let constantDensityName = document.createElement("label");
@@ -518,10 +565,13 @@ temperatureControlContainer.appendChild(temperatureControl);
 temperatureControlContainer.appendChild(defaultTemperatureBtn);
 solventControlContainer.appendChild(solventControlName);
 solventControlContainer.appendChild(solventControl);
+solventControlContainer.appendChild(soluteControlName);
+solventControlContainer.appendChild(soluteControl);
 constantDensityContainer.appendChild(constantDensityName);
 constantDensityContainer.appendChild(constantDensityCheckbox);
 controls.appendChild(temperatureControlContainer);
 controls.appendChild(solventControlContainer);
+controls.appendChild(soluteControlContainer);
 controls.appendChild(constantDensityContainer);
 document.body.appendChild(controls);
 
