@@ -44,10 +44,10 @@ let solvents = [
 ];
 
 let solutes = [
-    {name: "glucose", van_t_hoff_factor: 1},
-    {name: "sodium_chloride", van_t_hoff_factor: 2},
-    {name: "calcium_chloride", van_t_hoff_factor: 3},
-    {name: "potassium_ferrocyanide", van_t_hoff_factor: 4}
+    {name: "glucose", van_t_hoff_factor: 1, color: "#f7f0ff"},
+    {name: "sodium_chloride", van_t_hoff_factor: 2, color: "#ffffff"},
+    {name: "calcium_chloride", van_t_hoff_factor: 3, color: "#fffff0"},
+    {name: "potassium_ferrocyanide", van_t_hoff_factor: 4, color: "dd0000"}
 ]
 
 let currentSolvent = 0;
@@ -179,7 +179,7 @@ class SoluteTapWidget extends TapWidget {
     draw() {
         super.draw();
         if (this.open && !isTooSalty()) {
-            ctx.fillStyle = "#ffffff";
+            ctx.fillStyle = "#" + solutes[currentSolute].color.toString(16).padStart(6, "0");
             ctx.fillRect(this.pos.x() + 93, this.pos.y() + 68, 14, canvas.height - this.pos.y() - 68 - (canvas.height - containerHeight) / 2);
             addSalt(0.03125);
         } else {
