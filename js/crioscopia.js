@@ -339,7 +339,7 @@ function getDensity(data) {
     if (data.length === 0) {
         return 0;
     } else if (data.length === 1) {
-        return data[0];
+        return data[0].density;
     } else if (constantDensity) {
         return (data[0].density + data[data.length - 1].density) / 2
     } else if (temperatureKelvin <= data[0].temperature) {
