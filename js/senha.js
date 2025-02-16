@@ -8,6 +8,7 @@ const gameFlexbox = document.getElementById("game-flexbox");
 const keyboard = document.getElementById("keyboard");
 const amountOfCharactersInput = document.getElementById("amount-of-characters");
 const victoryText = document.getElementById("victory");
+const restart = document.getElementById("restart");
 
 let randomSequence = "12345";
 let numberOfAttempts = 0;
@@ -217,7 +218,7 @@ function characterSlotMouseUp(event) {
     selectedCharacter = Array.from(parent.children).indexOf(event.target);
 }
 
-$("#restart").on("click", (event) => {
+restart.addEventListener("click", (event) => {
     amountOfCharactersInput.value = clamp(amountOfCharactersInput.value || 5, 1, validCharacters.length)
     startNewGame(amountOfCharactersInput.value);
     event.target.blur();
