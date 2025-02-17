@@ -1,73 +1,59 @@
 .controls {
-    width: 10em;
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 1rem;
+    right: 1rem;
     color: #ffffff;
     background-color: #000000;
-    padding: 1em;
+    padding: 1rem;
+    align-items: flex-end;
     font-family: sans-serif;
+}
+
+.controls, .controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.controls-container label {
+    margin-right: 0.5em;
 }
 
 .controls input[type="range"] {
     width: 100%;
 }
 
-.controls * {
-    display: block;
-    max-width: 100%;
+.collapse-controls {
+    display: none;
 }
 
-.controls > * {
-    margin: 0.5em;
+.collapse-controls-label:hover::before {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
-.tap {
-    display: block;
-    position: absolute;
-    width: 54px;
-    height: 18px;
-    background-color: #ffffff;
-    cursor: pointer;
-}
-
-.tap.top-right {
-    top: calc(50% - 389px);
-    right: calc(50% - 303px);
-}
-
-.tap.top-left {
-    top: calc(50% - 389px);
-    left: calc(50% - 303px);
-}
-
-.tap.bottom-right {
-    top: calc(50% + 334px);
-    right: calc(50% - 357px);
-}
-
-.tap::before {
+input ~ .collapse-controls-label::before {
     content: '';
-    display: block;
-    position: absolute;
-    width: 18px;
-    height: 36px;
-    background-color: #ffffff;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-color: white;
+    border-radius: 0.25rem;
+    border-width: 0.125rem;
+    border-style: solid;
+    cursor: pointer;
+    background-image: url("/assets/chevron-up.svg");
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    color: white;
 }
 
-.tap.top-right::before {
-    top: 0;
-    right: 0;
+input:checked ~ .collapse-controls-label::before {
+    background-image: url("/assets/chevron-down.svg");
 }
 
-.tap.top-left::before {
-    top: 0;
-    left: 0;
-}
-
-.tap.bottom-right::before {
-    top: 0;
-    right: 0;
+input:checked ~ .controls-container {
+    display: none;
 }
 
 .canvas-container {

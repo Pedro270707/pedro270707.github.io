@@ -490,6 +490,18 @@ resizeCanvas();
 
 let controls = document.createElement("div");
 controls.classList.add("controls");
+let controlsContainer = document.createElement("div");
+controlsContainer.classList.add("controls-container");
+
+// Collapse controls checkbox
+let collapseControlsCheckbox = document.createElement("input");
+collapseControlsCheckbox.id = "collapse-controls";
+collapseControlsCheckbox.type = "checkbox";
+collapseControlsCheckbox.checked = false;
+collapseControlsCheckbox.classList.add("collapse-controls");
+let collapseControlsLabel = document.createElement("label");
+collapseControlsLabel.setAttribute("for", "collapse-controls");
+collapseControlsLabel.classList.add("collapse-controls-label");
 
 // Temperature
 let temperatureControlContainer = document.createElement("div");
@@ -565,14 +577,17 @@ temperatureControlContainer.appendChild(temperatureControl);
 temperatureControlContainer.appendChild(defaultTemperatureBtn);
 solventControlContainer.appendChild(solventControlName);
 solventControlContainer.appendChild(solventControl);
-solventControlContainer.appendChild(soluteControlName);
-solventControlContainer.appendChild(soluteControl);
+soluteControlContainer.appendChild(soluteControlName);
+soluteControlContainer.appendChild(soluteControl);
 constantDensityContainer.appendChild(constantDensityName);
 constantDensityContainer.appendChild(constantDensityCheckbox);
-controls.appendChild(temperatureControlContainer);
-controls.appendChild(solventControlContainer);
-controls.appendChild(soluteControlContainer);
-controls.appendChild(constantDensityContainer);
+controls.appendChild(collapseControlsCheckbox);
+controls.appendChild(collapseControlsLabel);
+controlsContainer.appendChild(temperatureControlContainer);
+controlsContainer.appendChild(solventControlContainer);
+controlsContainer.appendChild(soluteControlContainer);
+controlsContainer.appendChild(constantDensityContainer);
+controls.appendChild(controlsContainer);
 document.body.appendChild(controls);
 
 canvas.addEventListener('click', (event) => {
