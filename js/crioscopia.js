@@ -135,6 +135,8 @@ class TapWidget extends Widget {
 }
 
 class SolventTapWidget extends TapWidget {
+    static name = new TranslatableText("crioscopia.tap.solvent");
+    
     constructor(pos) {
         super((() => {
             const img = new Image(122, 100);
@@ -163,11 +165,14 @@ class SolventTapWidget extends TapWidget {
         ctx.textBaseline = "top";
         ctx.font = "1em sans-serif";
         ctx.textAlign = "right";
-        ctx.fillText(solventVolumeLiters.toFixed(5) + " L", this.pos.x() + this.img.width - 70, this.pos.y() + 20);
+        ctx.fillText(SolventTapWidget.name.get(), this.pos.x() + this.img.width - 70, this.pos.y() + 20);
+        ctx.fillText(translate.translateString("crioscopia.tap.solvent.label", solventVolumeLiters.toFixed(5)), this.pos.x() + this.img.width - 70, this.pos.y() + 50);
     }
 }
 
 class SoluteTapWidget extends TapWidget {
+    static name = new TranslatableText("crioscopia.tap.solute");
+
     constructor(pos) {
         super((() => {
             const img = new Image(122, 100);
@@ -190,7 +195,8 @@ class SoluteTapWidget extends TapWidget {
         ctx.textAlign = "left";
         ctx.textBaseline = "top";
         ctx.font = "1em sans-serif";
-        ctx.fillText(soluteMoles.toFixed(5) + " mol", this.pos.x() + 70, this.pos.y() + 20);
+        ctx.fillText(SoluteTapWidget.name.get(), this.pos.x() + 70, this.pos.y() + 20);
+        ctx.fillText(translate.translateString("crioscopia.tap.solute.label", soluteMoles.toFixed(5)), this.pos.x() + 70, this.pos.y() + 50);
     }
 }
 
@@ -280,10 +286,10 @@ let widgets = [
     new SolventTapWidget({x: () => canvas.width / 2 + containerWidth / 2 - 122, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
     new SoluteTapWidget({x: () => canvas.width / 2 - containerWidth / 2, y: () => canvas.height / 2 - containerHeight / 2 - 100}),
     new EmptyTapWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 - 60}),
-    new TextWidget({x: () => canvas.width / 2 - containerWidth / 2 - 10, y: () => canvas.height / 2 - containerHeight / 2}, ((widget) => {
+    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 + 20}, ((widget) => {
         return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTc = Kc · W · i" : `ΔTc = ${solvents[currentSolvent].cryoscopic_constant} · ${getMolality().toFixed(5)} · ${solutes[currentSolute].van_t_hoff_factor} = ${(solvents[currentSolvent].cryoscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor).toFixed(5)} °C`
     }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}),
-    new TextWidget({x: () => canvas.width / 2 - containerWidth / 2 - 10, y: () => canvas.height / 2 - containerHeight / 2 + 30}, ((widget) => {
+    new TextWidget({x: () => canvas.width / 2 + containerWidth / 2, y: () => canvas.height / 2 + containerHeight / 2 + 50}, ((widget) => {
         return widget.isHoveredOver(mousePos.x, mousePos.y) ? "ΔTe = Ke · W · i" : `ΔTe = ${solvents[currentSolvent].ebulioscopic_constant} · ${getMolality().toFixed(5)} · ${solutes[currentSolute].van_t_hoff_factor} = ${(solvents[currentSolvent].ebulioscopic_constant * getMolality() * solutes[currentSolute].van_t_hoff_factor).toFixed(5)} °C`
     }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"})
 ];
@@ -296,12 +302,6 @@ let widgets = [
 
     ctx.fillStyle = "#1f1f1f";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "top";
-    ctx.font = "2em sans-serif";
-    ctx.fillText(translate.translateString('crioscopia.title'), 10, 10);
 
     for (let widget of widgets) {
         if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
