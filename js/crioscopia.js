@@ -21,7 +21,7 @@ let constantDensity = true;
 // Freezing point: K
 // Boiling point: K
 // Density: kg/L
-// Solubility: Random Value™. Doesn't actually represent accurate solubility, but just how much salt can be added.
+// Solubility: Random Value™. Doesn't actually represent accurate solubility, but just how much solute can be added.
 
 let solvents = [
     {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, freezing_point: 273.15, boiling_point: 373.13, density: [
@@ -173,7 +173,7 @@ class SoluteTapWidget extends TapWidget {
 
     draw() {
         super.draw();
-        if (this.open && !this.container.isTooSalty()) {
+        if (this.open && !this.container.hasTooMuchSolute()) {
             ctx.fillStyle = "#" + solutes[this.container.soluteType].color.toString(16).padStart(6, "0");
             ctx.fillRect(this.pos.x() + 93, this.pos.y() + 68, 14, this.container.getHeight() + 32);
             this.container.addSolute(0.03125);
@@ -313,8 +313,8 @@ class SolutionContainerWidget extends Widget {
         return false;
     }
     
-    isTooSalty() {
-        return this.soluteMoles == this.getMaxSaltAmount() && this.solventVolumeLiters > 0;
+    hasTooMuchSolute() {
+        return this.soluteMoles == this.getMaxSoluteAmount() && this.solventVolumeLiters > 0;
     }
 
     addSolvent(amount) {
@@ -328,8 +328,8 @@ class SolutionContainerWidget extends Widget {
     
     addSolute(amount) {
         this.soluteMoles += amount;
-        if (this.soluteMoles > this.getMaxSaltAmount()) {
-            this.soluteMoles = this.getMaxSaltAmount();
+        if (this.soluteMoles > this.getMaxSoluteAmount()) {
+            this.soluteMoles = this.getMaxSoluteAmount();
         } else if (this.soluteMoles < 0) {
             this.soluteMoles = 0;
         }
@@ -378,7 +378,7 @@ class SolutionContainerWidget extends Widget {
         return solvents[this.solventType].boiling_point + solvents[this.solventType].ebulioscopic_constant * this.getMolality() * solutes[this.soluteType].van_t_hoff_factor;
     }
     
-    getMaxSaltAmount() {
+    getMaxSoluteAmount() {
         return solvents[this.solventType].solubility * this.solventVolumeLiters;
     }
 
@@ -391,8 +391,8 @@ class SolutionContainerWidget extends Widget {
         ctx.fillRect(this.pos.x(), this.pos.y() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35, this.getWidth(), this.solventVolumeLiters * this.getHeight() / 35);
         if (temperatureKelvin > this.getBoilingTemperature() && this.solventVolumeLiters > 0) {
             this.addSolvent(-0.0625 * (temperatureKelvin - this.getBoilingTemperature()) / 200); // Simplification
-            if (this.soluteMoles > this.getMaxSaltAmount()) {
-                this.soluteMoles = this.getMaxSaltAmount();
+            if (this.soluteMoles > this.getMaxSoluteAmount()) {
+                this.soluteMoles = this.getMaxSoluteAmount();
             }
             const gradient = ctx.createLinearGradient(this.pos.x() + this.getWidth() / 2, this.pos.y() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 - 100, this.pos.x() + this.getWidth() / 2, this.pos.y() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35);
             gradient.addColorStop(1, "#" + solvents[this.solventType].color.toString(16).padStart(6, "0"));
@@ -408,9 +408,9 @@ class SolutionContainerWidget extends Widget {
         ctx.strokeRect(this.pos.x(), this.pos.y(), this.getWidth(), this.getHeight());
 
         ctx.textAlign = "center";
-        if (this.isTooSalty()) {
+        if (this.hasTooMuchSolute()) {
             ctx.fillStyle = "#ffffff";
-            let text = translate.translateString('crioscopia.tooSalty');
+            let text = translate.translateString('crioscopia.tooMuchSolute');
             ctx.fillText(text, this.pos.x() + this.getWidth() / 2, this.pos.y() - 40);
         }
         

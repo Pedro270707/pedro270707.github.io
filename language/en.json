@@ -61,7 +61,7 @@
   "crioscopia.temperatureControl": "Temperature: %s °C",
   "crioscopia.default": "Default",
   "crioscopia.frozen": "Frozen",
-  "crioscopia.tooSalty": "Too Salty!",
+  "crioscopia.tooMuchSolute": "Too Much Solute!",
   "crioscopia.solventControl": "Solvent",
   "crioscopia.solvent.water": "Water",
   "crioscopia.solvent.ethanol": "Ethanol",
