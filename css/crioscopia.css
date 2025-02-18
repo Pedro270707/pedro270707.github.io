@@ -27,12 +27,11 @@
     display: none;
 }
 
-.collapse-controls-label:hover::before {
+.collapse-controls-label:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-input ~ .collapse-controls-label::before {
-    content: '';
+input ~ .collapse-controls-label {
     display: inline-block;
     width: 1rem;
     height: 1rem;
@@ -48,7 +47,7 @@ input ~ .collapse-controls-label::before {
     color: white;
 }
 
-input:checked ~ .collapse-controls-label::before {
+input:checked ~ .collapse-controls-label {
     background-image: url("/assets/chevron-down.svg");
 }
 
