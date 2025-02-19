@@ -5,20 +5,21 @@ class Translate {
 		this.language = language;
 		this.changeListeners = [];
 		this.loadFunctions = [];
-		this.reloadLoc().then(file => {
+		this.definitions = [];
+		this.cachedFiles = new Map();
+		this.reloadFiles().then(file => {
 			for (let loadFunction of this.loadFunctions) {
 				loadFunction();
 			}
 		});
 	}
-	
-	translateString(string, ...args) {
-		let translatedString = string;
 
-		if (this.file && this.file[string]) {
-			translatedString = this.file[string];
-		} else if (this.defaultFile && this.defaultFile[string]) {
-			translatedString = this.defaultFile[string];
+	translateStringInLanguage(string, lang, ...args) {
+		let translatedString = string;
+		
+		const file = this.cachedFiles.get(lang);
+		if (file) {
+			translatedString = file[translatedString] || translatedString;
 		}
 
 		for (let i = 1; i <= args.length; i++) {
@@ -35,6 +36,22 @@ class Translate {
 
 		return translatedString;
 	}
+	
+	translateString(string, ...args) {
+		return this.translateStringInLanguage(string, this.language || localStorage.language, ...args);
+	}
+
+	getDefinition(lang) {
+		return this.definitions[lang];
+	}
+
+	getName(lang) {
+		return !this.getDefinition(lang) ? "" : this.getDefinition(lang).name;
+	}
+
+	getAuthor(lang) {
+		return !this.getDefinition(lang) ? "" : this.getDefinition(lang).author;
+	}
 
 	addChangeListener(listener) {
 		if (typeof listener !== 'function') throw new Error('translate.js change listener must be a function');
@@ -49,16 +66,29 @@ class Translate {
 			loadFunction();
 		}
 	}
+
+	async getOrLoadFile(url) {
+		let file = await fetch(url);
+		file = await file.clone().json();
+		return file;
+	}
 	
-	async reloadLoc() {
-		this.defaultFile = await fetch('/language/' + Translate.DEFAULT_LANGUAGE + '.json');
-		this.defaultFile = await this.defaultFile.clone().json();
-		if ((this.language || localStorage.language) === Translate.DEFAULT_LANGUAGE) {
-			this.file = this.defaultFile;
-		} else {
-			this.file = await fetch('/language/' + (this.language || localStorage.language) + '.json');
-			this.file = await this.file.clone().json();
+	async reloadFiles() {
+		const cachedFiles = new Map();
+		this.definitions = await fetch('/language/language_definitions.json');
+		this.definitions = await this.definitions.clone().json();
+
+		for (let definition in this.definitions) {
+			const file = await this.getOrLoadFile(this.definitions[definition].url);
+			cachedFiles.set(definition, file);
 		}
+
+		this.cachedFiles = cachedFiles;
+		
+		this.onLanguageLoad();
+	}
+
+	onLanguageLoad() {
 		let reloadElements = () => {
 			let allElements = document.getElementsByTagName('*');
 			for (let currentElement of allElements) {
@@ -73,7 +103,6 @@ class Translate {
 		for (let listener of this.changeListeners) {
 			listener();
 		}
-		return this.file;
 	}
 	
 	getKeyWrapped(key, ...args) {
@@ -125,7 +154,7 @@ if (localStorage.language === undefined) {
 var translate = new Translate();
 
 function reloadLanguage() {
-    translate.reloadLoc();
+    translate.onLanguageLoad();
 }
 
 function changeLanguage(language) {

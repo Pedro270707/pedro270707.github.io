@@ -57,7 +57,7 @@
   "senha-correctinwrongplace": "means that there is a correct character in the wrong place.",
   "senha-wrongcharacter": "means that the character is completely wrong.",
   "senha-gamestarted": "New game started! Random sequence: %s",
-  "crioscopia.title": "Cryoscopy",
+  "crioscopia.title": "Freezing-point depression and boiling-point elevation",
   "crioscopia.temperatureControl": "Temperature: %s °C",
   "crioscopia.default": "Default",
   "crioscopia.frozen": "Frozen",
