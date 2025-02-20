@@ -455,7 +455,7 @@ class LanguageWidget extends TextWidget {
 
 const containerWidget = new SolutionContainerWidget({x: (widget) => canvas.width / 2 - containerWidth / 2, y: (widget) => canvas.height / 2 - containerHeight / 2}, (widget) => containerWidth, (widget) => containerHeight);
 let widgets = [
-    new SolventTapWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth() - widget.getWidth(), y: (widget) => canvas.height / 2 - containerHeight / 2 - 100}, containerWidget),
+    new SolventTapWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth() - widget.getWidth(), y: (widget) => containerWidget.getY() - widget.getHeight()}, containerWidget),
     new SoluteTapWidget({x: (widget) => containerWidget.getX(), y: (widget) => containerWidget.getY() - widget.getHeight()}, containerWidget),
     new EmptyTapWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth(), y: (widget) => containerWidget.getY() + containerWidget.getHeight() - 60}, containerWidget),
     new TextWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth(), y: (widget) => containerWidget.getY() + containerWidget.getHeight() + 20}, ((widget) => {
