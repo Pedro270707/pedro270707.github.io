@@ -471,8 +471,8 @@ let widgets = [
         return new LiteralText(`ΔTe = ${solvents[containerWidget.solventType].ebulioscopic_constant} · ${containerWidget.getMolality().toFixed(5)} · ${solutes[containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[containerWidget.solventType].ebulioscopic_constant * containerWidget.getMolality() * solutes[containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
     }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}),
     new TextWidget({x: (widget) => 10, y: (widget) => canvas.height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")),
-    new LanguageWidget({x: (widget) => canvas.width - widget.getWidth() - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en"),
-    new LanguageWidget({x: (widget) => canvas.width - widget.getWidth() - 10, y: (widget) => canvas.height - widget.getHeight() - 10}, "pt"),
+    new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}),
+    new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}),
     containerWidget
 ];
 
