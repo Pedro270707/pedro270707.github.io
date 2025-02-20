@@ -55,6 +55,74 @@ let solutes = [
 
 let temperatureKelvin = 273.15;
 
+class Scene {
+    constructor() {
+        this.widgets = [];
+    }
+
+    addWidget(widget) {
+        if (!(widget instanceof Widget)) console.error("Non-widget variable passed as parameter of function addWidget");
+        this.widgets.push(widget);
+        widget.parent = this;
+    }
+
+    removeWidget(widget) {
+        if (widget instanceof Widget && widget.parent === this) delete widget.parent;
+        const index = this.widgets.findIndex(obj => obj === widget);
+        if (index !== -1) {
+            this.widgets.splice(index, 1);
+        }
+    }
+
+    draw() {
+        ctx.fillStyle = "#1f1f1f";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let widget of this.widgets) {
+            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
+                widget.onHover(mousePos.x, mousePos.y);
+            }
+            widget.draw();
+        }
+    }
+
+    click(mouseX, mouseY) {
+        for (let widget of this.widgets) {
+            if (widget.isHoveredOver(mouseX, mouseY)) {
+                widget.click(mouseX, mouseY);
+                event.preventDefault();
+            }
+        }
+    }
+}
+
+class CryoscopyEbulioscopyScene extends Scene {
+    constructor() {
+        super();
+        this.containerWidget = new SolutionContainerWidget({x: (widget) => canvas.width / 2 - containerWidth / 2, y: (widget) => canvas.height / 2 - containerHeight / 2}, (widget) => containerWidth, (widget) => containerHeight);
+
+        this.addWidget(new SolventTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth() - widget.getWidth(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
+        this.addWidget(new SoluteTapWidget({x: (widget) => this.containerWidget.getX(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
+        this.addWidget(new EmptyTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() - 60}, this.containerWidget));
+        this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 20}, ((widget) => {
+            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
+                return new LiteralText("ΔTc = Kc · W · i");
+            }
+            return new LiteralText(`ΔTc = ${solvents[this.containerWidget.solventType].cryoscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].cryoscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
+        }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
+        this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 50}, ((widget) => {
+            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
+                return new LiteralText("ΔTe = Ke · W · i");
+            }
+            return new LiteralText(`ΔTe = ${solvents[this.containerWidget.solventType].ebulioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebulioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
+        }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
+        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => canvas.height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")));
+        this.addWidget(new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}));
+        this.addWidget(new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}));
+        this.addWidget(this.containerWidget);
+    }
+}
+
 class Widget {
     constructor(pos) {
         this.pos = pos;
@@ -317,7 +385,8 @@ class SolutionContainerWidget extends Widget {
 
     isFrozen() {
         if (temperatureKelvin <= this.getFreezingTemperature() && this.solventVolumeLiters > 0) {
-            for (let widget of widgets) {
+            if (!this.parent) return true;
+            for (let widget of this.parent.widgets) {
                 if (!widget.allowsFreezing()) {
                     return false;
                 }
@@ -453,41 +522,12 @@ class LanguageWidget extends TextWidget {
     }
 }
 
-const containerWidget = new SolutionContainerWidget({x: (widget) => canvas.width / 2 - containerWidth / 2, y: (widget) => canvas.height / 2 - containerHeight / 2}, (widget) => containerWidth, (widget) => containerHeight);
-let widgets = [
-    new SolventTapWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth() - widget.getWidth(), y: (widget) => containerWidget.getY() - widget.getHeight()}, containerWidget),
-    new SoluteTapWidget({x: (widget) => containerWidget.getX(), y: (widget) => containerWidget.getY() - widget.getHeight()}, containerWidget),
-    new EmptyTapWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth(), y: (widget) => containerWidget.getY() + containerWidget.getHeight() - 60}, containerWidget),
-    new TextWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth(), y: (widget) => containerWidget.getY() + containerWidget.getHeight() + 20}, ((widget) => {
-        if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-            return new LiteralText("ΔTc = Kc · W · i");
-        }
-        return new LiteralText(`ΔTc = ${solvents[containerWidget.solventType].cryoscopic_constant} · ${containerWidget.getMolality().toFixed(5)} · ${solutes[containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[containerWidget.solventType].cryoscopic_constant * containerWidget.getMolality() * solutes[containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
-    }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}),
-    new TextWidget({x: (widget) => containerWidget.getX() + containerWidget.getWidth(), y: (widget) => containerWidget.getY() + containerWidget.getHeight() + 50}, ((widget) => {
-        if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-            return new LiteralText("ΔTe = Ke · W · i");
-        }
-        return new LiteralText(`ΔTe = ${solvents[containerWidget.solventType].ebulioscopic_constant} · ${containerWidget.getMolality().toFixed(5)} · ${solutes[containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[containerWidget.solventType].ebulioscopic_constant * containerWidget.getMolality() * solutes[containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
-    }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}),
-    new TextWidget({x: (widget) => 10, y: (widget) => canvas.height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")),
-    new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}),
-    new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}),
-    containerWidget
-];
+let scene = new CryoscopyEbulioscopyScene();
 
 (function draw() {
     canvas.style.cursor = "";
     
-    ctx.fillStyle = "#1f1f1f";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    for (let widget of widgets) {
-        if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-            widget.onHover(mousePos.x, mousePos.y);
-        }
-        widget.draw();
-    }
+    scene.draw();
 
     requestAnimationFrame(draw);
 })();
@@ -642,12 +682,8 @@ controls.appendChild(controlsContainer);
 document.body.appendChild(controls);
 
 canvas.addEventListener('click', (event) => {
-    for (let widget of widgets) {
-        if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-            widget.click(mousePos.x, mousePos.y);
-            event.preventDefault();
-        }
-    }
+    event.preventDefault();
+    scene.click(mousePos.x, mousePos.y);
 }, false);
 
 function getMousePos(event) {
