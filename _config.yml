@@ -3,10 +3,13 @@ email: pedro2007.prrr@gmail.com
 description: >-
   My website!
 baseurl: ""
-url: "https://pedro270707.github.io"
+url: "https://pedroricardo.net"
 github_username:  Pedro270707
 minecraft_username: pr_ib
 
 theme: minima
 plugins:
   - jekyll-feed
+
+include:
+  - _redirects
