@@ -20,26 +20,26 @@ function resizeCanvas() {
 let constantDensity = true;
 
 // Cryoscopic constant: K · kg / mol
-// Ebulioscopic constant: K · kg / mol
+// Ebullioscopic constant: K · kg / mol
 // Freezing point: K
 // Boiling point: K
 // Density: kg/L
 // Solubility: Random Value™. Doesn't actually represent accurate solubility, but just how much solute can be added.
 
 let solvents = [
-    {name: "water", cryoscopic_constant: 1.86, ebulioscopic_constant: 0.52, freezing_point: 273.15, boiling_point: 373.13, density: [
+    {name: "water", cryoscopic_constant: 1.86, ebullioscopic_constant: 0.52, freezing_point: 273.15, boiling_point: 373.13, density: [
         { temperature: 273.15, density: 0.96188791 },
         { temperature: 277.133035, density: 0.99997495 },
         { temperature: 298.15, density: 0.99704702 },
         { temperature: 368.15, density: 0.96188791 },
     ], solubility: 5, color: 0x5883d8},
-    {name: "ethanol", cryoscopic_constant: 2, ebulioscopic_constant: 1.2, freezing_point: 158.65, boiling_point: 351.55, density: [
+    {name: "ethanol", cryoscopic_constant: 2, ebullioscopic_constant: 1.2, freezing_point: 158.65, boiling_point: 351.55, density: [
         { temperature: 293.15, density: 0.78945}
     ], solubility: 5, color: 0xff5733},
-    {name: "benzene", cryoscopic_constant: 5.12, ebulioscopic_constant: 2.65, freezing_point: 278.68, boiling_point: 353.2, density: [
+    {name: "benzene", cryoscopic_constant: 5.12, ebullioscopic_constant: 2.65, freezing_point: 278.68, boiling_point: 353.2, density: [
         { temperature: 273.15, density: 0.8765}
     ], solubility: 5, color: 0x050303},
-    {name: "trichloromethane", cryoscopic_constant: 4.90, ebulioscopic_constant: 3.88, freezing_point: 209.7, boiling_point: 334.30, density: [
+    {name: "trichloromethane", cryoscopic_constant: 4.90, ebullioscopic_constant: 3.88, freezing_point: 209.7, boiling_point: 334.30, density: [
         { temperature: 253.15, density: 1.564 },
         { temperature: 298.15, density: 1.489 },
         { temperature: 333.15, density: 1.394 },
@@ -96,7 +96,7 @@ class Scene {
     }
 }
 
-class CryoscopyEbulioscopyScene extends Scene {
+class CryoscopyEbullioscopyScene extends Scene {
     constructor() {
         super();
         this.containerWidget = new SolutionContainerWidget({x: (widget) => canvas.width / 2 - containerWidth / 2, y: (widget) => canvas.height / 2 - containerHeight / 2}, (widget) => containerWidth, (widget) => containerHeight);
@@ -114,7 +114,7 @@ class CryoscopyEbulioscopyScene extends Scene {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
                 return new LiteralText("ΔTe = Ke · W · i");
             }
-            return new LiteralText(`ΔTe = ${solvents[this.containerWidget.solventType].ebulioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebulioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
+            return new LiteralText(`ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
         }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
         this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => canvas.height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")));
         this.addWidget(new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}));
@@ -458,7 +458,7 @@ class SolutionContainerWidget extends Widget {
     }
     
     getBoilingTemperature() {
-        return solvents[this.solventType].boiling_point + solvents[this.solventType].ebulioscopic_constant * this.getMolality() * solutes[this.soluteType].van_t_hoff_factor;
+        return solvents[this.solventType].boiling_point + solvents[this.solventType].ebullioscopic_constant * this.getMolality() * solutes[this.soluteType].van_t_hoff_factor;
     }
     
     getMaxSoluteAmount() {
@@ -522,7 +522,7 @@ class LanguageWidget extends TextWidget {
     }
 }
 
-let scene = new CryoscopyEbulioscopyScene();
+let scene = new CryoscopyEbullioscopyScene();
 
 (function draw() {
     canvas.style.cursor = "";
@@ -575,9 +575,6 @@ function addColors(first, second) {
 
     return Math.min(red + red2, 0xFF) << 16 | Math.min(green + green2, 0xFF) << 8 | Math.min(blue + blue2, 0xFF);
 }
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 let controls = document.createElement("div");
 controls.classList.add("controls");
@@ -685,6 +682,9 @@ canvas.addEventListener('click', (event) => {
     event.preventDefault();
     scene.click(mousePos.x, mousePos.y);
 }, false);
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 function getMousePos(event) {
     const rect = canvas.getBoundingClientRect();
