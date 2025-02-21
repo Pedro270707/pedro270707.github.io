@@ -1,21 +1,5 @@
 let container = document.getElementById("canvas-container");
 let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-
-let mousePos = {x: 0, y: 0};
-
-let containerWidth = 600;
-let containerHeight = 600;
-
-function resizeCanvas() {
-    const ratio = window.devicePixelRatio || 1;
-    canvas.width = container.clientWidth * ratio;
-    canvas.height = container.clientHeight * ratio;
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
-    containerWidth = Math.max(325, Math.min(600, canvas.width - 300));
-    containerHeight = Math.max(200, Math.min(600, canvas.height - 100));
-}
 
 let constantDensity = true;
 
@@ -55,51 +39,10 @@ let solutes = [
 
 let temperatureKelvin = 273.15;
 
-class Scene {
-    constructor() {
-        this.widgets = [];
-    }
-
-    addWidget(widget) {
-        if (!(widget instanceof Widget)) console.error("Non-widget variable passed as parameter of function addWidget");
-        this.widgets.push(widget);
-        widget.parent = this;
-    }
-
-    removeWidget(widget) {
-        if (widget instanceof Widget && widget.parent === this) delete widget.parent;
-        const index = this.widgets.findIndex(obj => obj === widget);
-        if (index !== -1) {
-            this.widgets.splice(index, 1);
-        }
-    }
-
-    draw() {
-        ctx.fillStyle = "#1f1f1f";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        for (let widget of this.widgets) {
-            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-                widget.onHover(mousePos.x, mousePos.y);
-            }
-            widget.draw();
-        }
-    }
-
-    click(mouseX, mouseY) {
-        for (let widget of this.widgets) {
-            if (widget.isHoveredOver(mouseX, mouseY)) {
-                widget.click(mouseX, mouseY);
-                event.preventDefault();
-            }
-        }
-    }
-}
-
 class CryoscopyEbullioscopyScene extends Scene {
     constructor() {
         super();
-        this.containerWidget = new SolutionContainerWidget({x: (widget) => canvas.width / 2 - containerWidth / 2, y: (widget) => canvas.height / 2 - containerHeight / 2}, (widget) => containerWidth, (widget) => containerHeight);
+        this.containerWidget = new SolutionContainerWidget({x: (widget) => this.getCanvas().width / 2 - (Math.max(325, Math.min(600, this.getCanvas().width - 300))) / 2, y: (widget) => this.getCanvas().height / 2 - (Math.max(200, Math.min(600, this.getCanvas().height - 100))) / 2}, (widget) => (Math.max(325, Math.min(600, this.getCanvas().width - 300))), (widget) => (Math.max(200, Math.min(600, this.getCanvas().height - 100))));
 
         this.addWidget(new SolventTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth() - widget.getWidth(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
         this.addWidget(new SoluteTapWidget({x: (widget) => this.containerWidget.getX(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
@@ -116,56 +59,16 @@ class CryoscopyEbullioscopyScene extends Scene {
             }
             return new LiteralText(`ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
         }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
-        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => canvas.height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")));
-        this.addWidget(new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}));
-        this.addWidget(new LanguageWidget({x: (widget) => canvas.width - 10, y: (widget) => canvas.height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}));
+        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")));
+        this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}));
+        this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}));
         this.addWidget(this.containerWidget);
     }
 }
 
-class Widget {
+class CryoscopyEbullioscopyWidget extends Widget {
     constructor(pos) {
-        this.pos = pos;
-    }
-
-    getWidth() {
-    }
-
-    getHeight() {
-    }
-
-    getMaxWidth() {
-        return this.getWidth();
-    }
-
-    getMaxHeight() {
-        return this.getHeight();
-    }
-
-    getMinX() {
-        return this.getX();
-    }
-
-    getMinY() {
-        return this.getY();
-    }
-
-    getX() {
-        return this.pos.x(this);
-    }
-
-    getY() {
-        return this.pos.y(this);
-    }
-
-    draw() {
-    }
-
-    onHover(mouseX, mouseY) {
-    }
-
-    isHoveredOver(mouseX, mouseY) {
-        return mouseX >= this.getMinX() && mouseY >= this.getMinY() && mouseX < this.getMinX() + this.getMaxWidth() && mouseY < this.getMinY() + this.getMaxHeight();
+        super(pos);
     }
 
     allowsFreezing() {
@@ -173,7 +76,7 @@ class Widget {
     }
 }
 
-class TapWidget extends Widget {
+class TapWidget extends CryoscopyEbullioscopyWidget {
     constructor(img, pos, container) {
         super(pos);
         this.img = img;
@@ -190,11 +93,11 @@ class TapWidget extends Widget {
     }
 
     onHover(mouseX, mouseY) {
-        canvas.style.cursor = "pointer";
+        this.getCanvas().style.cursor = "pointer";
     }
 
     draw() {
-        drawImage(ctx, this.img, this.getX(), this.getY());
+        drawImage(this.getCtx(), this.img, this.getX(), this.getY());
     }
 
     click(mouseX, mouseY) {
@@ -215,27 +118,27 @@ class SolventTapWidget extends TapWidget {
     }
 
     draw() {
-        ctx.save();
-        ctx.translate(this.getX() + this.img.width / 2, this.getY() + this.img.height / 2);
-        ctx.scale(-1, 1);
-        ctx.translate(-this.getX() - this.img.width / 2, -this.getY() - this.img.height / 2);
+        this.getCtx().save();
+        this.getCtx().translate(this.getX() + this.img.width / 2, this.getY() + this.img.height / 2);
+        this.getCtx().scale(-1, 1);
+        this.getCtx().translate(-this.getX() - this.img.width / 2, -this.getY() - this.img.height / 2);
         super.draw();
-        ctx.restore();
+        this.getCtx().restore();
         if (this.open && this.container.solventVolumeLiters < 35) {
-            ctx.fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
-            ctx.fillRect(this.getX() + 7, this.getY() + 68, 30, this.container.getHeight() + 32);
+            this.getCtx().fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
+            this.getCtx().fillRect(this.getX() + 7, this.getY() + 68, 30, this.container.getHeight() + 32);
             this.container.addSolvent(0.0625);
         } else {
             this.open = false;
         }
 
-        ctx.fillStyle = "#ffffff";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.font = "1em sans-serif";
-        ctx.textAlign = "right";
-        ctx.fillText(SolventTapWidget.name.get(), this.getX() + this.img.width - 70, this.getY() + 20);
-        ctx.fillText(translate.translateString("crioscopia.tap.solvent.label", this.container.solventVolumeLiters.toFixed(5)), this.getX() + this.img.width - 70, this.getY() + 50);
+        this.getCtx().fillStyle = "#ffffff";
+        this.getCtx().textAlign = "left";
+        this.getCtx().textBaseline = "top";
+        this.getCtx().font = "1em sans-serif";
+        this.getCtx().textAlign = "right";
+        this.getCtx().fillText(SolventTapWidget.name.get(), this.getX() + this.img.width - 70, this.getY() + 20);
+        this.getCtx().fillText(translate.translateString("crioscopia.tap.solvent.label", this.container.solventVolumeLiters.toFixed(5)), this.getX() + this.img.width - 70, this.getY() + 50);
     }
 }
 
@@ -253,19 +156,19 @@ class SoluteTapWidget extends TapWidget {
     draw() {
         super.draw();
         if (this.open && !this.container.hasTooMuchSolute()) {
-            ctx.fillStyle = "#" + solutes[this.container.soluteType].color.toString(16).padStart(6, "0");
-            ctx.fillRect(this.getX() + 93, this.getY() + 68, 14, this.container.getHeight() + 32);
+            this.getCtx().fillStyle = "#" + solutes[this.container.soluteType].color.toString(16).padStart(6, "0");
+            this.getCtx().fillRect(this.getX() + 93, this.getY() + 68, 14, this.container.getHeight() + 32);
             this.container.addSolute(0.03125);
         } else {
             this.open = false;
         }
 
-        ctx.fillStyle = "#ffffff";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.font = "1em sans-serif";
-        ctx.fillText(SoluteTapWidget.name.get(), this.getX() + 70, this.getY() + 20);
-        ctx.fillText(translate.translateString("crioscopia.tap.solute.label", this.container.soluteMoles.toFixed(5)), this.getX() + 70, this.getY() + 50);
+        this.getCtx().fillStyle = "#ffffff";
+        this.getCtx().textAlign = "left";
+        this.getCtx().textBaseline = "top";
+        this.getCtx().font = "1em sans-serif";
+        this.getCtx().fillText(SoluteTapWidget.name.get(), this.getX() + 70, this.getY() + 20);
+        this.getCtx().fillText(translate.translateString("crioscopia.tap.solute.label", this.container.soluteMoles.toFixed(5)), this.getX() + 70, this.getY() + 50);
     }
 }
 
@@ -281,8 +184,8 @@ class EmptyTapWidget extends TapWidget {
     draw() {
         super.draw();
         if (this.open && this.container.solventVolumeLiters > 0) {
-            ctx.fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
-            ctx.fillRect(this.getX() + 85, this.getY() + 68, 30, canvas.height - this.getY() - 68);
+            this.getCtx().fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
+            this.getCtx().fillRect(this.getX() + 85, this.getY() + 68, 30, this.getCanvas().height - this.getY() - 68);
             this.container.addSolute(-0.0625 * this.container.soluteMoles / this.container.solventVolumeLiters);
             this.container.addSolvent(-0.0625);
         } else {
@@ -292,63 +195,6 @@ class EmptyTapWidget extends TapWidget {
 
     allowsFreezing() {
         return !this.open;
-    }
-}
-
-class TextWidget extends Widget {
-    constructor(pos, text, settings = {}) {
-        super(pos);
-        this.text = text;
-        this.font = settings.font || ((widget) => "1em sans-serif");
-        this.textAlign = settings.textAlign || ((widget) => "left");
-        this.textBaseline = settings.textBaseline || ((widget) => "top");
-        this.fillStyle = settings.fillStyle || ((widget) => "#ffffff");
-        this.width = 0;
-        this.height = 0;
-        this.maxWidth = 0;
-        this.maxHeight = 0;
-    }
-
-    getWidth() {
-        return this.width;
-    }
-
-    getHeight() {
-        return this.height;
-    }
-
-    getMaxWidth() {
-        return this.maxWidth;
-    }
-
-    getMaxHeight() {
-        return this.maxHeight;
-    }
-
-    getMinX() {
-        if (this.textAlign(this) === "right") {
-            return super.getMinX() - this.maxWidth;
-        }
-        return super.getMinX();
-    }
-
-    draw() {
-        ctx.save();
-        
-        ctx.font = this.font(this);
-        ctx.textAlign = this.textAlign(this);
-        ctx.textBaseline = this.textBaseline(this);
-        ctx.fillStyle = this.fillStyle(this);
-
-        const text = this.text(this).get();
-        const measure = ctx.measureText(text);
-        this.width = measure.width;
-        this.height = measure.actualBoundingBoxDescent + measure.actualBoundingBoxAscent;
-        this.maxWidth = Math.max(this.maxWidth, this.width);
-        this.maxHeight = Math.max(this.maxHeight , this.height);
-
-        ctx.fillText(text, this.getX(), this.getY());
-        ctx.restore();
     }
 }
 
@@ -387,7 +233,7 @@ class SolutionContainerWidget extends Widget {
         if (temperatureKelvin <= this.getFreezingTemperature() && this.solventVolumeLiters > 0) {
             if (!this.parent) return true;
             for (let widget of this.parent.widgets) {
-                if (!widget.allowsFreezing()) {
+                if (widget instanceof CryoscopyEbullioscopyWidget && !widget.allowsFreezing()) {
                     return false;
                 }
             }
@@ -470,111 +316,45 @@ class SolutionContainerWidget extends Widget {
             this.setSolventType(0);
         }
 
-        ctx.fillStyle = "#" + addColors(solvents[this.solventType].color, this.isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
-        ctx.fillRect(this.getX(), this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35, this.getWidth(), this.solventVolumeLiters * this.getHeight() / 35);
+        this.getCtx().fillStyle = "#" + addColors(solvents[this.solventType].color, this.isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
+        this.getCtx().fillRect(this.getX(), this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35, this.getWidth(), this.solventVolumeLiters * this.getHeight() / 35);
         if (temperatureKelvin > this.getBoilingTemperature() && this.solventVolumeLiters > 0) {
             this.addSolvent(-0.0625 * (temperatureKelvin - this.getBoilingTemperature()) / 200); // Simplification
             if (this.soluteMoles > this.getMaxSoluteAmount()) {
                 this.soluteMoles = this.getMaxSoluteAmount();
             }
-            const gradient = ctx.createLinearGradient(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 - 100, this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35);
+            const gradient = this.getCtx().createLinearGradient(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 - 100, this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35);
             gradient.addColorStop(1, "#" + solvents[this.solventType].color.toString(16).padStart(6, "0"));
             gradient.addColorStop(0, "#" + solvents[this.solventType].color.toString(16).padStart(6, "0") + "00");
 
-            ctx.fillStyle = gradient;
-            ctx.fillRect(this.getX(), this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 - 100, this.getWidth(), 100);
+            this.getCtx().fillStyle = gradient;
+            this.getCtx().fillRect(this.getX(), this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 - 100, this.getWidth(), 100);
         }
 
         // Container outline
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 6;
-        ctx.strokeRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        this.getCtx().strokeStyle = "#ffffff";
+        this.getCtx().lineWidth = 6;
+        this.getCtx().strokeRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
-        ctx.textAlign = "center";
+        this.getCtx().textAlign = "center";
         if (this.hasTooMuchSolute()) {
-            ctx.fillStyle = "#ffffff";
+            this.getCtx().fillStyle = "#ffffff";
             let text = translate.translateString('crioscopia.tooMuchSolute');
-            ctx.fillText(text, this.getX() + this.getWidth() / 2, this.getY() - 40);
+            this.getCtx().fillText(text, this.getX() + this.getWidth() / 2, this.getY() - 40);
         }
         
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = `${Math.min(this.solventVolumeLiters * 20, 36)}px sans-serif`;
+        this.getCtx().textAlign = "center";
+        this.getCtx().textBaseline = "middle";
+        this.getCtx().font = `${Math.min(this.solventVolumeLiters * 20, 36)}px sans-serif`;
         if (this.isFrozen()) {
-            ctx.fillStyle = isDarkColor(addColors(solvents[this.solventType].color, 0x777777)) ? "#ffffff" : "#000000";
-            ctx.fillText(translate.translateString('crioscopia.frozen'), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 / 2);
+            this.getCtx().fillStyle = isDarkColor(addColors(solvents[this.solventType].color, 0x777777)) ? "#ffffff" : "#000000";
+            this.getCtx().fillText(translate.translateString('crioscopia.frozen'), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 / 2);
         }
     }
 }
 
-class LanguageWidget extends TextWidget {
-    constructor(pos, language, settings = {}) {
-        super(pos, (widget) => new LiteralText(translate.getName(language)), settings);
-        this.language = language;
-    }
-
-    onHover(mouseX, mouseY) {
-        canvas.style.cursor = "pointer";
-    }
-
-    click(mouseX, mouseY) {
-        changeLanguage(this.language);
-    }
-}
-
-let scene = new CryoscopyEbullioscopyScene();
-
-(function draw() {
-    canvas.style.cursor = "";
-    
-    scene.draw();
-
-    requestAnimationFrame(draw);
-})();
-
-function drawImage(ctx, img, x, y) {
-    if (!img.complete) {
-        return;
-    }
-
-    if (img.naturalWidth === 0) {
-        return;
-    }
-
-    ctx.drawImage(img, x, y);
-}
-
-function isDarkColor(hex) {
-    function sRGBtoLinear(colorChannel) {
-        const c = colorChannel / 255;
-        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    }
-
-    function getLuminance(hex) {
-        let red = (hex >> 16) & 0xFF;
-        let green = (hex >> 8) & 0xFF;
-        let blue = hex & 0xFF;
-        const R = sRGBtoLinear(red);
-        const G = sRGBtoLinear(green);
-        const B = sRGBtoLinear(blue);
-        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
-    }
-
-    const luminance = getLuminance(hex);
-    return luminance < 0.5;
-}
-
-function addColors(first, second) {
-    let red = (first >> 16) & 0xFF;
-    let green = (first >> 8) & 0xFF;
-    let blue = first & 0xFF;
-
-    let red2 = (second >> 16) & 0xFF;
-    let green2 = (second >> 8) & 0xFF;
-    let blue2 = second & 0xFF;
-
-    return Math.min(red + red2, 0xFF) << 16 | Math.min(green + green2, 0xFF) << 8 | Math.min(blue + blue2, 0xFF);
-}
+const labjolt = new LabJolt(canvas);
+labjolt.setScene(new CryoscopyEbullioscopyScene())
 
 let controls = document.createElement("div");
 controls.classList.add("controls");
@@ -677,26 +457,3 @@ controlsContainer.appendChild(soluteControlContainer);
 controlsContainer.appendChild(constantDensityContainer);
 controls.appendChild(controlsContainer);
 document.body.appendChild(controls);
-
-canvas.addEventListener('click', (event) => {
-    event.preventDefault();
-    scene.click(mousePos.x, mousePos.y);
-}, false);
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-function getMousePos(event) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    const x = (event.clientX - rect.left) * scaleX;
-    const y = (event.clientY - rect.top) * scaleY;
-
-    return { x, y };
-}
-
-canvas.addEventListener("mousemove", (event) => {
-    mousePos = getMousePos(event);
-});
