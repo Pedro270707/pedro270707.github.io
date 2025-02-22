@@ -218,7 +218,7 @@ class LabJolt {
     }
 
     setScene(scene) {
-        if (!(scene instanceof Scene)) throw new TypeError("Parameter \"scene\" (LabJolt) is not an instance of Scene");
+        if (!(scene instanceof Scene)) throw new TypeError("Parameter \"scene\" (LabJolt.setScene) is not an instance of Scene");
         if (this.#scene && this.#scene.labjolt === this) delete this.#scene.labjolt;
         this.#scene = scene;
         this.#scene.labjolt = this;
