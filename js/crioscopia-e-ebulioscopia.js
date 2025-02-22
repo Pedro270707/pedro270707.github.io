@@ -48,25 +48,23 @@ class CryoscopyEbullioscopyScene extends Scene {
         this.addWidget(new SolventTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth() - widget.getWidth(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
         this.addWidget(new SoluteTapWidget({x: (widget) => this.containerWidget.getX(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
         this.addWidget(new EmptyTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() - 60}, this.containerWidget));
-        this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 20}, ((widget) => {
-            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-                return "ΔTc = Kc · W · i";
-            }
+        this.addWidget(new VariableHoverableTextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 20}, ((widget) => {
             return `ΔTc = ${solvents[this.containerWidget.solventType].cryoscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].cryoscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
-        }), (widget) => 500, (widget) => textHeight, undefined, undefined, {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
-        this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 50}, ((widget) => {
-            if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-                return "ΔTe = Ke · W · i";
-            }
+        }), ((widget) => {
+            return "ΔTc = Kc · W · i";
+        }), 500, textHeight, undefined, undefined, {textAlign: "right"}));
+        this.addWidget(new VariableHoverableTextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 50}, ((widget) => {
             return `ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
-        }), (widget) => 500, (widget) => textHeight, undefined, undefined, {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
+        }), ((widget) => {
+            return "ΔTe = Ke · W · i";
+        }), 500, textHeight, undefined, undefined, {textAlign: "right"}));
         const title = new TranslatableText("crioscopia.title");
-        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, (widget) => title, (widget) => 500, (widget) => textHeight));
+        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, title, 500, textHeight));
         translate.whenLoaded(() => {
             let index = 0;
             for (let definition in Object.fromEntries(Object.entries(translate.definitions).reverse())) {
                 let currentIndex = index;
-                this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10 - currentIndex * 30}, definition, (widget) => 100, (widget) => textHeight, undefined, undefined, {textAlign: (widget) => "right"}));
+                this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10 - currentIndex * 30}, definition, 100, textHeight, undefined, undefined, {textAlign: "right"}));
                 ++index;
             }
         })

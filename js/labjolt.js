@@ -119,34 +119,34 @@ class TextWidget extends Widget {
     constructor(pos, text, width, height, maxWidth, maxHeight, settings = {}) {
         super(pos);
         this.text = text;
-        this.font = settings.font || ((widget) => "1em sans-serif");
-        this.textAlign = settings.textAlign || ((widget) => "left");
-        this.textBaseline = settings.textBaseline || ((widget) => "top");
-        this.fillStyle = settings.fillStyle || ((widget) => "#ffffff");
-        this.width = width || ((widget) => 0);
-        this.height = height || ((widget) => 0);
+        this.font = settings.font || "1em sans-serif";
+        this.textAlign = settings.textAlign || "left";
+        this.textBaseline = settings.textBaseline || "top";
+        this.fillStyle = settings.fillStyle || "#ffffff";
+        this.width = width || 0;
+        this.height = height || 0;
         this.maxWidth = maxWidth || this.width;
         this.maxHeight = maxHeight || this.height;
     }
 
     getWidth() {
-        return this.width(this);
+        return this.width;
     }
 
     getHeight() {
-        return this.height(this);
+        return this.height;
     }
 
     getMaxWidth() {
-        return this.maxWidth(this);
+        return this.maxWidth;
     }
 
     getMaxHeight() {
-        return this.maxHeight(this);
+        return this.maxHeight;
     }
 
     getMinX() {
-        if (this.textAlign(this) === "right") {
+        if (this.textAlign === "right") {
             return super.getMinX() - this.getMaxWidth();
         }
         return super.getMinX();
@@ -155,18 +155,176 @@ class TextWidget extends Widget {
     draw() {
         this.getCtx().save();
         
-        this.getCtx().font = this.font(this);
-        this.getCtx().textAlign = this.textAlign(this);
-        this.getCtx().textBaseline = this.textBaseline(this);
-        this.getCtx().fillStyle = this.fillStyle(this);
+        this.getCtx().font = this.font;
+        this.getCtx().textAlign = this.textAlign;
+        this.getCtx().textBaseline = this.textBaseline;
+        this.getCtx().fillStyle = this.fillStyle;
 
-        const text = this.text(this);
+        const text = this.text;
         this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
         this.getCtx().restore();
     }
 }
 
-class LanguageWidget extends TextWidget {
+class HoverableTextWidget extends Widget {
+    constructor(pos, text, hoverText, width, height, maxWidth, maxHeight, settings = {}) {
+        super(pos);
+        this.text = text;
+        this.hoverText = hoverText;
+        this.font = settings.font || "1em sans-serif";
+        this.textAlign = settings.textAlign || "left";
+        this.textBaseline = settings.textBaseline || "top";
+        this.fillStyle = settings.fillStyle || "#ffffff";
+        this.hoverFillStyle = settings.hoverFillStyle || "#ffff00";
+        this.width = width || 0;
+        this.height = height || 0;
+        this.maxWidth = maxWidth || this.width;
+        this.maxHeight = maxHeight || this.height;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    getMaxWidth() {
+        return this.maxWidth;
+    }
+
+    getMaxHeight() {
+        return this.maxHeight;
+    }
+
+    getMinX() {
+        if (this.textAlign === "right") {
+            return super.getMinX() - this.getMaxWidth();
+        }
+        return super.getMinX();
+    }
+
+    draw() {
+        this.getCtx().save();
+        
+        this.getCtx().font = this.font;
+        this.getCtx().textAlign = this.textAlign;
+        this.getCtx().textBaseline = this.textBaseline;
+        this.getCtx().fillStyle = this.isHoveredOver(mousePos.x, mousePos.y) ? this.hoverFillStyle : this.fillStyle;
+
+        const text = this.isHoveredOver(mousePos.x, mousePos.y) ? this.hoverText : this.text;
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
+        this.getCtx().restore();
+    }
+}
+
+class VariableHoverableTextWidget extends Widget {
+    constructor(pos, textFunction, hoverTextFunction, width, height, maxWidth, maxHeight, settings = {}) {
+        super(pos);
+        this.textFunction = textFunction;
+        this.hoverTextFunction = hoverTextFunction;
+        this.settings = settings;
+        this.font = settings.font || "1em sans-serif";
+        this.textAlign = settings.textAlign || "left";
+        this.textBaseline = settings.textBaseline || "top";
+        this.fillStyle = settings.fillStyle || "#ffffff";
+        this.hoverFillStyle = settings.hoverFillStyle || "#ffff00";
+        this.width = width || 0;
+        this.height = height || 0;
+        this.maxWidth = maxWidth || this.width;
+        this.maxHeight = maxHeight || this.height;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    getMaxWidth() {
+        return this.maxWidth;
+    }
+
+    getMaxHeight() {
+        return this.maxHeight;
+    }
+
+    getMinX() {
+        if (this.textAlign === "right") {
+            return super.getMinX() - this.getMaxWidth();
+        }
+        return super.getMinX();
+    }
+
+    draw() {
+        this.getCtx().save();
+        
+        this.getCtx().font = this.font;
+        this.getCtx().textAlign = this.textAlign;
+        this.getCtx().textBaseline = this.textBaseline;
+        this.getCtx().fillStyle = this.isHoveredOver(mousePos.x, mousePos.y) ? this.hoverFillStyle : this.fillStyle;
+
+        const text = this.isHoveredOver(mousePos.x, mousePos.y) ? this.hoverTextFunction(this) : this.textFunction(this);
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
+        this.getCtx().restore();
+    }
+}
+
+class VariableTextWidget extends Widget {
+    constructor(pos, textFunction, width, height, maxWidth, maxHeight, settings = {}) {
+        super(pos);
+        this.textFunction = textFunction;
+        this.font = settings.font || "1em sans-serif";
+        this.textAlign = settings.textAlign || "left";
+        this.textBaseline = settings.textBaseline || "top";
+        this.fillStyle = settings.fillStyle || "#ffffff";
+        this.width = width || 0;
+        this.height = height || 0;
+        this.maxWidth = maxWidth || this.width;
+        this.maxHeight = maxHeight || this.height;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    getMaxWidth() {
+        return this.maxWidth;
+    }
+
+    getMaxHeight() {
+        return this.maxHeight;
+    }
+
+    getMinX() {
+        if (this.textAlign === "right") {
+            return super.getMinX() - this.getMaxWidth();
+        }
+        return super.getMinX();
+    }
+
+    draw() {
+        this.getCtx().save();
+        
+        this.getCtx().font = this.font;
+        this.getCtx().textAlign = this.textAlign;
+        this.getCtx().textBaseline = this.textBaseline;
+        this.getCtx().fillStyle = this.fillStyle;
+
+        const text = this.textFunction(this);
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
+        this.getCtx().restore();
+    }
+}
+
+class LanguageWidget extends VariableTextWidget {
     constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
         let text = LiteralText.EMPTY;
         translate.whenLoaded(() => text = new LiteralText(translate.getName(language)));
