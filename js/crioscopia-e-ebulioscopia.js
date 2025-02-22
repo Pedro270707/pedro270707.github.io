@@ -102,7 +102,7 @@ class TapWidget extends CryoscopyEbullioscopyWidget {
         this.getCanvas().style.cursor = "pointer";
     }
 
-    draw() {
+    draw(tickDelta) {
         drawImage(this.getCtx(), this.img, this.getX(), this.getY());
     }
 
@@ -123,17 +123,17 @@ class SolventTapWidget extends TapWidget {
         })(), pos, container);
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().save();
         this.getCtx().translate(this.getX() + this.img.width / 2, this.getY() + this.img.height / 2);
         this.getCtx().scale(-1, 1);
         this.getCtx().translate(-this.getX() - this.img.width / 2, -this.getY() - this.img.height / 2);
-        super.draw();
+        super.draw(tickDelta);
         this.getCtx().restore();
         if (this.open && this.container.solventVolumeLiters < 35) {
             this.getCtx().fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
             this.getCtx().fillRect(this.getX() + 7, this.getY() + 68, 30, this.container.getHeight() + 32);
-            this.container.addSolvent(0.0625);
+            this.container.addSolvent(2 * tickDelta);
         } else {
             this.open = false;
         }
@@ -159,12 +159,12 @@ class SoluteTapWidget extends TapWidget {
         })(), pos, container);
     }
 
-    draw() {
-        super.draw();
+    draw(tickDelta) {
+        super.draw(tickDelta);
         if (this.open && !this.container.hasTooMuchSolute()) {
             this.getCtx().fillStyle = "#" + solutes[this.container.soluteType].color.toString(16).padStart(6, "0");
             this.getCtx().fillRect(this.getX() + 93, this.getY() + 68, 14, this.container.getHeight() + 32);
-            this.container.addSolute(0.03125);
+            this.container.addSolute(1 * tickDelta);
         } else {
             this.open = false;
         }
@@ -187,13 +187,13 @@ class EmptyTapWidget extends TapWidget {
         })(), pos, container);
     }
 
-    draw() {
-        super.draw();
+    draw(tickDelta) {
+        super.draw(tickDelta);
         if (this.open && this.container.solventVolumeLiters > 0) {
             this.getCtx().fillStyle = "#" + solvents[this.container.solventType].color.toString(16).padStart(6, "0");
             this.getCtx().fillRect(this.getX() + 85, this.getY() + 68, 30, this.getCanvas().height - this.getY() - 68);
-            this.container.addSolute(-0.0625 * this.container.soluteMoles / this.container.solventVolumeLiters);
-            this.container.addSolvent(-0.0625);
+            this.container.addSolute(-2 * this.container.soluteMoles / this.container.solventVolumeLiters * tickDelta);
+            this.container.addSolvent(-2 * tickDelta);
         } else {
             this.open = false;
         }
@@ -317,7 +317,7 @@ class SolutionContainerWidget extends Widget {
         return solvents[this.solventType].solubility * this.solventVolumeLiters;
     }
 
-    draw() {
+    draw(tickDelta) {
         if (this.solventType > solvents.length - 1 || this.solventType < 0) {
             this.setSolventType(0);
         }

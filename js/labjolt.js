@@ -33,7 +33,7 @@ class Scene {
         }
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().fillStyle = "#1f1f1f";
         this.getCtx().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
 
@@ -41,7 +41,7 @@ class Scene {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
                 widget.onHover(mousePos.x, mousePos.y);
             }
-            widget.draw();
+            widget.draw(tickDelta);
         }
     }
 
@@ -98,7 +98,7 @@ class Widget {
         return this.pos.y(this);
     }
 
-    draw() {
+    draw(tickDelta) {
     }
 
     resizeCanvas() {
@@ -152,7 +152,7 @@ class TextWidget extends Widget {
         return super.getMinX();
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().save();
         
         this.getCtx().font = this.font;
@@ -205,7 +205,7 @@ class HoverableTextWidget extends Widget {
         return super.getMinX();
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().save();
         
         this.getCtx().font = this.font;
@@ -259,7 +259,7 @@ class VariableHoverableTextWidget extends Widget {
         return super.getMinX();
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().save();
         
         this.getCtx().font = this.font;
@@ -310,7 +310,7 @@ class VariableTextWidget extends Widget {
         return super.getMinX();
     }
 
-    draw() {
+    draw(tickDelta) {
         this.getCtx().save();
         
         this.getCtx().font = this.font;
@@ -344,6 +344,8 @@ class LanguageWidget extends VariableTextWidget {
 class LabJolt {
     #scene;
     #canvas;
+    #previousTime;
+    #deltaTime = 0;
 
     constructor(canvas) {
         this.#scene = undefined;
@@ -388,9 +390,16 @@ class LabJolt {
     }
 
     draw() {
+        const currentTime = performance.now();
+    
+        this.#deltaTime = currentTime - (this.#previousTime || currentTime);
+        this.#previousTime = currentTime;
+    
+        const tickDelta = this.#deltaTime / 1000;
+
         if (this.getCanvas()) this.getCanvas().style.cursor = "";
         
-        if (this.#scene) this.#scene.draw();
+        if (this.#scene) this.#scene.draw(tickDelta);
     
         requestAnimationFrame(() => this.draw());
     }
