@@ -52,12 +52,12 @@ class CryoscopyEbullioscopyScene extends Scene {
             return `ΔTc = ${solvents[this.containerWidget.solventType].cryoscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].cryoscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
         }), ((widget) => {
             return "ΔTc = Kc · W · i";
-        }), 500, textHeight, undefined, undefined, {textAlign: "right"}));
+        }), 310, textHeight, undefined, undefined, {textAlign: "right"}));
         this.addWidget(new VariableHoverableTextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 50}, ((widget) => {
             return `ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
         }), ((widget) => {
             return "ΔTe = Ke · W · i";
-        }), 500, textHeight, undefined, undefined, {textAlign: "right"}));
+        }), 310, textHeight, undefined, undefined, {textAlign: "right"}));
         const title = new TranslatableText("crioscopia.title");
         this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, title, 500, textHeight));
         translate.whenLoaded(() => {
