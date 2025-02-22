@@ -195,7 +195,7 @@ class LabJolt {
             this.#scene.click(mousePos.x, mousePos.y);
         }, false);
 
-        window.addEventListener('resize', this.resizeCanvas);
+        window.addEventListener('resize', () => this.resizeCanvas());
 
         canvas.addEventListener("mousemove", (event) => {
             mousePos = getMousePos(event);
@@ -209,6 +209,7 @@ class LabJolt {
     }
 
     resizeCanvas() {
+        console.log("Resizing canvas");
         const ratio = window.devicePixelRatio || 1;
         this.getCanvas().width = container.clientWidth * ratio;
         this.getCanvas().height = container.clientHeight * ratio;
