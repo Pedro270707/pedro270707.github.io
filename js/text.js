@@ -1,4 +1,7 @@
 class LiteralText {
+    static #EMPTY = new LiteralText("");
+    static get EMPTY() { return LiteralText.#EMPTY }
+
     constructor(key, ...args) {
         this.key = key;
         for (const arg in args) {

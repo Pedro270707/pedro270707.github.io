@@ -171,7 +171,9 @@ class TextWidget extends Widget {
 
 class LanguageWidget extends TextWidget {
     constructor(pos, language, settings = {}) {
-        super(pos, (widget) => new LiteralText(translate.getName(language)), settings);
+        let text = LiteralText.EMPTY;
+        translate.addChangeListener(() => text = new LiteralText(translate.getName(language)));
+        super(pos, (widget) => text, settings);
         this.language = language;
     }
 

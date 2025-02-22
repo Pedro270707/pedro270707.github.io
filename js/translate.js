@@ -3,6 +3,7 @@ class Translate {
 
 	constructor(language) {
 		this.language = language;
+		this.loaded = false;
 		this.changeListeners = [];
 		this.loadFunctions = [];
 		this.definitions = [];
@@ -18,8 +19,13 @@ class Translate {
 		let translatedString = string;
 		
 		const file = this.cachedFiles.get(lang);
-		if (file) {
-			translatedString = file[translatedString] || translatedString;
+		if (file && file[translatedString]) {
+			translatedString = file[translatedString];
+		} else {
+			const defaultFile = this.cachedFiles.get(Translate.DEFAULT_LANGUAGE);
+			if (defaultFile) {
+				translatedString = defaultFile[translatedString] || translatedString;
+			}
 		}
 
 		for (let i = 1; i <= args.length; i++) {
@@ -86,6 +92,7 @@ class Translate {
 		this.cachedFiles = cachedFiles;
 		
 		this.onLanguageLoad();
+		this.loaded = true;
 	}
 
 	onLanguageLoad() {
