@@ -1,11 +1,17 @@
-class LiteralText {
+class Text {
+    toJSON() {}
+    get() {}
+}
+
+class LiteralText extends Text {
     static #EMPTY = new LiteralText("");
     static get EMPTY() { return LiteralText.#EMPTY }
 
     constructor(key, ...args) {
+        super();
         this.key = key;
         for (const arg in args) {
-            if (!(args[arg] instanceof LiteralText || args[arg] instanceof TranslatableText)) {
+            if (!(args[arg] instanceof Text)) {
                 args[arg] = new LiteralText(args[arg]);
             }
         }
@@ -43,11 +49,12 @@ class LiteralText {
     }
 }
 
-class TranslatableText {
+class TranslatableText extends Text {
     constructor(key, ...args) {
+        super();
         this.key = key;
         for (const arg in args) {
-            if (!(args[arg] instanceof LiteralText || args[arg] instanceof TranslatableText)) {
+            if (!(args[arg] instanceof Text)) {
                 args[arg] = new LiteralText(args[arg]);
             }
         }

@@ -1,12 +1,12 @@
 {
-    "pt": {
-        "name": "Português",
-        "author": "Pedro Ricardo",
-        "url": "/language/pt.json"
-    },
     "en": {
         "name": "English",
         "author": "Pedro Ricardo",
         "url": "/language/en.json"
+    },
+    "pt": {
+        "name": "Português",
+        "author": "Pedro Ricardo",
+        "url": "/language/pt.json"
     }
 }

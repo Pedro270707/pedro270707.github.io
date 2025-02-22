@@ -107,44 +107,47 @@ class Widget {
     onHover(mouseX, mouseY) {
     }
 
+    click(mouseX, mouseY) {
+    }
+
     isHoveredOver(mouseX, mouseY) {
         return mouseX >= this.getMinX() && mouseY >= this.getMinY() && mouseX < this.getMinX() + this.getMaxWidth() && mouseY < this.getMinY() + this.getMaxHeight();
     }
 }
 
 class TextWidget extends Widget {
-    constructor(pos, text, settings = {}) {
+    constructor(pos, text, width, height, maxWidth, maxHeight, settings = {}) {
         super(pos);
         this.text = text;
         this.font = settings.font || ((widget) => "1em sans-serif");
         this.textAlign = settings.textAlign || ((widget) => "left");
         this.textBaseline = settings.textBaseline || ((widget) => "top");
         this.fillStyle = settings.fillStyle || ((widget) => "#ffffff");
-        this.width = 0;
-        this.height = 0;
-        this.maxWidth = 0;
-        this.maxHeight = 0;
+        this.width = width || ((widget) => 0);
+        this.height = height || ((widget) => 0);
+        this.maxWidth = maxWidth || this.width;
+        this.maxHeight = maxHeight || this.height;
     }
 
     getWidth() {
-        return this.width;
+        return this.width(this);
     }
 
     getHeight() {
-        return this.height;
+        return this.height(this);
     }
 
     getMaxWidth() {
-        return this.maxWidth;
+        return this.maxWidth(this);
     }
 
     getMaxHeight() {
-        return this.maxHeight;
+        return this.maxHeight(this);
     }
 
     getMinX() {
         if (this.textAlign(this) === "right") {
-            return super.getMinX() - this.maxWidth;
+            return super.getMinX() - this.getMaxWidth();
         }
         return super.getMinX();
     }
@@ -157,23 +160,17 @@ class TextWidget extends Widget {
         this.getCtx().textBaseline = this.textBaseline(this);
         this.getCtx().fillStyle = this.fillStyle(this);
 
-        const text = this.text(this).get();
-        const measure = this.getCtx().measureText(text);
-        this.width = measure.width;
-        this.height = measure.actualBoundingBoxDescent + measure.actualBoundingBoxAscent;
-        this.maxWidth = Math.max(this.maxWidth, this.width);
-        this.maxHeight = Math.max(this.maxHeight , this.height);
-
-        this.getCtx().fillText(text, this.getX(), this.getY());
+        const text = this.text(this);
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
         this.getCtx().restore();
     }
 }
 
 class LanguageWidget extends TextWidget {
-    constructor(pos, language, settings = {}) {
+    constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
         let text = LiteralText.EMPTY;
-        translate.addChangeListener(() => text = new LiteralText(translate.getName(language)));
-        super(pos, (widget) => text, settings);
+        translate.whenLoaded(() => text = new LiteralText(translate.getName(language)));
+        super(pos, (widget) => text, width, height, maxWidth, maxHeight, settings);
         this.language = language;
     }
 
@@ -253,36 +250,38 @@ function drawImage(ctx, img, x, y) {
     ctx.drawImage(img, x, y);
 }
 
-function isDarkColor(hex) {
-    function sRGBtoLinear(colorChannel) {
-        const c = colorChannel / 255;
-        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+class ColorHelper {
+    static isDarkColor(hex) {
+        function sRGBtoLinear(colorChannel) {
+            const c = colorChannel / 255;
+            return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        }
+
+        function getLuminance(hex) {
+            let red = (hex >> 16) & 0xFF;
+            let green = (hex >> 8) & 0xFF;
+            let blue = hex & 0xFF;
+            const R = sRGBtoLinear(red);
+            const G = sRGBtoLinear(green);
+            const B = sRGBtoLinear(blue);
+            return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+        }
+
+        const luminance = getLuminance(hex);
+        return luminance < 0.5;
     }
 
-    function getLuminance(hex) {
-        let red = (hex >> 16) & 0xFF;
-        let green = (hex >> 8) & 0xFF;
-        let blue = hex & 0xFF;
-        const R = sRGBtoLinear(red);
-        const G = sRGBtoLinear(green);
-        const B = sRGBtoLinear(blue);
-        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    static addColors(first, second) {
+        let red = (first >> 16) & 0xFF;
+        let green = (first >> 8) & 0xFF;
+        let blue = first & 0xFF;
+
+        let red2 = (second >> 16) & 0xFF;
+        let green2 = (second >> 8) & 0xFF;
+        let blue2 = second & 0xFF;
+
+        return Math.min(red + red2, 0xFF) << 16 | Math.min(green + green2, 0xFF) << 8 | Math.min(blue + blue2, 0xFF);
     }
-
-    const luminance = getLuminance(hex);
-    return luminance < 0.5;
-}
-
-function addColors(first, second) {
-    let red = (first >> 16) & 0xFF;
-    let green = (first >> 8) & 0xFF;
-    let blue = first & 0xFF;
-
-    let red2 = (second >> 16) & 0xFF;
-    let green2 = (second >> 8) & 0xFF;
-    let blue2 = second & 0xFF;
-
-    return Math.min(red + red2, 0xFF) << 16 | Math.min(green + green2, 0xFF) << 8 | Math.min(blue + blue2, 0xFF);
 }
 
 function getMousePos(event) {
@@ -294,4 +293,14 @@ function getMousePos(event) {
     const y = (event.clientY - rect.top) * scaleY;
 
     return { x, y };
+}
+
+class TextMeasurementHelper {
+    static #textCache = {};
+    
+    static measureTextMemoized(text, ctx) {
+        if (!this.#textCache[ctx.font]) this.#textCache[ctx.font] = {};
+        if (!this.#textCache[ctx.font][text]) this.#textCache[ctx.font][text] = ctx.measureText(text);
+        return this.#textCache[ctx.font][text];
+    }
 }

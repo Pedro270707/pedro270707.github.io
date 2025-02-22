@@ -8,11 +8,7 @@ class Translate {
 		this.loadFunctions = [];
 		this.definitions = [];
 		this.cachedFiles = new Map();
-		this.reloadFiles().then(file => {
-			for (let loadFunction of this.loadFunctions) {
-				loadFunction();
-			}
-		});
+		this.reloadFiles();
 	}
 
 	translateStringInLanguage(string, lang, ...args) {
@@ -30,7 +26,7 @@ class Translate {
 
 		for (let i = 1; i <= args.length; i++) {
 			const placeholder = '%' + i + '$s';
-			if (!(args[i - 1] instanceof LiteralText || args[i - 1] instanceof TranslatableText)) args[i - 1] = new LiteralText(args[i - 1]);
+			if (!(args[i - 1] instanceof Text)) args[i - 1] = new LiteralText(args[i - 1]);
 			const str = args[i - 1].get();
 
 			if (translatedString.includes(placeholder)) {
@@ -66,7 +62,7 @@ class Translate {
 
 	whenLoaded(loadFunction) {
 		if (typeof loadFunction !== 'function') throw new Error('translate.js load function must be a function');
-		if (!this.file) {
+		if (!this.loaded) {
 			this.loadFunctions.push(loadFunction);
 		} else {
 			loadFunction();
@@ -90,6 +86,10 @@ class Translate {
 		}
 
 		this.cachedFiles = cachedFiles;
+
+		for (let loadFunction of this.loadFunctions) {
+			loadFunction();
+		}
 		
 		this.onLanguageLoad();
 		this.loaded = true;
@@ -117,7 +117,7 @@ class Translate {
 	}
 
 	setAttribute(element, attribute, text) {
-		if (text instanceof LiteralText || text instanceof TranslatableText) {
+		if (text instanceof Text) {
 			text = JSON.stringify(text);
 		}
 		element.setAttribute("data-translate-" + attribute, text);

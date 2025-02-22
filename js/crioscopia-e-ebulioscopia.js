@@ -44,24 +44,32 @@ class CryoscopyEbullioscopyScene extends Scene {
         super();
         this.containerWidget = new SolutionContainerWidget({x: (widget) => this.getCanvas().width / 2 - (Math.max(325, Math.min(600, this.getCanvas().width - 300))) / 2, y: (widget) => this.getCanvas().height / 2 - (Math.max(200, Math.min(600, this.getCanvas().height - 100))) / 2}, (widget) => (Math.max(325, Math.min(600, this.getCanvas().width - 300))), (widget) => (Math.max(200, Math.min(600, this.getCanvas().height - 100))));
 
+        const textHeight = 26;
         this.addWidget(new SolventTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth() - widget.getWidth(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
         this.addWidget(new SoluteTapWidget({x: (widget) => this.containerWidget.getX(), y: (widget) => this.containerWidget.getY() - widget.getHeight()}, this.containerWidget));
         this.addWidget(new EmptyTapWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() - 60}, this.containerWidget));
         this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 20}, ((widget) => {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-                return new LiteralText("ΔTc = Kc · W · i");
+                return "ΔTc = Kc · W · i";
             }
-            return new LiteralText(`ΔTc = ${solvents[this.containerWidget.solventType].cryoscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].cryoscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
-        }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
+            return `ΔTc = ${solvents[this.containerWidget.solventType].cryoscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].cryoscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
+        }), (widget) => 500, (widget) => textHeight, undefined, undefined, {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
         this.addWidget(new TextWidget({x: (widget) => this.containerWidget.getX() + this.containerWidget.getWidth(), y: (widget) => this.containerWidget.getY() + this.containerWidget.getHeight() + 50}, ((widget) => {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
-                return new LiteralText("ΔTe = Ke · W · i");
+                return "ΔTe = Ke · W · i";
             }
-            return new LiteralText(`ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`);
-        }), {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
-        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, (widget) => new TranslatableText("crioscopia.title")));
-        this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 40}, "en", {textAlign: (widget) => "right"}));
-        this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, "pt", {textAlign: (widget) => "right"}));
+            return `ΔTe = ${solvents[this.containerWidget.solventType].ebullioscopic_constant} · ${this.containerWidget.getMolality().toFixed(5)} · ${solutes[this.containerWidget.soluteType].van_t_hoff_factor} = ${(solvents[this.containerWidget.solventType].ebullioscopic_constant * this.containerWidget.getMolality() * solutes[this.containerWidget.soluteType].van_t_hoff_factor).toFixed(5)} °C`;
+        }), (widget) => 500, (widget) => textHeight, undefined, undefined, {fillStyle: (widget) => widget.isHoveredOver(mousePos.x, mousePos.y) ? "#ffff00" : "#ffffff", textAlign: (widget) => "right"}));
+        const title = new TranslatableText("crioscopia.title");
+        this.addWidget(new TextWidget({x: (widget) => 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10}, (widget) => title, (widget) => 500, (widget) => textHeight));
+        translate.whenLoaded(() => {
+            let index = 0;
+            for (let definition in Object.fromEntries(Object.entries(translate.definitions).reverse())) {
+                let currentIndex = index;
+                this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10 - currentIndex * 30}, definition, (widget) => 100, (widget) => textHeight, undefined, undefined, {textAlign: (widget) => "right"}));
+                ++index;
+            }
+        })
         this.addWidget(this.containerWidget);
     }
 }
@@ -316,7 +324,7 @@ class SolutionContainerWidget extends Widget {
             this.setSolventType(0);
         }
 
-        this.getCtx().fillStyle = "#" + addColors(solvents[this.solventType].color, this.isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
+        this.getCtx().fillStyle = "#" + ColorHelper.addColors(solvents[this.solventType].color, this.isFrozen() ? 0x777777 : 0).toString(16).padStart(6, "0");
         this.getCtx().fillRect(this.getX(), this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35, this.getWidth(), this.solventVolumeLiters * this.getHeight() / 35);
         if (temperatureKelvin > this.getBoilingTemperature() && this.solventVolumeLiters > 0) {
             this.addSolvent(-0.0625 * (temperatureKelvin - this.getBoilingTemperature()) / 200); // Simplification
@@ -347,7 +355,7 @@ class SolutionContainerWidget extends Widget {
         this.getCtx().textBaseline = "middle";
         this.getCtx().font = `${Math.min(this.solventVolumeLiters * 20, 36)}px sans-serif`;
         if (this.isFrozen()) {
-            this.getCtx().fillStyle = isDarkColor(addColors(solvents[this.solventType].color, 0x777777)) ? "#ffffff" : "#000000";
+            this.getCtx().fillStyle = ColorHelper.isDarkColor(ColorHelper.addColors(solvents[this.solventType].color, 0x777777)) ? "#ffffff" : "#000000";
             this.getCtx().fillText(translate.translateString('crioscopia.frozen'), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - this.solventVolumeLiters * this.getHeight() / 35 / 2);
         }
     }
