@@ -69,6 +69,7 @@ class CryoscopyEbullioscopyScene extends Scene {
             }
         })
         this.addWidget(this.containerWidget);
+        this.addWidget(new Draggable({x: (widget) => 0, y: (widget) => 0}));
     }
 }
 
@@ -360,7 +361,7 @@ class SolutionContainerWidget extends Widget {
 }
 
 const labjolt = new LabJolt(canvas);
-labjolt.setScene(new CryoscopyEbullioscopyScene())
+labjolt.setScene(new CryoscopyEbullioscopyScene());
 
 let controls = document.createElement("div");
 controls.classList.add("controls");

@@ -49,8 +49,19 @@ class Scene {
         for (let widget of this.widgets) {
             if (widget.isHoveredOver(mouseX, mouseY)) {
                 widget.click(mouseX, mouseY);
-                event.preventDefault();
             }
+        }
+    }
+
+    mouseDown(mouseX, mouseY) {
+        for (let widget of this.widgets) {
+            widget.mouseDown(mouseX, mouseY);
+        }
+    }
+
+    mouseUp(mouseX, mouseY) {
+        for (let widget of this.widgets) {
+            widget.mouseUp(mouseX, mouseY);
         }
     }
 }
@@ -108,6 +119,12 @@ class Widget {
     }
 
     click(mouseX, mouseY) {
+    }
+
+    mouseDown(mouseX, mouseY) {
+    }
+
+    mouseUp(mouseX, mouseY) {
     }
 
     isHoveredOver(mouseX, mouseY) {
@@ -324,6 +341,49 @@ class VariableTextWidget extends Widget {
     }
 }
 
+class Draggable extends Widget {
+    constructor(pos) {
+        super(pos);
+        this.dx = 0;
+        this.dy = 0;
+        this.isFollowingCursor = false;
+    }
+
+    getX() {
+        return this.pos.x() + this.dx;
+    }
+
+    getY() {
+        return this.pos.y() + this.dy;
+    }
+
+    mouseDown(mouseX, mouseY) {
+        if (!this.isHoveredOver(mouseX, mouseY)) return;
+        this.isFollowingCursor = true;
+        this.oldMouseX = mouseX;
+        this.oldMouseY = mouseY;
+    }
+
+    mouseUp(mouseX, mouseY) {
+        this.isFollowingCursor = false;
+        this.oldMouseX = 0;
+        this.oldMouseY = 0;
+        this.onRelease();
+    }
+
+    onRelease() {
+    }
+
+    draw(tickDelta) {
+        if (this.isFollowingCursor) {
+            this.dx += mousePos.x - this.oldMouseX;
+            this.dy += mousePos.y - this.oldMouseY;
+            this.oldMouseX = mousePos.x;
+            this.oldMouseY = mousePos.y;
+        }
+    }
+}
+
 class LanguageWidget extends VariableTextWidget {
     constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
         let text = LiteralText.EMPTY;
@@ -353,6 +413,16 @@ class LabJolt {
         canvas.addEventListener('click', (event) => {
             event.preventDefault();
             this.#scene.click(mousePos.x, mousePos.y);
+        }, false);
+
+        canvas.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+            this.#scene.mouseDown(mousePos.x, mousePos.y);
+        }, false);
+
+        canvas.addEventListener('mouseup', (event) => {
+            event.preventDefault();
+            this.#scene.mouseUp(mousePos.x, mousePos.y);
         }, false);
 
         window.addEventListener('resize', () => this.resizeCanvas());
