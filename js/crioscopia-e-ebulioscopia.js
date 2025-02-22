@@ -415,7 +415,7 @@ for (let i in solvents) {
     solventControl.appendChild(solventOption);
 }
 solventControl.addEventListener("input", (event) => {
-    containerWidget.setSolventType(Number.parseFloat(event.target.value));
+    labjolt.getScene().containerWidget.setSolventType(Number.parseFloat(event.target.value));
 });
 
 // Solute
@@ -432,7 +432,7 @@ for (let i in solutes) {
     soluteControl.appendChild(soluteOption);
 }
 soluteControl.addEventListener("input", (event) => {
-    containerWidget.setSoluteType(Number.parseFloat(event.target.value));
+    labjolt.getScene().containerWidget.setSoluteType(Number.parseFloat(event.target.value));
 });
 
 // Constant density
