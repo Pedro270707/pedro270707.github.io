@@ -17,6 +17,7 @@ class Scene {
         if (!(widget instanceof Widget)) throw new TypeError("Parameter \"widget\" (Scene.addWidget) is not an instance of Widget");
         this.widgets.push(widget);
         widget.parent = this;
+        return widget;
     }
 
     removeWidget(widget) {
@@ -25,12 +26,16 @@ class Scene {
         if (index !== -1) {
             this.widgets.splice(index, 1);
         }
+        return widget;
     }
 
     resizeCanvas() {
         for (let widget of this.widgets) {
             widget.resizeCanvas();
         }
+    }
+
+    init() {
     }
 
     draw(tickDelta) {
@@ -80,9 +85,11 @@ class Widget {
     }
 
     getWidth() {
+        return 0;
     }
 
     getHeight() {
+        return 0;
     }
 
     getMaxWidth() {
@@ -163,7 +170,7 @@ class TextWidget extends Widget {
     }
 
     getMinX() {
-        if (this.textAlign === "right") {
+        if (this.textAlign === 'right') {
             return super.getMinX() - this.getMaxWidth();
         }
         return super.getMinX();
@@ -178,7 +185,7 @@ class TextWidget extends Widget {
         this.getCtx().fillStyle = this.fillStyle;
 
         const text = this.text;
-        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.textAlign === 'center' ? this.getX() + this.getWidth() / 2 : this.getX(), this.getY());
         this.getCtx().restore();
     }
 }
@@ -341,6 +348,96 @@ class VariableTextWidget extends Widget {
     }
 }
 
+class HorizontalArrangementWidget extends Widget {
+    constructor(pos, alignItems = 'middle', ...elements) {
+        super(pos);
+        this.elements = elements;
+        this.alignItems = alignItems;
+    }
+
+    getWidth() {
+        let width = 0;
+        for (let element of this.elements) {
+            width += element.getWidth();
+        }
+        return width;
+    }
+
+    getHeight() {
+        return Math.max(...this.elements.map(e => e.getHeight()));
+    }
+
+    getMaxWidth() {
+        let width = 0;
+        for (let element of this.elements) {
+            width += element.getMaxWidth();
+        }
+        return width;
+    }
+
+    getHeight() {
+        return Math.max(...this.elements.map(e => e.getMaxHeight()));
+    }
+
+    draw(tickDelta) {
+        let x = 0;
+        for (let element of this.elements) {
+            let elementX = x;
+            switch (this.alignItems) {
+                case 'top':
+                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + this.getHeight() / 2};
+                    break;
+                case 'middle':
+                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + (this.getHeight() - widget.getHeight()) / 2};
+                    break;
+                case 'bottom':
+                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + this.getHeight() - widget.getHeight()};
+            }
+            x += element.getMaxWidth();
+        }
+    }
+}
+
+class VerticalArrangementWidget extends Widget {
+    constructor(pos, ...elements) {
+        super(pos);
+        this.elements = elements;
+    }
+
+    getWidth() {
+        return Math.max(...this.elements.map(e => e.getWidth()));
+    }
+
+    getHeight() {
+        let height = 0;
+        for (let element of this.elements) {
+            height += element.getHeight();
+        }
+        return height;
+    }
+
+    getMaxWidth() {
+        return Math.max(...this.elements.map(e => e.getMaxWidth()));
+    }
+
+    getMaxHeight() {
+        let height = 0;
+        for (let element of this.elements) {
+            height += element.getMaxHeight();
+        }
+        return height;
+    }
+
+    draw(tickDelta) {
+        let y = 0;
+        for (let element of this.elements) {
+            let elementY = y;
+            element.pos = {x: (widget) => this.getX(), y: (widget) => this.getY() + elementY};
+            y += element.getMaxWidth();
+        }
+    }
+}
+
 class Draggable extends Widget {
     constructor(pos) {
         super(pos);
@@ -440,8 +537,8 @@ class LabJolt {
 
     resizeCanvas() {
         const ratio = window.devicePixelRatio || 1;
-        this.getCanvas().width = container.clientWidth * ratio;
-        this.getCanvas().height = container.clientHeight * ratio;
+        this.getCanvas().width = this.getCanvas().parentElement.clientWidth * ratio;
+        this.getCanvas().height = this.getCanvas().parentElement.clientHeight * ratio;
         this.getCanvas().style.width = `${window.innerWidth}px`;
         this.getCanvas().style.height = `${window.innerHeight}px`;
         if (this.#scene) this.#scene.resizeCanvas();
@@ -453,6 +550,7 @@ class LabJolt {
         this.#scene = scene;
         this.#scene.labjolt = this;
         this.resizeCanvas();
+        scene.init();
     }
 
     getScene() {

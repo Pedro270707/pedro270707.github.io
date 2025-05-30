@@ -32,7 +32,6 @@ class LiteralText extends Text {
 
     get() {
         let key = this.key;
-        const promises = [];
     
         for (let i = 1; i <= this.args.length; i++) {
             const placeholder = "%" + i + "$s";
