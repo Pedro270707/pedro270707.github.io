@@ -558,14 +558,14 @@ class TextFormatting {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
         const time = performance.now() * 0.01;
-        ctx.transform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex) * getSetting("pixelScale", textRenderingContext.canvas));
+        ctx.transform(1, 0, 0, 1, 0, Math.sin(time + textRenderingContext.charIndex / 3) * getSetting("pixelScale", textRenderingContext.canvas));
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.HORIZONTAL_BOBBING, (textRenderingContext, textRenderer, value) => {
       const ctx = textRenderingContext.canvas.getContext('2d');
       if (value) {
         const time = performance.now() * 0.01;
-        ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex) * getSetting("pixelScale", textRenderingContext.canvas) / 2, 0);
+        ctx.transform(1, 0, 0, 1, Math.cos(time + textRenderingContext.charIndex / 3) * getSetting("pixelScale", textRenderingContext.canvas) / 2, 0);
       }
     }, false);
     this.addFormattingOption(TextFormatting.FormattingOptions.RANDOM_BOBBING, (textRenderingContext, textRenderer, value) => {
