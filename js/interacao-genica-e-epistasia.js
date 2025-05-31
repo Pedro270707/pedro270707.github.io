@@ -390,15 +390,16 @@ class AllelePairWidget extends Widget {
         let oldIndex = this.currentPair;
         if (this.isInTopButton(mouseX, mouseY)) {
             this.currentPair--;
-            this.#changeListeners.forEach(listener => listener(this, 1, oldIndex));
         } else if (this.isInBottomButton(mouseX, mouseY)) {
             this.currentPair++;
-            this.#changeListeners.forEach(listener => listener(this, 1, oldIndex));
         }
         if (this.currentPair < 0) {
             this.currentPair = this.#validPairs.length - 1;
         } else if (this.currentPair >= this.#validPairs.length) {
             this.currentPair = 0;
+        }
+        if (this.currentPair != oldIndex) {
+            this.#changeListeners.forEach(listener => listener(this, 1, oldIndex));
         }
     }
 
