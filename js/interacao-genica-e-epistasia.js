@@ -21,6 +21,55 @@ class Genotype {
         return new Genotype(...descendantPairs);
     }
 
+    getOffspringDistribution(other) {
+        if (this.allelePairs.length !== other.allelePairs.length) {
+            throw new Error('Genotypes must have the same number of allele pairs to breed');
+        }
+    
+        const allelePairOptions = this.allelePairs.map((thisPair, i) => {
+            const otherPair = other.allelePairs[i];
+    
+            const combos = [
+                [thisPair.allele1, otherPair.allele1],
+                [thisPair.allele1, otherPair.allele2],
+                [thisPair.allele2, otherPair.allele1],
+                [thisPair.allele2, otherPair.allele2]
+            ];
+    
+            const counts = {};
+            for (const [a1, a2] of combos) {
+                const sortedPair = new AllelePair(a1, a2).toString();
+                counts[sortedPair] = (counts[sortedPair] || 0) + 1;
+            }
+    
+            return Object.entries(counts).map(([pairStr, count]) => ({
+                pairStr,
+                prob: count / 4
+            }));
+        });
+    
+        const genotypeProbabilities = new Map();
+    
+        function combine(index, currentGenotypeParts, currentProb) {
+            if (index === allelePairOptions.length) {
+                const genotypeStr = currentGenotypeParts.join('');
+                genotypeProbabilities.set(
+                    genotypeStr,
+                    (genotypeProbabilities.get(genotypeStr) || 0) + currentProb
+                );
+                return;
+            }
+    
+            for (const { pairStr, prob } of allelePairOptions[index]) {
+                combine(index + 1, [...currentGenotypeParts, pairStr], currentProb * prob);
+            }
+        }
+    
+        combine(0, [], 1);
+    
+        return genotypeProbabilities;
+    }
+
     toString() {
         return this.allelePairs
             .map(pair => pair.toString())
@@ -31,8 +80,7 @@ class Genotype {
         if (str.length % 2 !== 0) {
             throw new Error('String must have pairs of characters to parse (use the constructor instead for allels with two or more characters)');
         }
-        return new Genotype(str.match(/.{2}/g).map(s => {
-            console.log(s);
+        return new Genotype(...str.match(/.{2}/g).map(s => {
             return new AllelePair(new Allele(s[0], s[0] === s[0].toUpperCase()), new Allele(s[1], s[1] === s[1].toUpperCase()))
         }));
     }
@@ -87,12 +135,12 @@ class Allele {
 class GeneInteractionScene extends Scene {
     constructor() {
         super();
-        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new LiteralText("Quantidade de indivíduos"), new LiteralText("Fenótipo")))
-        this.graph.addItem('black', new GraphItem('Preto', '#000000', 30));
-        this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 60));
-        this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 70));
-        this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 60));
-        this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 30));
+        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals")))
+        this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
+        this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
+        this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
+        this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
+        this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
     }
 
     init() {
@@ -103,35 +151,42 @@ class GeneInteractionScene extends Scene {
         this.breedText = this.addWidget(new TextWidget({x: (widget) => 0, y: (widget) => 0}, new LiteralText('x'), breedTextMeasurement.width + 20, 0, breedTextMeasurement.width + 20, 0, {font: '4em sans-serif', textAlign: 'center', textBaseline: 'middle'}));
         this.thirdAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.fourthAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
-        this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => this.getCanvas().width / 2 - 200 - widget.getMaxWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
+        this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
+    
+        this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
+            for (let i = 0; i < 64; i++) {
+                const child = this.getChild();
+                switch (child.toString()) {
+                    case 'AABB':
+                        this.graph.getItem('black').value++;
+                        break;
+                    case 'AaBB':
+                    case 'AABb':
+                        this.graph.getItem('dark_gray').value++;
+                        break;
+                    case 'AaBb':
+                    case 'AAbb':
+                    case 'aaBB':
+                        this.graph.getItem('gray').value++;
+                        break;
+                    case 'Aabb':
+                    case 'aaBb':
+                        this.graph.getItem('light_gray').value++;
+                        break;
+                    default:
+                        this.graph.getItem('white').value++;
+                        break;
+                }
+            }
+        }));
+    }
+
+    getChild() {
+        return new Genotype(this.firstAllelePair.validPairs[this.firstAllelePair.currentPair], this.secondAllelePair.validPairs[this.secondAllelePair.currentPair]).breed(new Genotype(this.thirdAllelePair.validPairs[this.thirdAllelePair.currentPair], this.fourthAllelePair.validPairs[this.fourthAllelePair.currentPair]));
     }
 
     draw(tickDelta) {
         super.draw(tickDelta);
-        for (let i = 0; i < 100; i++) {
-            let child = new Genotype(this.firstAllelePair.validPairs[this.firstAllelePair.currentPair], this.secondAllelePair.validPairs[this.secondAllelePair.currentPair]).breed(new Genotype(this.thirdAllelePair.validPairs[this.thirdAllelePair.currentPair], this.fourthAllelePair.validPairs[this.fourthAllelePair.currentPair]));
-            switch (child.toString()) {
-                case 'AABB':
-                    this.graph.getItem('black').value++;
-                    break;
-                case 'AaBB':
-                case 'AABb':
-                    this.graph.getItem('dark_gray').value++;
-                    break;
-                case 'AaBb':
-                case 'AAbb':
-                case 'aaBB':
-                    this.graph.getItem('gray').value++;
-                    break;
-                case 'Aabb':
-                case 'aaBb':
-                    this.graph.getItem('light_gray').value++;
-                    break;
-                default:
-                    this.graph.getItem('white').value++;
-                    break;
-            }
-        }
     }
 }
 
@@ -164,16 +219,16 @@ class AllelePairWidget extends Widget {
     }
 
     draw(tickDelta) {
-        drawRoundedRectWithGradient(this.getX(), this.getY() + (this.getHeight() - AllelePairWidget.#boxHeight) / 2, this.getWidth(), AllelePairWidget.#boxHeight, 5, this.getCtx());
+        DrawHelper.drawRoundedRectWithGradient(this.getX(), this.getY() + (this.getHeight() - AllelePairWidget.#boxHeight) / 2, this.getWidth(), AllelePairWidget.#boxHeight, 5, this.getCtx());
         this.getCtx().textAlign = "center";
         this.getCtx().textBaseline = "middle";
         this.getCtx().font = "1.8em sans-serif";
         this.getCtx().fillText(this.validPairs[this.currentPair].toString(), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2);
 
-        drawRoundedRectWithGradient(this.getX() + (this.getWidth() - AllelePairWidget.#arrowSide) / 2, this.getY(), AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, 5, this.getCtx());
+        DrawHelper.drawRoundedRectWithGradient(this.getX() + (this.getWidth() - AllelePairWidget.#arrowSide) / 2, this.getY(), AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, 5, this.getCtx(), this.isInTopButton(mousePos.x, mousePos.y) ? '#ffffff' : undefined);
         this.getCtx().fillText('↑', this.getX() + this.getWidth() / 2, this.getY() + AllelePairWidget.#arrowSide / 2)
         
-        drawRoundedRectWithGradient(this.getX() + (this.getWidth() - AllelePairWidget.#arrowSide) / 2, this.getY() + this.getHeight() - AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, 5, this.getCtx());
+        DrawHelper.drawRoundedRectWithGradient(this.getX() + (this.getWidth() - AllelePairWidget.#arrowSide) / 2, this.getY() + this.getHeight() - AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, 5, this.getCtx(), this.isInBottomButton(mousePos.x, mousePos.y) ? '#ffffff' : undefined);
         this.getCtx().fillText('↓', this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() - AllelePairWidget.#arrowSide / 2)
     }
 
@@ -356,39 +411,6 @@ class GraphItem {
         this.color = color;
         this.value = value;
     }
-}
-
-function drawRoundedRectWithGradient(x, y, width, height, radius, ctx) {
-    const cx = x + width / 2;
-    const cy = y + height / 2;
-    const r = Math.max(width, height) / 2;
-
-    const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-    gradient.addColorStop(0, "#222222");
-    gradient.addColorStop(1, "#444444");
-
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-
-    ctx.save();
-    ctx.clip();
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(x, y, width, height);
-
-    ctx.restore();
-
-    ctx.strokeStyle = "#888888";
-    ctx.stroke();
 }
 
 const labjolt = new LabJolt(canvas);

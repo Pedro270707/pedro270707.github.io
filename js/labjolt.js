@@ -42,11 +42,15 @@ class Scene {
         this.getCtx().fillStyle = "#1f1f1f";
         this.getCtx().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
 
+        this.getCtx().fillStyle = "#ffffff";
+        this.getCtx().font = "1em sans-serif";
         for (let widget of this.widgets) {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
                 widget.onHover(mousePos.x, mousePos.y);
             }
+            this.getCtx().save();
             widget.draw(tickDelta);
+            this.getCtx().restore();
         }
     }
 
@@ -348,6 +352,42 @@ class VariableTextWidget extends Widget {
     }
 }
 
+class ButtonWidget extends Widget {
+    constructor(pos, width, height, text, pressAction) {
+        super(pos);
+        this.width = width;
+        this.height = height;
+        this.text = text instanceof Text ? text : new LiteralText(text.toString());
+        this.pressAction = pressAction;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    draw(tickDelta) {
+        DrawHelper.drawRoundedRectWithGradient(this.getX(), this.getY(), this.getWidth(), this.getHeight(), 5, this.getCtx(), this.isHoveredOver(mousePos.x, mousePos.y) ? '#ffffff' : undefined);
+
+        this.getCtx().textAlign = 'center';
+        this.getCtx().textBaseline = 'middle';
+        this.getCtx().fillText(this.text.get(), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2);
+    }
+
+    onHover(mouseX, mouseY) {
+        if (this.isHoveredOver(mouseX, mouseY)) {
+            this.getCanvas().style.cursor = "pointer";
+        }
+    }
+
+    click(mouseX, mouseY) {
+        this.pressAction(this, mouseX, mouseY);
+    }
+}
+
 class HorizontalArrangementWidget extends Widget {
     constructor(pos, alignItems = 'middle', ...elements) {
         super(pos);
@@ -583,6 +623,41 @@ function drawImage(ctx, img, x, y) {
     }
 
     ctx.drawImage(img, x, y);
+}
+
+class DrawHelper {
+    static drawRoundedRectWithGradient(x, y, width, height, radius, ctx, strokeColor = "#888888", middleColor = "#222222", endColor = "#444444") {
+        const cx = x + width / 2;
+        const cy = y + height / 2;
+        const r = Math.max(width, height) / 2;
+    
+        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        gradient.addColorStop(0, middleColor);
+        gradient.addColorStop(1, endColor);
+    
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+    
+        ctx.save();
+        ctx.clip();
+    
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, y, width, height);
+    
+        ctx.restore();
+    
+        ctx.strokeStyle = strokeColor;
+        ctx.stroke();
+    }
 }
 
 class ColorHelper {
