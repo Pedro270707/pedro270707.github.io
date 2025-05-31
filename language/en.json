@@ -84,6 +84,7 @@
   "interacaogenica.graph.reproduce_hundred_times": "Reproduce 100x",
   "interacaogenica.graph.reproduce_ten_thousand_times": "Reproduce 10,000x",
   "interacaogenica.graph.reproduce_n_times": "Reproduce %sx",
+  "interacaogenica.graph.clear": "Clear",
   "sanandreasfault.title": "San Andreas Fault",
   "sanandreasfault.start": "Start!",
   "sanandreasfault.questions.0": "What is the approximate length of the San Andreas Fault?",

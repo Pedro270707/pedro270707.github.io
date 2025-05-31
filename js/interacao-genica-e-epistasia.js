@@ -21,6 +21,11 @@ class Genotype {
         return new Genotype(...descendantPairs);
     }
 
+    fastReproduction(other, n) {
+        const distribution = this.getOffspringDistribution(other);
+        return Genotype.#multinomialSample(distribution, n)
+    }
+
     getOffspringDistribution(other) {
         if (this.allelePairs.length !== other.allelePairs.length) {
             throw new Error('Genotypes must have the same number of allele pairs to breed');
@@ -68,6 +73,36 @@ class Genotype {
         combine(0, [], 1);
     
         return genotypeProbabilities;
+    }
+
+    static #multinomialSample(distribution, n) {
+        const genotypes = Array.from(distribution.keys());
+        const probabilities = Array.from(distribution.values());
+    
+        const counts = new Array(genotypes.length).fill(0);
+        let remaining = n;
+    
+        for (let i = 0; i < genotypes.length - 1; i++) {
+            const p = probabilities[i] / probabilities.slice(i).reduce((a,b) => a + b, 0);
+            counts[i] = Genotype.#binomialSample(remaining, p);
+            remaining -= counts[i];
+        }
+        counts[genotypes.length - 1] = remaining;
+    
+        const genotypeCounts = new Map();
+        for (let i = 0; i < genotypes.length; i++) {
+            genotypeCounts.set(genotypes[i], counts[i]);
+        }
+    
+        return genotypeCounts;
+    }
+    
+    static #binomialSample(n, p) {
+        let successes = 0;
+        for (let i = 0; i < n; i++) {
+            if (Math.random() < p) successes++;
+        }
+        return successes;
     }
 
     toString() {
@@ -133,6 +168,8 @@ class Allele {
 }
 
 class GeneInteractionScene extends Scene {
+    lastAddedDescendants = [];
+
     constructor() {
         super();
         this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals")))
@@ -154,35 +191,101 @@ class GeneInteractionScene extends Scene {
         this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
     
         this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
-            for (let i = 0; i < 64; i++) {
-                const child = this.getChild();
-                switch (child.toString()) {
-                    case 'AABB':
-                        this.graph.getItem('black').value++;
-                        break;
-                    case 'AaBB':
-                    case 'AABb':
-                        this.graph.getItem('dark_gray').value++;
-                        break;
-                    case 'AaBb':
-                    case 'AAbb':
-                    case 'aaBB':
-                        this.graph.getItem('gray').value++;
-                        break;
-                    case 'Aabb':
-                    case 'aaBb':
-                        this.graph.getItem('light_gray').value++;
-                        break;
-                    default:
-                        this.graph.getItem('white').value++;
-                        break;
-                }
+            this.reproduce(1);
+        }));
+        this.reproduceTenTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_times'), (button, mouseX, mouseY) => {
+            this.reproduce(10);
+        }));
+        this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 + 100}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
+            this.reproduce(100);
+        }));
+        this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 + 100}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
+            this.reproduce(10000);
+        }));
+
+        this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
+            for (let key of Object.keys(this.graph.items)) {
+                this.graph.items[key].value = 0;
             }
         }));
     }
 
+    reproduce(n) {
+        const first = this.getFirstGenotype();
+        const second = this.getSecondGenotype();
+        if (n <= 10) {
+            for (let i = 0; i < n; i++) {
+                this.addGenotype(first.breed(second));
+            }
+        } else {
+            for (let [g, amount] of first.fastReproduction(second, n - 10)) {
+                this.addToGenotype(g, amount);
+            }
+            for (let i = 0; i < 10; i++) {
+                this.addGenotype(first.breed(second));
+            }
+        }
+    }
+
+    addToGenotype(str, n) {
+        switch (str) {
+            case 'AABB':
+                this.graph.getItem('black').value += n;
+                break;
+            case 'AaBB':
+            case 'AABb':
+                this.graph.getItem('dark_gray').value += n;
+                break;
+            case 'AaBb':
+            case 'AAbb':
+            case 'aaBB':
+                this.graph.getItem('gray').value += n;
+                break;
+            case 'Aabb':
+            case 'aaBb':
+                this.graph.getItem('light_gray').value += n;
+                break;
+            default:
+                this.graph.getItem('white').value += n;
+                break;
+        }
+    }
+
+    addGenotype(genotype) {
+        switch (genotype.toString()) {
+            case 'AABB':
+                this.graph.getItem('black').value++;
+                break;
+            case 'AaBB':
+            case 'AABb':
+                this.graph.getItem('dark_gray').value++;
+                break;
+            case 'AaBb':
+            case 'AAbb':
+            case 'aaBB':
+                this.graph.getItem('gray').value++;
+                break;
+            case 'Aabb':
+            case 'aaBb':
+                this.graph.getItem('light_gray').value++;
+                break;
+            default:
+                this.graph.getItem('white').value++;
+                break;
+        }
+        this.lastAddedDescendants.push(genotype);
+    }
+
+    getFirstGenotype() {
+        return new Genotype(this.firstAllelePair.validPairs[this.firstAllelePair.currentPair], this.secondAllelePair.validPairs[this.secondAllelePair.currentPair]);
+    }
+
+    getSecondGenotype() {
+        return new Genotype(this.thirdAllelePair.validPairs[this.thirdAllelePair.currentPair], this.fourthAllelePair.validPairs[this.fourthAllelePair.currentPair]);
+    }
+
     getChild() {
-        return new Genotype(this.firstAllelePair.validPairs[this.firstAllelePair.currentPair], this.secondAllelePair.validPairs[this.secondAllelePair.currentPair]).breed(new Genotype(this.thirdAllelePair.validPairs[this.thirdAllelePair.currentPair], this.fourthAllelePair.validPairs[this.fourthAllelePair.currentPair]));
+        return this.getFirstGenotype().breed(this.getSecondGenotype());
     }
 
     draw(tickDelta) {
@@ -282,6 +385,10 @@ class GraphWidget extends Widget {
 
     removeItem(id) {
         delete this.#items[id];
+    }
+
+    get items() {
+        return this.#items;
     }
 
     getLargestItems() {
@@ -396,9 +503,11 @@ class GraphWidget extends Widget {
 
         this.getCtx().textBaseline = "bottom";
 
+        let largestTickWidth = Math.max(0, ...ticks.map(tick => TextMeasurementHelper.measureTextMemoized(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick).toString() : parseFloat(tick).toFixed(1), this.getCtx()).width))
+
         let yLabelText = this.yLabel.get();
         this.getCtx().save();
-        this.getCtx().translate(x - 15 - TextMeasurementHelper.measureTextMemoized(largest.toString(), this.getCtx()).width, y + height / 2);
+        this.getCtx().translate(x - 15 - largestTickWidth, y + height / 2);
         this.getCtx().rotate(-Math.PI / 2);
         this.getCtx().fillText(yLabelText, 0, 0);
         this.getCtx().restore();
