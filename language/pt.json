@@ -85,6 +85,8 @@
   "interacaogenica.graph.reproduce_ten_thousand_times": "Reproduzir 10.000x",
   "interacaogenica.graph.reproduce_n_times": "Reproduzir %sx",
   "interacaogenica.graph.clear": "Limpar",
+  "interacaogenica.graph.last_individual": "Último indivíduo: %s",
+  "interacaogenica.graph.last_individual.none": "Último indivíduo: nenhum",
   "sanandreasfault.title": "Falha de San Andreas",
   "sanandreasfault.start": "Iniciar!",
   "sanandreasfault.questions.0": "Qual é o comprimento aproximado da falha de San Andreas?",

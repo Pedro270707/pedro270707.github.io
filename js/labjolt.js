@@ -43,6 +43,7 @@ class Scene {
         this.getCtx().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
 
         this.getCtx().fillStyle = "#ffffff";
+        this.getCtx().strokeStyle = "#ffffff";
         this.getCtx().font = "1em sans-serif";
         for (let widget of this.widgets) {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {

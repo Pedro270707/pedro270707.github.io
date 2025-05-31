@@ -105,6 +105,16 @@ class Genotype {
         return successes;
     }
 
+    getGametes() {
+        const alleleOptions = this.allelePairs.map(pair => [pair.allele1, pair.allele2]);
+    
+        function cartesianProduct(arr) {
+            return arr.reduce((a, b) => a.flatMap(d => b.map(e => d.concat(e))), [[]]);
+        }
+    
+        return cartesianProduct(alleleOptions).map(alleleList => alleleList.map(a => a.toString()).join(''));
+    }
+
     toString() {
         return this.allelePairs
             .map(pair => pair.toString())
@@ -168,19 +178,23 @@ class Allele {
 }
 
 class GeneInteractionScene extends Scene {
-    lastAddedDescendants = [];
+    lastIndividuals = [];
 
     constructor() {
         super();
+    }
+
+    // 🎵 I will refactor this later, you know I will refactor this later
+    init() {
         this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals")))
         this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
         this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
         this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
         this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
         this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
-    }
 
-    init() {
+        this.punnettSquare = this.addWidget(new PunnettSquareWidget({x: (widget) => 200 + (this.hbox.getWidth() - widget.getWidth()) / 2, y: (widget) => (this.getCanvas().height + this.reproduceHundredTimesButton.getHeight()) / 2 + 20}, Genotype.parse('AaBb'), Genotype.parse('CcDd')))
+
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.getCtx().font = '4em sans-serif';
@@ -189,17 +203,27 @@ class GeneInteractionScene extends Scene {
         this.thirdAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.fourthAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
-    
-        this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
+        
+        const updatePunnettSquare = () => {
+            this.punnettSquare.firstGenotype = this.getFirstGenotype();
+            this.punnettSquare.secondGenotype = this.getSecondGenotype();
+        }
+        this.firstAllelePair.addChangeListener(updatePunnettSquare);
+        this.secondAllelePair.addChangeListener(updatePunnettSquare);
+        this.thirdAllelePair.addChangeListener(updatePunnettSquare);
+        this.fourthAllelePair.addChangeListener(updatePunnettSquare);
+        updatePunnettSquare();
+
+        this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 80}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
             this.reproduce(1);
         }));
-        this.reproduceTenTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_times'), (button, mouseX, mouseY) => {
+        this.reproduceTenTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 80}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_times'), (button, mouseX, mouseY) => {
             this.reproduce(10);
         }));
-        this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 + 100}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
+        this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 20}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
             this.reproduce(100);
         }));
-        this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 + 100}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
+        this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 20}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
             this.reproduce(10000);
         }));
 
@@ -208,6 +232,19 @@ class GeneInteractionScene extends Scene {
                 this.graph.items[key].value = 0;
             }
         }));
+
+        const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
+        this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height + this.graph.getHeight()) / 2 + 100}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1])), 0, 0, 0, 0);
+
+        const textHeight = 26;
+        translate.whenLoaded(() => {
+            let index = 0;
+            for (let definition in Object.fromEntries(Object.entries(translate.definitions).reverse())) {
+                let currentIndex = index;
+                this.addWidget(new LanguageWidget({x: (widget) => this.getCanvas().width - 10, y: (widget) => this.getCanvas().height - widget.getHeight() - 10 - currentIndex * 30}, definition, 100, textHeight, undefined, undefined, {textAlign: "right"}));
+                ++index;
+            }
+        });
     }
 
     reproduce(n) {
@@ -273,7 +310,7 @@ class GeneInteractionScene extends Scene {
                 this.graph.getItem('white').value++;
                 break;
         }
-        this.lastAddedDescendants.push(genotype);
+        this.lastIndividuals.push(genotype);
     }
 
     getFirstGenotype() {
@@ -295,13 +332,15 @@ class GeneInteractionScene extends Scene {
 
 class AllelePairWidget extends Widget {
     #validPairs;
+    #changeListeners;
     static #boxHeight = 50;
     static #arrowSide = 50;
 
-    constructor(pos, validPairs) {
+    constructor(pos, validPairs, onChange = (widget, direction, oldIndex) => {}) {
         super(pos);
         this.#validPairs = validPairs;
         this.currentPair = 0;
+        this.#changeListeners = [];
     }
 
     get validPairs() {
@@ -319,6 +358,10 @@ class AllelePairWidget extends Widget {
 
     getHeight() {
         return 175;
+    }
+
+    addChangeListener(listener) {
+        this.#changeListeners.push(listener);
     }
 
     draw(tickDelta) {
@@ -344,10 +387,13 @@ class AllelePairWidget extends Widget {
     }
 
     mouseDown(mouseX, mouseY) {
+        let oldIndex = this.currentPair;
         if (this.isInTopButton(mouseX, mouseY)) {
             this.currentPair--;
+            this.#changeListeners.forEach(listener => listener(this, 1, oldIndex));
         } else if (this.isInBottomButton(mouseX, mouseY)) {
             this.currentPair++;
+            this.#changeListeners.forEach(listener => listener(this, 1, oldIndex));
         }
         if (this.currentPair < 0) {
             this.currentPair = this.#validPairs.length - 1;
@@ -511,6 +557,121 @@ class GraphWidget extends Widget {
         this.getCtx().rotate(-Math.PI / 2);
         this.getCtx().fillText(yLabelText, 0, 0);
         this.getCtx().restore();
+    }
+}
+
+class PunnettSquareWidget extends Widget {
+    #tableData;
+    #firstGenotype;
+    #secondGenotype;
+    gridSquareSide = 75
+
+    constructor(pos, firstGenotype, secondGenotype) {
+        super(pos);
+        this.#firstGenotype = firstGenotype;
+        this.#secondGenotype = secondGenotype;
+        this.generateTable();
+    }
+
+    get firstGenotype() {
+        return this.#firstGenotype;
+    }
+
+    set firstGenotype(value) {
+        this.#firstGenotype = value;
+        this.generateTable();
+    }
+
+    get secondGenotype() {
+        return this.#secondGenotype;
+    }
+
+    set secondGenotype(value) {
+        this.#secondGenotype = value;
+        this.generateTable();
+    }
+
+    getWidth() {
+        return (this.#tableData.columns.length + 1) * this.gridSquareSide;
+    }
+
+    getHeight() {
+        return (this.#tableData.rows.length + 1) * this.gridSquareSide;
+    }
+
+    generateTable() {
+        if (this.#firstGenotype.allelePairs.length !== this.#secondGenotype.allelePairs.length) {
+            throw new Error('Genotypes must have the same number of allele pairs to breed');
+        }
+    
+        const firstGametes = this.#firstGenotype.getGametes();
+        const secondGametes = this.#secondGenotype.getGametes();
+    
+        const square = [];
+    
+        for (const g1 of firstGametes) {
+            const row = [];
+            for (const g2 of secondGametes) {
+                const allelePairs = [];
+    
+                for (let i = 0; i < g1.length; i++) {
+                    const a1 = new Allele(g1[i], g1[i] === g1[i].toUpperCase());
+                    const a2 = new Allele(g2[i], g2[i] === g2[i].toUpperCase());
+                    allelePairs.push(new AllelePair(a1, a2));
+                }
+    
+                row.push(new Genotype(...allelePairs));
+            }
+            square.push(row);
+        }
+    
+        this.#tableData = {
+            rows: firstGametes,
+            columns: secondGametes,
+            grid: square
+        };
+    }
+
+    draw(tickDelta) {
+        this.getCtx().textAlign = 'center';
+        this.getCtx().textBaseline = 'middle';
+
+        let x = this.getX() + this.gridSquareSide * 0.5;
+        let y = this.getY() + this.gridSquareSide * 1.5;
+        for (let gamete of this.#tableData.rows) {
+            this.getCtx().fillStyle = '#000000';
+            this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+            this.getCtx().fillStyle = '#ffffff';
+            this.getCtx().fillText(gamete, x, y);
+            this.getCtx().strokeRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+            y += this.gridSquareSide;
+        }
+
+        x = this.getX() + this.gridSquareSide * 1.5;
+        y = this.getY() + this.gridSquareSide * 0.5;
+        for (let gamete of this.#tableData.columns) {
+            this.getCtx().fillStyle = '#000000';
+            this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+            this.getCtx().fillStyle = '#ffffff';
+            this.getCtx().fillText(gamete, x, y);
+            this.getCtx().strokeRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+            x += this.gridSquareSide;
+        }
+
+        x = this.getX() + this.gridSquareSide * 1.5;
+        y = this.getY() + this.gridSquareSide * 1.5;
+        for (let gridY in this.#tableData.grid) {
+            for (let gamete of this.#tableData.grid[gridY]) {
+                this.getCtx().fillStyle = '#000000';
+                this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+                this.getCtx().fillStyle = '#ffffff';
+                this.getCtx().fillText(gamete, x, y);
+                this.getCtx().strokeRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
+                x += this.gridSquareSide;
+            }
+            x = this.getX() + this.gridSquareSide * 1.5;
+            y += this.gridSquareSide;
+        }
     }
 }
 
