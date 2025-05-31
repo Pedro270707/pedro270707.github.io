@@ -640,7 +640,7 @@ class PunnettSquareWidget extends Widget {
         let x = this.getX() + this.gridSquareSide * 0.5;
         let y = this.getY() + this.gridSquareSide * 1.5;
         for (let gamete of this.#tableData.rows) {
-            this.getCtx().fillStyle = '#000000';
+            this.getCtx().fillStyle = '#333333';
             this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
             this.getCtx().fillStyle = '#ffffff';
             this.getCtx().fillText(gamete, x, y);
@@ -651,7 +651,7 @@ class PunnettSquareWidget extends Widget {
         x = this.getX() + this.gridSquareSide * 1.5;
         y = this.getY() + this.gridSquareSide * 0.5;
         for (let gamete of this.#tableData.columns) {
-            this.getCtx().fillStyle = '#000000';
+            this.getCtx().fillStyle = '#333333';
             this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
             this.getCtx().fillStyle = '#ffffff';
             this.getCtx().fillText(gamete, x, y);
