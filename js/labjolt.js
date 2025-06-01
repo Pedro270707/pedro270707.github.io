@@ -389,6 +389,66 @@ class ButtonWidget extends Widget {
     }
 }
 
+class LanguageWidget extends VariableTextWidget {
+    constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
+        let text = LiteralText.EMPTY;
+        translate.whenLoaded(() => text = new LiteralText(translate.getName(language)));
+        super(pos, (widget) => text, width, height, maxWidth, maxHeight, settings);
+        this.language = language;
+    }
+
+    onHover(mouseX, mouseY) {
+        this.getCanvas().style.cursor = "pointer";
+    }
+
+    click(mouseX, mouseY) {
+        changeLanguage(this.language);
+    }
+}
+
+class Draggable extends Widget {
+    constructor(pos) {
+        super(pos);
+        this.dx = 0;
+        this.dy = 0;
+        this.isFollowingCursor = false;
+    }
+
+    getX() {
+        return this.pos.x() + this.dx;
+    }
+
+    getY() {
+        return this.pos.y() + this.dy;
+    }
+
+    mouseDown(mouseX, mouseY) {
+        if (!this.isHoveredOver(mouseX, mouseY)) return;
+        this.isFollowingCursor = true;
+        this.oldMouseX = mouseX;
+        this.oldMouseY = mouseY;
+    }
+
+    mouseUp(mouseX, mouseY) {
+        this.isFollowingCursor = false;
+        this.oldMouseX = 0;
+        this.oldMouseY = 0;
+        this.onRelease();
+    }
+
+    onRelease() {
+    }
+
+    draw(tickDelta) {
+        if (this.isFollowingCursor) {
+            this.dx += mousePos.x - this.oldMouseX;
+            this.dy += mousePos.y - this.oldMouseY;
+            this.oldMouseX = mousePos.x;
+            this.oldMouseY = mousePos.y;
+        }
+    }
+}
+
 class HorizontalArrangementWidget extends Widget {
     constructor(pos, gap, alignItems = 'middle', ...elements) {
         super(pos);
@@ -520,66 +580,6 @@ class GridWidget extends Widget {
             let cellHeight = this.getHeight() / this.rowCount;
             element.pos = {x: (widget) => this.getX() + (cellWidth - widget.getWidth()) / 2 + column * cellWidth, y: (widget) => this.getY() + (cellHeight - widget.getHeight()) / 2 + row * cellHeight};
         }
-    }
-}
-
-class Draggable extends Widget {
-    constructor(pos) {
-        super(pos);
-        this.dx = 0;
-        this.dy = 0;
-        this.isFollowingCursor = false;
-    }
-
-    getX() {
-        return this.pos.x() + this.dx;
-    }
-
-    getY() {
-        return this.pos.y() + this.dy;
-    }
-
-    mouseDown(mouseX, mouseY) {
-        if (!this.isHoveredOver(mouseX, mouseY)) return;
-        this.isFollowingCursor = true;
-        this.oldMouseX = mouseX;
-        this.oldMouseY = mouseY;
-    }
-
-    mouseUp(mouseX, mouseY) {
-        this.isFollowingCursor = false;
-        this.oldMouseX = 0;
-        this.oldMouseY = 0;
-        this.onRelease();
-    }
-
-    onRelease() {
-    }
-
-    draw(tickDelta) {
-        if (this.isFollowingCursor) {
-            this.dx += mousePos.x - this.oldMouseX;
-            this.dy += mousePos.y - this.oldMouseY;
-            this.oldMouseX = mousePos.x;
-            this.oldMouseY = mousePos.y;
-        }
-    }
-}
-
-class LanguageWidget extends VariableTextWidget {
-    constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
-        let text = LiteralText.EMPTY;
-        translate.whenLoaded(() => text = new LiteralText(translate.getName(language)));
-        super(pos, (widget) => text, width, height, maxWidth, maxHeight, settings);
-        this.language = language;
-    }
-
-    onHover(mouseX, mouseY) {
-        this.getCanvas().style.cursor = "pointer";
-    }
-
-    click(mouseX, mouseY) {
-        changeLanguage(this.language);
     }
 }
 
