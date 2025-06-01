@@ -11,6 +11,10 @@ class Translate {
 		this.reloadFiles();
 	}
 
+	getCurrentLanguage() {
+		return this.language || localStorage.language;
+	}
+
 	translateStringInLanguage(string, lang, ...args) {
 		let translatedString = string;
 		
@@ -40,7 +44,7 @@ class Translate {
 	}
 	
 	translateString(string, ...args) {
-		return this.translateStringInLanguage(string, this.language || localStorage.language, ...args);
+		return this.translateStringInLanguage(string, this.getCurrentLanguage(), ...args);
 	}
 
 	getDefinition(lang) {
