@@ -348,7 +348,7 @@ class VariableTextWidget extends Widget {
         this.getCtx().fillStyle = this.fillStyle;
 
         const text = this.textFunction(this);
-        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY());
+        this.getCtx().fillText(text instanceof Text ? text.get() : text, this.getX(), this.getY() + this.getHeight() / 2);
         this.getCtx().restore();
     }
 }

@@ -187,8 +187,6 @@ class GeneInteractionScene extends Scene {
 
     // 🎵 I will refactor this later, you know I will refactor this later
     init() {
-        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
-
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.getCtx().font = '4em sans-serif';
@@ -222,7 +220,6 @@ class GeneInteractionScene extends Scene {
         this.secondAllelePair.addChangeListener(updatePunnettSquare);
         this.thirdAllelePair.addChangeListener(updatePunnettSquare);
         this.fourthAllelePair.addChangeListener(updatePunnettSquare);
-        this.updatePunnettSquare();
 
         this.radioButtonManager = new RadioButtonManager();
         this.polygenicInheritance = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.polygenic_inheritance'))));
@@ -230,8 +227,7 @@ class GeneInteractionScene extends Scene {
         this.recessiveEpistasis = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.recessive_epistasis'))));
         this.dominantEpistasis = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.dominant_epistasis'))));
 
-        this.radioButtonManager.addChangeListener(() => this.onRadioButtonChanged());
-        this.onRadioButtonChanged();
+        this.radioButtonManager.addChangeListener(() => this.executeRadioButtonUpdates());
 
         this.radioButtonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, 'left', 'middle',
         this.polygenicInheritance,
@@ -245,8 +241,12 @@ class GeneInteractionScene extends Scene {
             this.graph.clear();
         }));
 
+        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
+        
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
-        this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height + this.graph.getHeight()) / 2 + 100}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1])), 0, 0, 0, 0);
+        this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height + this.graph.getHeight()) / 2 + 100}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1]), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
+
+        this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText));
 
         const textHeight = 26;
         translate.whenLoaded(() => {
@@ -257,6 +257,8 @@ class GeneInteractionScene extends Scene {
                 ++index;
             }
         });
+        this.updatePunnettSquare();
+        this.executeRadioButtonUpdates();
     }
 
     updatePunnettSquare() {
@@ -264,7 +266,7 @@ class GeneInteractionScene extends Scene {
         this.punnettSquare.secondGenotype = this.getSecondGenotype();
     }
 
-    onRadioButtonChanged() {
+    executeRadioButtonUpdates() {
         this.graph.removeAll();
         this.lastIndividuals = [];
         switch (this.radioButtonManager.widgets[this.radioButtonManager.selected]) {
@@ -274,42 +276,42 @@ class GeneInteractionScene extends Scene {
                 this.thirdAllelePair.validPairs = [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')];
                 this.fourthAllelePair.validPairs = [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')];
                 this.punnettSquare.colorMap = {
-                    'AABB': 0x000000,
-                    'AaBB': 0x666666,
-                    'AABb': 0x666666,
-                    'AaBb': 0xaaaaaa,
-                    'AAbb': 0xaaaaaa,
-                    'aaBB': 0xaaaaaa,
-                    'Aabb': 0xcccccc,
-                    'aaBb': 0xcccccc,
-                    'aabb': 0xffffff
+                    'AABB': 0x322425,
+                    'AaBB': 0x604740,
+                    'AABb': 0x604740,
+                    'AaBb': 0x8E6B5B,
+                    'AAbb': 0x8E6B5B,
+                    'aaBB': 0x8E6B5B,
+                    'Aabb': 0xBCA18F,
+                    'aaBb': 0xBCA18F,
+                    'aabb': 0xE7D3C1
                 };
                 this.graph.title = new TranslatableText('interacaogenica.options.polygenic_inheritance.title');
-                this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
-                this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
-                this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
-                this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
-                this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
+                this.graph.addItem('dark', new GraphItem(new TranslatableText('interacaogenica.options.polygenic_inheritance.type.dark'), 0x322425, 0));
+                this.graph.addItem('dark_brown', new GraphItem(new TranslatableText('interacaogenica.options.polygenic_inheritance.type.dark_brown'), 0x604740, 0));
+                this.graph.addItem('medium_brown', new GraphItem(new TranslatableText('interacaogenica.options.polygenic_inheritance.type.medium_brown'), 0x8E6B5B, 0));
+                this.graph.addItem('light_brown', new GraphItem(new TranslatableText('interacaogenica.options.polygenic_inheritance.type.light_brown'), 0xBCA18F, 0));
+                this.graph.addItem('light', new GraphItem(new TranslatableText('interacaogenica.options.polygenic_inheritance.type.light'), 0xE7D3C1, 0));
                 this.addToGenotypeFunction = (str, n) => {
                     switch (str) {
                         case 'AABB':
-                            this.graph.getItem('black').value += n;
+                            this.graph.getItem('dark').value += n;
                             break;
                         case 'AaBB':
                         case 'AABb':
-                            this.graph.getItem('dark_gray').value += n;
+                            this.graph.getItem('dark_brown').value += n;
                             break;
                         case 'AaBb':
                         case 'AAbb':
                         case 'aaBB':
-                            this.graph.getItem('gray').value += n;
+                            this.graph.getItem('medium_brown').value += n;
                             break;
                         case 'Aabb':
                         case 'aaBb':
-                            this.graph.getItem('light_gray').value += n;
+                            this.graph.getItem('light_brown').value += n;
                             break;
                         default:
-                            this.graph.getItem('white').value += n;
+                            this.graph.getItem('light').value += n;
                             break;
                     }
                 }
@@ -331,10 +333,10 @@ class GeneInteractionScene extends Scene {
                     'rree': 0xC68800
                 };
                 this.graph.title = new TranslatableText('interacaogenica.options.collaborative_genes.title');
-                this.graph.addItem('walnut', new GraphItem('Crista noz', '#FFFFFF', 0));
-                this.graph.addItem('rose', new GraphItem('Crista rosa', '#FF85d8', 0));
-                this.graph.addItem('pea', new GraphItem('Crista ervilha', '#C64E00', 0));
-                this.graph.addItem('single', new GraphItem('Crista simples', "#C68800", 0));
+                this.graph.addItem('walnut', new GraphItem(new TranslatableText('interacaogenica.options.collaborative_genes.type.walnut'), 0xFFFFFF, 0));
+                this.graph.addItem('rose', new GraphItem(new TranslatableText('interacaogenica.options.collaborative_genes.type.rose'), 0xFF85d8, 0));
+                this.graph.addItem('pea', new GraphItem(new TranslatableText('interacaogenica.options.collaborative_genes.type.pea'), 0xC64E00, 0));
+                this.graph.addItem('single', new GraphItem(new TranslatableText('interacaogenica.options.collaborative_genes.type.single'), 0xC68800, 0));
                 this.addToGenotypeFunction = (str, n) => {
                     switch (str) {
                         case 'RREE':
@@ -374,9 +376,9 @@ class GeneInteractionScene extends Scene {
                     'bbcc': 0xFFFFFF
                 };
                 this.graph.title = new TranslatableText('interacaogenica.options.recessive_epistasis.title');
-                this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
-                this.graph.addItem('brown', new GraphItem('Marrom', '#492A2A', 0));
-                this.graph.addItem('albino', new GraphItem('Albino', '#FFFFFF', 0));
+                this.graph.addItem('black', new GraphItem(new TranslatableText('interacaogenica.options.recessive_epistasis.type.black'), 0x000000, 0));
+                this.graph.addItem('brown', new GraphItem(new TranslatableText('interacaogenica.options.recessive_epistasis.type.brown'), 0x492A2A, 0));
+                this.graph.addItem('albino', new GraphItem(new TranslatableText('interacaogenica.options.recessive_epistasis.type.albino'), 0xFFFFFF, 0));
                 this.addToGenotypeFunction = (str, n) => {
                     switch (str) {
                         case 'BBCC':
@@ -412,8 +414,8 @@ class GeneInteractionScene extends Scene {
                     'iicc': 0xFFFFFF
                 };
                 this.graph.title = new TranslatableText('interacaogenica.options.dominant_epistasis.title');
-                this.graph.addItem('white', new GraphItem('Branco', '#FFFFFF', 0));
-                this.graph.addItem('colored', new GraphItem('Colorido', '#C64E00', 0));
+                this.graph.addItem('white', new GraphItem(new TranslatableText('interacaogenica.options.dominant_epistasis.type.white'), 0xFFFFFF, 0));
+                this.graph.addItem('colored', new GraphItem(new TranslatableText('interacaogenica.options.dominant_epistasis.type.colored'), 0xC64E00, 0));
                 this.addToGenotypeFunction = (str, n) => {
                     switch (str) {
                         case 'IICC':
@@ -676,13 +678,28 @@ class GraphWidget extends Widget {
         for (let key in this.#items) {
             let item = this.#items[key];
             let itemX = this.itemGap + i * (this.itemWidth + this.itemGap);
-            let itemHeight = item.value / largest * graphHeight;
+            let itemHeight = largest === 0 ? 0 : item.value / largest * graphHeight;
 
-            this.getCtx().fillStyle = item.color;
+            this.getCtx().fillStyle = '#' + item.color.toString(16).padStart(6, '0');
             this.getCtx().fillRect(x + itemX, y + graphHeight - itemHeight, this.itemWidth, itemHeight);
 
-            this.getCtx().fillStyle = "#ffffff";
+            this.getCtx().fillStyle = '#FFFFFF';
             this.getCtx().fillText(item.value, x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 10);
+
+            this.getCtx().save();
+            this.getCtx().textBaseline = 'middle';
+            const textWidth = TextMeasurementHelper.measureTextMemoized(item.name.get(), this.getCtx()).width;
+            if (textWidth + 20 >= itemHeight) {
+                this.getCtx().textAlign = "left";
+                this.getCtx().translate(x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 40);
+            } else {
+                this.getCtx().textAlign = "right";
+                this.getCtx().translate(x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight + 10);
+                this.getCtx().fillStyle = ColorHelper.isDarkColor(item.color) ? '#FFFFFF' : '#000000';
+            }
+            this.getCtx().rotate(-Math.PI / 2);
+            this.getCtx().fillText(item.name.get(), 0, 0);
+            this.getCtx().restore();
 
             i++;
         }
@@ -717,7 +734,7 @@ class GraphWidget extends Widget {
         this.getCtx().textBaseline = "top";
 
         let xLabelText = this.xLabel.get();
-        this.getCtx().fillText(xLabelText, x + width / 2, y + graphHeight + 35);
+        this.getCtx().fillText(xLabelText, x + width / 2, y + graphHeight + this.xLabelGap);
 
         this.getCtx().textBaseline = "bottom";
 
@@ -725,7 +742,7 @@ class GraphWidget extends Widget {
 
         let yLabelText = this.yLabel.get();
         this.getCtx().save();
-        this.getCtx().translate(x - 15 - largestTickWidth, y + graphHeight / 2);
+        this.getCtx().translate(x - this.yLabelGap - largestTickWidth, y + graphHeight / 2);
         this.getCtx().rotate(-Math.PI / 2);
         this.getCtx().fillText(yLabelText, 0, 0);
         this.getCtx().restore();
@@ -844,12 +861,9 @@ class PunnettSquareWidget extends Widget {
         for (let gridY in this.#tableData.grid) {
             for (let gamete of this.#tableData.grid[gridY]) {
                 const color = this.colorMap[gamete.toString()] || 0;
-                const red = ((color >> 16) & 0xFF) / 255
-                const green = ((color >> 8) & 0xFF) / 255
-                const blue = (color & 0xFF) / 255
                 this.getCtx().fillStyle = '#' + color.toString(16).padStart(6, '0') || '#000000';
                 this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
-                this.getCtx().fillStyle = 1.05/(0.2126 * red + 0.7152 * green + 0.0722 * blue) < 4.5 ? '#000000' : '#ffffff';
+                this.getCtx().fillStyle = ColorHelper.isDarkColor(color) ? '#FFFFFF' : '#000000';
                 this.getCtx().fillText(gamete, x, y);
                 this.getCtx().strokeRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
                 x += this.gridSquareSide;
