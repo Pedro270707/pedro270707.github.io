@@ -205,14 +205,22 @@ class GeneInteractionScene extends Scene {
         this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
             this.reproduce(100);
         }));
+        this.reproduceThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_thousand_times'), (button, mouseX, mouseY) => {
+            this.reproduce(1000);
+        }));
         this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
             this.reproduce(10000);
         }));
-        this.buttonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, 'center', 'middle',
+        this.reproduceHundredThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_thousand_times'), (button, mouseX, mouseY) => {
+            this.reproduce(100000);
+        }));
+        this.buttonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 150, 2, 3, 'center', 'middle',
         this.reproduceButton,
         this.reproduceTenTimesButton,
         this.reproduceHundredTimesButton,
-        this.reproduceTenThousandTimesButton));
+        this.reproduceThousandTimesButton,
+        this.reproduceTenThousandTimesButton,
+        this.reproduceHundredThousandTimesButton));
 
         this.punnettSquare = this.addWidget(new PunnettSquareWidget({x: (widget) => 0, y: (widget) => 0}, Genotype.parse('AaBb'), Genotype.parse('CcDd')));
         const updatePunnettSquare = () => this.updatePunnettSquare();
