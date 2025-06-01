@@ -89,6 +89,7 @@
   "interacaogenica.graph.clear": "Limpar",
   "interacaogenica.graph.last_individual": "Último indivíduo: %s",
   "interacaogenica.graph.last_individual.none": "Último indivíduo: nenhum",
+  "interacaogenica.graph.total": "Total: %s",
   "interacaogenica.options.polygenic_inheritance": "Herança quantitativa",
   "interacaogenica.options.polygenic_inheritance.type.dark": "Negro",
   "interacaogenica.options.polygenic_inheritance.type.dark_brown": "Pardo escuro",

@@ -245,16 +245,18 @@ class GeneInteractionScene extends Scene {
 
         this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.hbox, this.buttonGrid, this.punnettSquare, this.radioButtonGrid));
 
-        this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
+        this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
             this.graph.clear();
         }));
 
-        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
+        this.graph = this.addWidget(new GraphWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
         
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
-        this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height + this.graph.getHeight()) / 2 + 100}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1]), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
+        this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1]), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
+        
+        this.totalText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => new TranslatableText('interacaogenica.graph.total', Object.values(this.graph.items).reduce((accumulator, item) => accumulator + item.value, 0)), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
 
-        this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText));
+        this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText, this.totalText));
 
         this.vbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => (this.getCanvas().width - widget.getWidth()) / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 150, 'middle', this.vboxLeft, this.vboxRight));
 
@@ -745,7 +747,6 @@ class GraphWidget extends Widget {
         this.getCtx().stroke();
 
         this.getCtx().textAlign = "center";
-        this.getCtx().textBaseline = "top";
 
         let xLabelText = this.xLabel.get();
         this.getCtx().fillText(xLabelText, x + width / 2, y + graphHeight + this.xLabelGap);

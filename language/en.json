@@ -89,6 +89,7 @@
   "interacaogenica.graph.clear": "Clear",
   "interacaogenica.graph.last_individual": "Last individual: %s",
   "interacaogenica.graph.last_individual.none": "Last individual: none",
+  "interacaogenica.graph.total": "Total: %s",
   "interacaogenica.options.polygenic_inheritance": "Polygenic inheritance",
   "interacaogenica.options.polygenic_inheritance.type.dark": "Dark",
   "interacaogenica.options.polygenic_inheritance.type.dark_brown": "Dark brown",
