@@ -187,7 +187,7 @@ class GeneInteractionScene extends Scene {
 
     // 🎵 I will refactor this later, you know I will refactor this later
     init() {
-        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals")))
+        this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
 
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
@@ -284,6 +284,7 @@ class GeneInteractionScene extends Scene {
                     'aaBb': 0xcccccc,
                     'aabb': 0xffffff
                 };
+                this.graph.title = new TranslatableText('interacaogenica.options.polygenic_inheritance.title');
                 this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
                 this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
                 this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
@@ -329,7 +330,7 @@ class GeneInteractionScene extends Scene {
                     'rrEe': 0xC64E00,
                     'rree': 0xC68800
                 };
-                this.graph.removeAll();
+                this.graph.title = new TranslatableText('interacaogenica.options.collaborative_genes.title');
                 this.graph.addItem('walnut', new GraphItem('Crista noz', '#FFFFFF', 0));
                 this.graph.addItem('rose', new GraphItem('Crista rosa', '#FF85d8', 0));
                 this.graph.addItem('pea', new GraphItem('Crista ervilha', '#C64E00', 0));
@@ -372,7 +373,7 @@ class GeneInteractionScene extends Scene {
                     'bbCc': 0x492A2A,
                     'bbcc': 0xFFFFFF
                 };
-                this.graph.removeAll();
+                this.graph.title = new TranslatableText('interacaogenica.options.recessive_epistasis.title');
                 this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
                 this.graph.addItem('brown', new GraphItem('Marrom', '#492A2A', 0));
                 this.graph.addItem('albino', new GraphItem('Albino', '#FFFFFF', 0));
@@ -410,7 +411,7 @@ class GeneInteractionScene extends Scene {
                     'iiCc': 0xC64E00,
                     'iicc': 0xFFFFFF
                 };
-                this.graph.removeAll();
+                this.graph.title = new TranslatableText('interacaogenica.options.dominant_epistasis.title');
                 this.graph.addItem('white', new GraphItem('Branco', '#FFFFFF', 0));
                 this.graph.addItem('colored', new GraphItem('Colorido', '#C64E00', 0));
                 this.addToGenotypeFunction = (str, n) => {
@@ -483,7 +484,7 @@ class AllelePairWidget extends Widget {
     static #boxHeight = 50;
     static #arrowSide = 50;
 
-    constructor(pos, validPairs, onChange = (widget, direction, oldIndex) => {}) {
+    constructor(pos, validPairs) {
         super(pos);
         this.#validPairs = validPairs;
         this.currentPair = 0;
@@ -561,12 +562,17 @@ class GraphWidget extends Widget {
     #items;
     itemWidth = 50;
     itemGap = 20;
+    xLabelGap = 25;
+    yLabelGap = 25;
+    titleGap = 55;
+    height = 400;
     
-    constructor(pos, xLabel, yLabel, items = {}) {
+    constructor(pos, xLabel, yLabel, title, items = {}) {
         super(pos);
         this.#items = items;
-        this.xLabel = xLabel;
-        this.yLabel = yLabel;
+        this.xLabel = xLabel instanceof Text ? xLabel : new LiteralText(xLabel);
+        this.yLabel = yLabel instanceof Text ? yLabel : new LiteralText(yLabel);
+        this.title = title instanceof Text ? title : new LiteralText(title);
     }
 
     addItem(id, item) {
@@ -622,7 +628,9 @@ class GraphWidget extends Widget {
     }
 
     getHeight() {
-        return 400;
+        const titleMeasurement = TextMeasurementHelper.measureTextMemoized(this.title.get(), this.getCtx());
+        const xLabelMeasurement = TextMeasurementHelper.measureTextMemoized(this.xLabel.get(), this.getCtx());
+        return titleMeasurement.actualBoundingBoxAscent + titleMeasurement.actualBoundingBoxDescent + this.titleGap + this.height + this.xLabelGap + xLabelMeasurement.actualBoundingBoxAscent + xLabelMeasurement.actualBoundingBoxDescent;
     }
 
     getTicks() {
@@ -651,24 +659,30 @@ class GraphWidget extends Widget {
         let x = this.getX();
         let y = this.getY();
         let width = this.getWidth();
-        let height = this.getHeight();
+        let graphHeight = this.height;
         let largest = this.getLargestValue();
 
         this.getCtx().font = "1em sans-serif";
         this.getCtx().textAlign = "center";
+        this.getCtx().textBaseline = "top";
+
+        this.getCtx().fillText(this.title.get(), x + width / 2, y);
+        const titleMeasurement = TextMeasurementHelper.measureTextMemoized(this.title.get(), this.getCtx());
+        y += titleMeasurement.actualBoundingBoxAscent + titleMeasurement.actualBoundingBoxDescent + this.titleGap;
+
         this.getCtx().textBaseline = "bottom";
 
         let i = 0;
         for (let key in this.#items) {
             let item = this.#items[key];
             let itemX = this.itemGap + i * (this.itemWidth + this.itemGap);
-            let itemHeight = item.value / largest * height;
+            let itemHeight = item.value / largest * graphHeight;
 
             this.getCtx().fillStyle = item.color;
-            this.getCtx().fillRect(x + itemX, y + height - itemHeight, this.itemWidth, itemHeight);
+            this.getCtx().fillRect(x + itemX, y + graphHeight - itemHeight, this.itemWidth, itemHeight);
 
             this.getCtx().fillStyle = "#ffffff";
-            this.getCtx().fillText(item.value, x + itemX + this.itemWidth / 2, y + height - itemHeight - 10);
+            this.getCtx().fillText(item.value, x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 10);
 
             i++;
         }
@@ -682,39 +696,47 @@ class GraphWidget extends Widget {
         
         let ticks = this.getTicks();
         for (let tick of ticks) {
-            let tickHeight = tick / largest * height;
+            let tickHeight = tick / largest * graphHeight;
             this.getCtx().beginPath();
-            this.getCtx().moveTo(x - 5, y + height - tickHeight);
-            this.getCtx().lineTo(x, y + height - tickHeight);
+            this.getCtx().moveTo(x - 5, y + graphHeight - tickHeight);
+            this.getCtx().lineTo(x, y + graphHeight - tickHeight);
             this.getCtx().stroke();
-            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick) : parseFloat(tick).toFixed(1), x - 10, y + height - tickHeight);
+            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick) : parseFloat(tick).toFixed(1), x - 10, y + graphHeight - tickHeight);
         }
 
         this.getCtx().textBaseline = "top";
-        this.getCtx().fillText('0', x - 5, y + height);
+        this.getCtx().fillText('0', x - 5, y + graphHeight);
 
         this.getCtx().beginPath();
         this.getCtx().moveTo(x, y);
-        this.getCtx().lineTo(x, y + height);
-        this.getCtx().lineTo(x + width, y + height);
+        this.getCtx().lineTo(x, y + graphHeight);
+        this.getCtx().lineTo(x + width, y + graphHeight);
         this.getCtx().stroke();
 
         this.getCtx().textAlign = "center";
         this.getCtx().textBaseline = "top";
 
         let xLabelText = this.xLabel.get();
-        this.getCtx().fillText(xLabelText, x + width / 2, y + height + 35);
+        this.getCtx().fillText(xLabelText, x + width / 2, y + graphHeight + 35);
 
         this.getCtx().textBaseline = "bottom";
 
-        let largestTickWidth = Math.max(0, ...ticks.map(tick => TextMeasurementHelper.measureTextMemoized(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick).toString() : parseFloat(tick).toFixed(1), this.getCtx()).width))
+        let largestTickWidth = Math.max(0, ...ticks.map(tick => TextMeasurementHelper.measureTextMemoized(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick).toString() : parseFloat(tick).toFixed(1), this.getCtx()).width));
 
         let yLabelText = this.yLabel.get();
         this.getCtx().save();
-        this.getCtx().translate(x - 15 - largestTickWidth, y + height / 2);
+        this.getCtx().translate(x - 15 - largestTickWidth, y + graphHeight / 2);
         this.getCtx().rotate(-Math.PI / 2);
         this.getCtx().fillText(yLabelText, 0, 0);
         this.getCtx().restore();
+    }
+}
+
+class GraphItem {
+    constructor(name, color, value) {
+        this.name = name instanceof Text ? name : new LiteralText(name.toString());
+        this.color = color;
+        this.value = value;
     }
 }
 
@@ -835,14 +857,6 @@ class PunnettSquareWidget extends Widget {
             x = this.getX() + this.gridSquareSide * 1.5;
             y += this.gridSquareSide;
         }
-    }
-}
-
-class GraphItem {
-    constructor(name, color, value) {
-        this.name = name instanceof Text ? name : new LiteralText(name.toString());
-        this.color = color;
-        this.value = value;
     }
 }
 
