@@ -389,6 +389,99 @@ class ButtonWidget extends Widget {
     }
 }
 
+class RadioButtonManager {
+    #selected = -1;
+    #changeListeners;
+
+    constructor() {
+        this.widgets = [];
+        this.#changeListeners = [];
+    }
+
+    register(widget) {
+        widget.manager = this;
+        this.widgets.push(widget);
+        if (this.widgets.length === 1) {
+            this.selected = 0;
+        }
+        return widget;
+    }
+
+    get selected() {
+        return this.#selected;
+    }
+
+    addChangeListener(listener) {
+        this.#changeListeners.push(listener);
+    }
+
+    set selected(index) {
+        const oldSelected = this.#selected;
+        if (this.#selected >= 0 && this.#selected < this.widgets.length) {
+            this.widgets[this.#selected].selected = false;
+        }
+        this.#selected = Math.max(0, Math.min(index, this.widgets.length - 1));
+        this.widgets[this.#selected].selected = true;
+        if (oldSelected !== this.#selected) {
+            this.#changeListeners.forEach(listener => listener(this, oldSelected));
+        }
+    }
+
+    getWidget() {
+        return this.widgets[this.#selected];
+    }
+
+    changeToWidget(widget) {
+        const index = this.widgets.indexOf(widget);
+        if (index !== -1) this.selected = index;
+    }
+}
+
+class RadioButtonWidget extends Widget {
+    static #radius = 7;
+    static #gap = 10;
+
+    constructor(pos, text) {
+        super(pos);
+        this.selected = false;
+        this.text = text instanceof Text ? text : new LiteralText(text);
+        this.manager = null;
+    }
+
+    getHeight() {
+        const measurement = TextMeasurementHelper.measureTextMemoized(this.text.get(), this.getCtx());
+        return Math.max(RadioButtonWidget.#radius * 2, measurement.actualBoundingBoxAscent + measurement.actualBoundingBoxDescent);
+    }
+
+    getWidth() {
+        return RadioButtonWidget.#radius * 2 + RadioButtonWidget.#gap + TextMeasurementHelper.measureTextMemoized(this.text.get(), this.getCtx()).width;
+    }
+
+    click(mouseX, mouseY) {
+        if (this.manager) {
+            this.manager.changeToWidget(this);
+        }
+    }
+
+    draw(tickDelta) {
+        const radius = RadioButtonWidget.#radius;
+        this.getCtx().save();
+        this.getCtx().strokeStyle = this.isHoveredOver(mousePos.x, mousePos.y) ? '#ffffff' : '#888888';
+        this.getCtx().beginPath();
+        this.getCtx().arc(this.getX() + radius, this.getY() + radius, radius, 0, 2 * Math.PI);
+        this.getCtx().stroke();
+        if (this.selected) {
+            this.getCtx().fillStyle = '#ffffff';
+            this.getCtx().beginPath();
+            this.getCtx().arc(this.getX() + radius, this.getY() + radius, radius * 0.5, 0, 2 * Math.PI);
+            this.getCtx().fill();
+        }
+        this.getCtx().restore();
+        this.getCtx().textBaseline = 'middle';
+        this.getCtx().fillText(this.text.get(), this.getX() + 2 * radius + RadioButtonWidget.#gap, this.getY() + radius);
+    }
+}
+
 class LanguageWidget extends VariableTextWidget {
     constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
         let text = LiteralText.EMPTY;

@@ -179,6 +179,7 @@ class Allele {
 
 class GeneInteractionScene extends Scene {
     lastIndividuals = [];
+    addToGenotypeFunction;
 
     constructor() {
         super();
@@ -224,19 +225,28 @@ class GeneInteractionScene extends Scene {
         const updatePunnettSquare = () => {
             this.punnettSquare.firstGenotype = this.getFirstGenotype();
             this.punnettSquare.secondGenotype = this.getSecondGenotype();
-        }
+        };
         this.firstAllelePair.addChangeListener(updatePunnettSquare);
         this.secondAllelePair.addChangeListener(updatePunnettSquare);
         this.thirdAllelePair.addChangeListener(updatePunnettSquare);
         this.fourthAllelePair.addChangeListener(updatePunnettSquare);
         updatePunnettSquare();
 
-        this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'middle', this.hbox, this.buttonGrid, this.punnettSquare));
+        this.radioButtonManager = new RadioButtonManager();
+        this.polygenicInheritance = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.polygenic_inheritance'))));
+        this.collaborativeGenes = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.collaborative_genes'))));
+        this.recessiveEpistasis = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.recessive_epistasis'))));
+        this.dominantEpistasis = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.dominant_epistasis'))));
+
+        this.radioButtonManager.addChangeListener(() => this.onRadioButtonChanged());
+        this.onRadioButtonChanged();
+
+        this.radioButtonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, this.polygenicInheritance, this.collaborativeGenes, this.recessiveEpistasis, this.dominantEpistasis));
+
+        this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'middle', this.hbox, this.buttonGrid, this.punnettSquare, this.radioButtonGrid));
 
         this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
-            for (let key of Object.keys(this.graph.items)) {
-                this.graph.items[key].value = 0;
-            }
+            
         }));
 
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
@@ -251,6 +261,175 @@ class GeneInteractionScene extends Scene {
                 ++index;
             }
         });
+    }
+
+    onRadioButtonChanged() {
+        this.graph.removeAll();
+        this.lastIndividuals = [];
+        switch (this.radioButtonManager.widgets[this.radioButtonManager.selected]) {
+            case this.polygenicInheritance:
+                this.firstAllelePair.validPairs = [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')];
+                this.secondAllelePair.validPairs = [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')];
+                this.thirdAllelePair.validPairs = [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')];
+                this.fourthAllelePair.validPairs = [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')];
+                this.punnettSquare.colorMap = {
+                    'AABB': 0x000000,
+                    'AaBB': 0x666666,
+                    'AABb': 0x666666,
+                    'AaBb': 0xaaaaaa,
+                    'AAbb': 0xaaaaaa,
+                    'aaBB': 0xaaaaaa,
+                    'Aabb': 0xcccccc,
+                    'aaBb': 0xcccccc,
+                    'aabb': 0xffffff
+                };
+                this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
+                this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
+                this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
+                this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
+                this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
+                this.addToGenotypeFunction = (str, n) => {
+                    switch (str) {
+                        case 'AABB':
+                            this.graph.getItem('black').value += n;
+                            break;
+                        case 'AaBB':
+                        case 'AABb':
+                            this.graph.getItem('dark_gray').value += n;
+                            break;
+                        case 'AaBb':
+                        case 'AAbb':
+                        case 'aaBB':
+                            this.graph.getItem('gray').value += n;
+                            break;
+                        case 'Aabb':
+                        case 'aaBb':
+                            this.graph.getItem('light_gray').value += n;
+                            break;
+                        default:
+                            this.graph.getItem('white').value += n;
+                            break;
+                    }
+                }
+                break;
+            case this.collaborativeGenes:
+                this.firstAllelePair.validPairs = [AllelePair.parse('RR'), AllelePair.parse('Rr'), AllelePair.parse('rr')];
+                this.secondAllelePair.validPairs = [AllelePair.parse('EE'), AllelePair.parse('Ee'), AllelePair.parse('ee')];
+                this.thirdAllelePair.validPairs = [AllelePair.parse('RR'), AllelePair.parse('Rr'), AllelePair.parse('rr')];
+                this.fourthAllelePair.validPairs = [AllelePair.parse('EE'), AllelePair.parse('Ee'), AllelePair.parse('ee')];
+                this.punnettSquare.colorMap = {
+                    'RREE': 0xFFFFFF,
+                    'RrEE': 0xFFFFFF,
+                    'RREe': 0xFFFFFF,
+                    'RrEe': 0xFFFFFF,
+                    'RRee': 0xFF85d8,
+                    'rrEE': 0xC64E00,
+                    'Rree': 0xFF85d8,
+                    'rrEe': 0xC64E00,
+                    'rree': 0xC68800
+                };
+                this.graph.removeAll();
+                this.graph.addItem('walnut', new GraphItem('Crista noz', '#FFFFFF', 0));
+                this.graph.addItem('rose', new GraphItem('Crista rosa', '#FF85d8', 0));
+                this.graph.addItem('pea', new GraphItem('Crista ervilha', '#C64E00', 0));
+                this.graph.addItem('single', new GraphItem('Crista simples', "#C68800", 0));
+                this.addToGenotypeFunction = (str, n) => {
+                    switch (str) {
+                        case 'RREE':
+                        case 'RrEE':
+                        case 'RREe':
+                        case 'RrEe':
+                            this.graph.getItem('walnut').value += n;
+                            break;
+                        case 'RRee':
+                        case 'Rree':
+                            this.graph.getItem('rose').value += n;
+                            break;
+                        case 'rrEe':
+                        case 'rrEE':
+                            this.graph.getItem('pea').value += n;
+                            break;
+                        default:
+                            this.graph.getItem('single').value += n;
+                            break;
+                    }
+                }
+                break;
+            case this.recessiveEpistasis:
+                this.firstAllelePair.validPairs = [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')];
+                this.secondAllelePair.validPairs = [AllelePair.parse('CC'), AllelePair.parse('Cc'), AllelePair.parse('cc')];
+                this.thirdAllelePair.validPairs = [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')];
+                this.fourthAllelePair.validPairs = [AllelePair.parse('CC'), AllelePair.parse('Cc'), AllelePair.parse('cc')];
+                this.punnettSquare.colorMap = {
+                    'BBCC': 0x000000,
+                    'BbCC': 0x000000,
+                    'BBCc': 0x000000,
+                    'BbCc': 0x000000,
+                    'BBcc': 0xFFFFFF,
+                    'bbCC': 0x492A2A,
+                    'Bbcc': 0xFFFFFF,
+                    'bbCc': 0x492A2A,
+                    'bbcc': 0xFFFFFF
+                };
+                this.graph.removeAll();
+                this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
+                this.graph.addItem('brown', new GraphItem('Marrom', '#492A2A', 0));
+                this.graph.addItem('albino', new GraphItem('Albino', '#FFFFFF', 0));
+                this.addToGenotypeFunction = (str, n) => {
+                    switch (str) {
+                        case 'BBCC':
+                        case 'BbCC':
+                        case 'BBCc':
+                        case 'BbCc':
+                            this.graph.getItem('black').value += n;
+                            break;
+                        case 'bbCC':
+                        case 'bbCc':
+                            this.graph.getItem('brown').value += n;
+                            break;
+                        default:
+                            this.graph.getItem('albino').value += n;
+                            break;
+                    }
+                }
+                break;
+            case this.dominantEpistasis:
+                this.firstAllelePair.validPairs = [AllelePair.parse('II'), AllelePair.parse('Ii'), AllelePair.parse('ii')];
+                this.secondAllelePair.validPairs = [AllelePair.parse('CC'), AllelePair.parse('Cc'), AllelePair.parse('cc')];
+                this.thirdAllelePair.validPairs = [AllelePair.parse('II'), AllelePair.parse('Ii'), AllelePair.parse('ii')];
+                this.fourthAllelePair.validPairs = [AllelePair.parse('CC'), AllelePair.parse('Cc'), AllelePair.parse('cc')];
+                this.punnettSquare.colorMap = {
+                    'IICC': 0xFFFFFF,
+                    'IiCC': 0xFFFFFF,
+                    'IICc': 0xFFFFFF,
+                    'IiCc': 0xFFFFFF,
+                    'IIcc': 0xFFFFFF,
+                    'iiCC': 0xC64E00,
+                    'Iicc': 0xFFFFFF,
+                    'iiCc': 0xC64E00,
+                    'iicc': 0xFFFFFF
+                };
+                this.graph.removeAll();
+                this.graph.addItem('white', new GraphItem('Branco', '#FFFFFF', 0));
+                this.graph.addItem('colored', new GraphItem('Colorido', '#C64E00', 0));
+                this.addToGenotypeFunction = (str, n) => {
+                    switch (str) {
+                        case 'IICC':
+                        case 'IiCC':
+                        case 'IICc':
+                        case 'IiCc':
+                        case 'IIcc':
+                        case 'Iicc':
+                        case 'iicc':
+                            this.graph.getItem('white').value += n;
+                            break;
+                        default:
+                            this.graph.getItem('colored').value += n;
+                            break;
+                    }
+                }
+                break;
+        }
     }
 
     reproduce(n) {
@@ -271,51 +450,11 @@ class GeneInteractionScene extends Scene {
     }
 
     addToGenotype(str, n) {
-        switch (str) {
-            case 'AABB':
-                this.graph.getItem('black').value += n;
-                break;
-            case 'AaBB':
-            case 'AABb':
-                this.graph.getItem('dark_gray').value += n;
-                break;
-            case 'AaBb':
-            case 'AAbb':
-            case 'aaBB':
-                this.graph.getItem('gray').value += n;
-                break;
-            case 'Aabb':
-            case 'aaBb':
-                this.graph.getItem('light_gray').value += n;
-                break;
-            default:
-                this.graph.getItem('white').value += n;
-                break;
-        }
+        this.addToGenotypeFunction(str, n);
     }
 
     addGenotype(genotype) {
-        switch (genotype.toString()) {
-            case 'AABB':
-                this.graph.getItem('black').value++;
-                break;
-            case 'AaBB':
-            case 'AABb':
-                this.graph.getItem('dark_gray').value++;
-                break;
-            case 'AaBb':
-            case 'AAbb':
-            case 'aaBB':
-                this.graph.getItem('gray').value++;
-                break;
-            case 'Aabb':
-            case 'aaBb':
-                this.graph.getItem('light_gray').value++;
-                break;
-            default:
-                this.graph.getItem('white').value++;
-                break;
-        }
+        this.addToGenotype(genotype.toString(), 1);
         this.lastIndividuals.push(genotype);
     }
 
@@ -438,6 +577,16 @@ class GraphWidget extends Widget {
 
     removeItem(id) {
         delete this.#items[id];
+    }
+
+    clear() {
+        for (let key of Object.keys(this.#items)) {
+            this.#items[key].value = 0;
+        }
+    }
+
+    removeAll() {
+        this.#items = [];
     }
 
     get items() {
@@ -573,7 +722,7 @@ class PunnettSquareWidget extends Widget {
     #secondGenotype;
     gridSquareSide = 75
 
-    constructor(pos, firstGenotype, secondGenotype, colorMap = new Map()) {
+    constructor(pos, firstGenotype, secondGenotype, colorMap = {}) {
         super(pos);
         this.#firstGenotype = firstGenotype;
         this.#secondGenotype = secondGenotype;
@@ -670,9 +819,13 @@ class PunnettSquareWidget extends Widget {
         y = this.getY() + this.gridSquareSide * 1.5;
         for (let gridY in this.#tableData.grid) {
             for (let gamete of this.#tableData.grid[gridY]) {
-                this.getCtx().fillStyle = '#000000';
+                const color = this.colorMap[gamete.toString()] || 0;
+                const red = ((color >> 16) & 0xFF) / 255
+                const green = ((color >> 8) & 0xFF) / 255
+                const blue = (color & 0xFF) / 255
+                this.getCtx().fillStyle = '#' + color.toString(16).padStart(6, '0') || '#000000';
                 this.getCtx().fillRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
-                this.getCtx().fillStyle = '#ffffff';
+                this.getCtx().fillStyle = 1.05/(0.2126 * red + 0.7152 * green + 0.0722 * blue) < 4.5 ? '#000000' : '#ffffff';
                 this.getCtx().fillText(gamete, x, y);
                 this.getCtx().strokeRect(x - this.gridSquareSide / 2, y - this.gridSquareSide / 2, this.gridSquareSide, this.gridSquareSide);
                 x += this.gridSquareSide;
