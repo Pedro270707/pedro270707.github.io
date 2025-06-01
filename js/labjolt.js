@@ -390,9 +390,10 @@ class ButtonWidget extends Widget {
 }
 
 class HorizontalArrangementWidget extends Widget {
-    constructor(pos, alignItems = 'middle', ...elements) {
+    constructor(pos, gap, alignItems = 'middle', ...elements) {
         super(pos);
         this.elements = elements;
+        this.gap = gap;
         this.alignItems = alignItems;
     }
 
@@ -409,11 +410,12 @@ class HorizontalArrangementWidget extends Widget {
     }
 
     getMaxWidth() {
+        if (this.elements.length === 0) return 0;
         let width = 0;
         for (let element of this.elements) {
             width += element.getMaxWidth();
         }
-        return width;
+        return width + (this.elements.length - 1) * this.gap;
     }
 
     getHeight() {
@@ -440,9 +442,11 @@ class HorizontalArrangementWidget extends Widget {
 }
 
 class VerticalArrangementWidget extends Widget {
-    constructor(pos, ...elements) {
+    constructor(pos, gap, alignItems = 'middle', ...elements) {
         super(pos);
         this.elements = elements;
+        this.gap = gap;
+        this.alignItems = alignItems;
     }
 
     getWidth() {
@@ -462,19 +466,59 @@ class VerticalArrangementWidget extends Widget {
     }
 
     getMaxHeight() {
+        if (this.elements.length === 0) return 0;
         let height = 0;
         for (let element of this.elements) {
             height += element.getMaxHeight();
         }
-        return height;
+        return height + (this.elements.length - 1) * this.gap;
     }
 
     draw(tickDelta) {
         let y = 0;
         for (let element of this.elements) {
             let elementY = y;
-            element.pos = {x: (widget) => this.getX(), y: (widget) => this.getY() + elementY};
-            y += element.getMaxWidth();
+            switch (this.alignItems) {
+                case 'top':
+                    element.pos = {x: (widget) => this.getX() + this.getWidth() / 2, y: (widget) => this.getY() + elementY};
+                    break;
+                case 'middle':
+                    element.pos = {x: (widget) => this.getX() + (this.getWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + elementY};
+                    break;
+                case 'bottom':
+                    element.pos = {x: (widget) => this.getX() + this.getWidth() - widget.getWidth(), y: (widget) => this.getY() + elementY};
+            }
+            y += element.getMaxHeight() + this.gap;
+        }
+    }
+}
+
+class GridWidget extends Widget {
+    constructor(pos, width, height, columnCount, rowCount, ...elements) {
+        super(pos);
+        this.elements = elements;
+        this.width = width;
+        this.height = height;
+        this.columnCount = columnCount;
+        this.rowCount = rowCount;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    getHeight() {
+        return this.height;
+    }
+
+    draw(tickDelta) {
+        for (let i in this.elements) {
+            let element = this.elements[i];
+            let column = i % this.columnCount;
+            let row = Math.floor(i / this.columnCount);
+            let cellWidth = this.getWidth() / this.columnCount;
+            let cellHeight = this.getHeight() / this.rowCount;
+            element.pos = {x: (widget) => this.getX() + (cellWidth - widget.getWidth()) / 2 + column * cellWidth, y: (widget) => this.getY() + (cellHeight - widget.getHeight()) / 2 + row * cellHeight};
         }
     }
 }

@@ -193,8 +193,6 @@ class GeneInteractionScene extends Scene {
         this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
         this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
 
-        this.punnettSquare = this.addWidget(new PunnettSquareWidget({x: (widget) => 200 + (this.hbox.getWidth() - widget.getWidth()) / 2, y: (widget) => (this.getCanvas().height + this.reproduceHundredTimesButton.getHeight()) / 2 + 20}, Genotype.parse('AaBb'), Genotype.parse('CcDd')))
-
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.getCtx().font = '4em sans-serif';
@@ -202,8 +200,27 @@ class GeneInteractionScene extends Scene {
         this.breedText = this.addWidget(new TextWidget({x: (widget) => 0, y: (widget) => 0}, new LiteralText('x'), breedTextMeasurement.width + 20, 0, breedTextMeasurement.width + 20, 0, {font: '4em sans-serif', textAlign: 'center', textBaseline: 'middle'}));
         this.thirdAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.fourthAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
-        this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
-        
+        this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 0, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
+
+        this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
+            this.reproduce(1);
+        }));
+        this.reproduceTenTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_times'), (button, mouseX, mouseY) => {
+            this.reproduce(10);
+        }));
+        this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
+            this.reproduce(100);
+        }));
+        this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
+            this.reproduce(10000);
+        }));
+        this.buttonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2,
+        this.reproduceButton,
+        this.reproduceTenTimesButton,
+        this.reproduceHundredTimesButton,
+        this.reproduceTenThousandTimesButton));
+
+        this.punnettSquare = this.addWidget(new PunnettSquareWidget({x: (widget) => 0, y: (widget) => 0}, Genotype.parse('AaBb'), Genotype.parse('CcDd')));
         const updatePunnettSquare = () => {
             this.punnettSquare.firstGenotype = this.getFirstGenotype();
             this.punnettSquare.secondGenotype = this.getSecondGenotype();
@@ -214,18 +231,7 @@ class GeneInteractionScene extends Scene {
         this.fourthAllelePair.addChangeListener(updatePunnettSquare);
         updatePunnettSquare();
 
-        this.reproduceButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 80}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce'), (button, mouseX, mouseY) => {
-            this.reproduce(1);
-        }));
-        this.reproduceTenTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 80}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_times'), (button, mouseX, mouseY) => {
-            this.reproduce(10);
-        }));
-        this.reproduceHundredTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 20}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_hundred_times'), (button, mouseX, mouseY) => {
-            this.reproduce(100);
-        }));
-        this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 200 + this.hbox.getWidth() - widget.getWidth(), y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 20}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
-            this.reproduce(10000);
-        }));
+        this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'middle', this.hbox, this.buttonGrid, this.punnettSquare));
 
         this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
             for (let key of Object.keys(this.graph.items)) {
@@ -567,10 +573,11 @@ class PunnettSquareWidget extends Widget {
     #secondGenotype;
     gridSquareSide = 75
 
-    constructor(pos, firstGenotype, secondGenotype) {
+    constructor(pos, firstGenotype, secondGenotype, colorMap = new Map()) {
         super(pos);
         this.#firstGenotype = firstGenotype;
         this.#secondGenotype = secondGenotype;
+        this.colorMap = colorMap;
         this.generateTable();
     }
 
