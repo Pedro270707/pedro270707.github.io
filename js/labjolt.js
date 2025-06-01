@@ -486,6 +486,7 @@ class LanguageWidget extends VariableTextWidget {
     constructor(pos, language, width, height, maxWidth, maxHeight, settings = {}) {
         let text = LiteralText.EMPTY;
         translate.whenLoaded(() => text = new LiteralText(translate.getName(language)));
+        settings.textBaseline = 'middle';
         super(pos, (widget) => text, width, height, maxWidth, maxHeight, settings);
         this.language = language;
     }
