@@ -249,12 +249,12 @@ class GeneInteractionScene extends Scene {
             this.graph.clear();
         }));
 
-        this.graph = this.addWidget(new GraphWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY));
+        this.graph = this.addWidget(new GraphWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals"), LiteralText.EMPTY, undefined, true));
         
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
         this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1]), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
         
-        this.totalText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => new TranslatableText('interacaogenica.graph.total', Object.values(this.graph.items).reduce((accumulator, item) => accumulator + item.value, 0)), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
+        this.totalText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => new TranslatableText('interacaogenica.graph.total', Object.values(this.graph.items).reduce((accumulator, item) => accumulator + item.value, 0).toLocaleString(translate.getCurrentLanguage())), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
 
         this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText, this.totalText));
 
@@ -581,12 +581,13 @@ class GraphWidget extends Widget {
     titleGap = 55;
     height = 400;
     
-    constructor(pos, xLabel, yLabel, title, items = {}) {
+    constructor(pos, xLabel, yLabel, title, items = {}, integerTicks = false) {
         super(pos);
         this.#items = items;
         this.xLabel = xLabel instanceof Text ? xLabel : new LiteralText(xLabel);
         this.yLabel = yLabel instanceof Text ? yLabel : new LiteralText(yLabel);
         this.title = title instanceof Text ? title : new LiteralText(title);
+        this.integerTicks = integerTicks;
     }
 
     addItem(id, item) {
@@ -667,7 +668,11 @@ class GraphWidget extends Widget {
         let ticks = [];
         for (let t = 0; t <= tickEnd + 1e-9; t += step) {
             if (t !== 0) {
-                ticks.push(t);
+                if (!this.integerTicks) {
+                    ticks.push(t);
+                } else if (Math.abs(Math.round(t) - t) < 1e-14) {
+                    ticks.push(Math.round(t));
+                }
             }
         }
         return ticks;
@@ -734,7 +739,7 @@ class GraphWidget extends Widget {
             this.getCtx().moveTo(x - 5, y + graphHeight - tickHeight);
             this.getCtx().lineTo(x, y + graphHeight - tickHeight);
             this.getCtx().stroke();
-            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick) : parseFloat(tick).toFixed(1), x - 10, y + graphHeight - tickHeight);
+            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.round(tick) : parseFloat(tick).toFixed(1), x - 10, y + graphHeight - tickHeight);
         }
 
         this.getCtx().textBaseline = "top";
