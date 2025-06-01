@@ -188,11 +188,6 @@ class GeneInteractionScene extends Scene {
     // 🎵 I will refactor this later, you know I will refactor this later
     init() {
         this.graph = this.addWidget(new GraphWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, new TranslatableText("interacaogenica.graph.phenotype"), new TranslatableText("interacaogenica.graph.amount_of_individuals")))
-        this.graph.addItem('black', new GraphItem('Preto', '#000000', 0));
-        this.graph.addItem('dark_gray', new GraphItem('Cinza-escuro', '#666666', 0));
-        this.graph.addItem('gray', new GraphItem('Cinza', '#aaaaaa', 0));
-        this.graph.addItem('light_gray', new GraphItem('Cinza-claro', "#cccccc", 0));
-        this.graph.addItem('white', new GraphItem('Branco', "#ffffff", 0));
 
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
