@@ -217,15 +217,12 @@ class GeneInteractionScene extends Scene {
         this.reproduceTenThousandTimesButton));
 
         this.punnettSquare = this.addWidget(new PunnettSquareWidget({x: (widget) => 0, y: (widget) => 0}, Genotype.parse('AaBb'), Genotype.parse('CcDd')));
-        const updatePunnettSquare = () => {
-            this.punnettSquare.firstGenotype = this.getFirstGenotype();
-            this.punnettSquare.secondGenotype = this.getSecondGenotype();
-        };
+        const updatePunnettSquare = () => this.updatePunnettSquare();
         this.firstAllelePair.addChangeListener(updatePunnettSquare);
         this.secondAllelePair.addChangeListener(updatePunnettSquare);
         this.thirdAllelePair.addChangeListener(updatePunnettSquare);
         this.fourthAllelePair.addChangeListener(updatePunnettSquare);
-        updatePunnettSquare();
+        this.updatePunnettSquare();
 
         this.radioButtonManager = new RadioButtonManager();
         this.polygenicInheritance = this.radioButtonManager.register(this.addWidget(new RadioButtonWidget({x: (widget) => 0, y: (widget) => 0}, new TranslatableText('interacaogenica.options.polygenic_inheritance'))));
@@ -245,7 +242,7 @@ class GeneInteractionScene extends Scene {
         this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.hbox, this.buttonGrid, this.punnettSquare, this.radioButtonGrid));
 
         this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
-            
+            this.graph.clear();
         }));
 
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
@@ -260,6 +257,11 @@ class GeneInteractionScene extends Scene {
                 ++index;
             }
         });
+    }
+
+    updatePunnettSquare() {
+        this.punnettSquare.firstGenotype = this.getFirstGenotype();
+        this.punnettSquare.secondGenotype = this.getSecondGenotype();
     }
 
     onRadioButtonChanged() {
@@ -429,6 +431,7 @@ class GeneInteractionScene extends Scene {
                 }
                 break;
         }
+        this.updatePunnettSquare();
     }
 
     reproduce(n) {
