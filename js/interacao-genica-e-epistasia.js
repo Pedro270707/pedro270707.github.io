@@ -215,7 +215,7 @@ class GeneInteractionScene extends Scene {
         this.reproduceTenThousandTimesButton = this.addWidget(new ButtonWidget({x: (widget) => 0, y: (widget) => 0}, 200, 40, new TranslatableText('interacaogenica.graph.reproduce_ten_thousand_times'), (button, mouseX, mouseY) => {
             this.reproduce(10000);
         }));
-        this.buttonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2,
+        this.buttonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, 'center', 'middle',
         this.reproduceButton,
         this.reproduceTenTimesButton,
         this.reproduceHundredTimesButton,
@@ -241,9 +241,13 @@ class GeneInteractionScene extends Scene {
         this.radioButtonManager.addChangeListener(() => this.onRadioButtonChanged());
         this.onRadioButtonChanged();
 
-        this.radioButtonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, this.polygenicInheritance, this.collaborativeGenes, this.recessiveEpistasis, this.dominantEpistasis));
+        this.radioButtonGrid = this.addWidget(new GridWidget({x: (widget) => 0, y: (widget) => 0}, this.hbox.getWidth(), 100, 2, 2, 'left', 'middle',
+        this.polygenicInheritance,
+        this.collaborativeGenes,
+        this.recessiveEpistasis,
+        this.dominantEpistasis));
 
-        this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'middle', this.hbox, this.buttonGrid, this.punnettSquare, this.radioButtonGrid));
+        this.vboxLeft = this.addWidget(new VerticalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.hbox, this.buttonGrid, this.punnettSquare, this.radioButtonGrid));
 
         this.clearButton = this.addWidget(new ButtonWidget({x: (widget) => this.getCanvas().width / 2 + 200, y: (widget) => (this.getCanvas().height - this.graph.getHeight()) / 2 - widget.getHeight() - 50}, 70, 40, new TranslatableText('interacaogenica.graph.clear'), (button, mouseX, mouseY) => {
             

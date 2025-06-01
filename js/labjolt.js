@@ -595,7 +595,7 @@ class HorizontalArrangementWidget extends Widget {
 }
 
 class VerticalArrangementWidget extends Widget {
-    constructor(pos, gap, alignItems = 'middle', ...elements) {
+    constructor(pos, gap, alignItems = 'center', ...elements) {
         super(pos);
         this.elements = elements;
         this.gap = gap;
@@ -632,13 +632,13 @@ class VerticalArrangementWidget extends Widget {
         for (let element of this.elements) {
             let elementY = y;
             switch (this.alignItems) {
-                case 'top':
+                case 'left':
                     element.pos = {x: (widget) => this.getX() + this.getWidth() / 2, y: (widget) => this.getY() + elementY};
                     break;
-                case 'middle':
+                case 'center':
                     element.pos = {x: (widget) => this.getX() + (this.getWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + elementY};
                     break;
-                case 'bottom':
+                case 'right':
                     element.pos = {x: (widget) => this.getX() + this.getWidth() - widget.getWidth(), y: (widget) => this.getY() + elementY};
             }
             y += element.getMaxHeight() + this.gap;
@@ -647,13 +647,15 @@ class VerticalArrangementWidget extends Widget {
 }
 
 class GridWidget extends Widget {
-    constructor(pos, width, height, columnCount, rowCount, ...elements) {
+    constructor(pos, width, height, columnCount, rowCount, justifyContent = 'center', alignItems = 'middle', ...elements) {
         super(pos);
         this.elements = elements;
         this.width = width;
         this.height = height;
         this.columnCount = columnCount;
         this.rowCount = rowCount;
+        this.justifyContent = justifyContent;
+        this.alignItems = alignItems;
     }
 
     getWidth() {
@@ -671,7 +673,26 @@ class GridWidget extends Widget {
             let row = Math.floor(i / this.columnCount);
             let cellWidth = this.getWidth() / this.columnCount;
             let cellHeight = this.getHeight() / this.rowCount;
-            element.pos = {x: (widget) => this.getX() + (cellWidth - widget.getWidth()) / 2 + column * cellWidth, y: (widget) => this.getY() + (cellHeight - widget.getHeight()) / 2 + row * cellHeight};
+            switch (this.justifyContent) {
+                case 'left':
+                    element.pos.x = (widget) => this.getX() + column * cellWidth;
+                    break;
+                case 'center':
+                    element.pos.x = (widget) => this.getX() + (cellWidth - widget.getWidth()) / 2 + column * cellWidth;
+                    break;
+                case 'right':
+                    element.pos.x = (widget) => this.getX() + (column + 1) * cellWidth - widget.getWidth();
+            }
+            switch (this.alignItems) {
+                case 'top':
+                    element.pos.y = (widget) => this.getY() + row * cellHeight;
+                    break;
+                case 'middle':
+                    element.pos.y = (widget) => this.getY() + (cellHeight - widget.getHeight()) / 2 + row * cellHeight;
+                    break;
+                case 'bottom':
+                    element.pos.y = (widget) => this.getX() + (row + 1) * cellHeight - widget.getHeight();
+            }
         }
     }
 }
