@@ -449,12 +449,12 @@ class RadioButtonWidget extends Widget {
     }
 
     getHeight() {
-        const measurement = TextMeasurementHelper.measureTextMemoized(this.text.get(), this.getCtx());
+        const measurement = TextHelper.measureTextMemoized(this.text.get(), this.getCtx());
         return Math.max(RadioButtonWidget.#radius * 2, measurement.actualBoundingBoxAscent + measurement.actualBoundingBoxDescent);
     }
 
     getWidth() {
-        return RadioButtonWidget.#radius * 2 + RadioButtonWidget.#gap + TextMeasurementHelper.measureTextMemoized(this.text.get(), this.getCtx()).width;
+        return RadioButtonWidget.#radius * 2 + RadioButtonWidget.#gap + TextHelper.measureTextMemoized(this.text.get(), this.getCtx()).width;
     }
 
     click(mouseX, mouseY) {
@@ -867,12 +867,16 @@ function getMousePos(event) {
     return { x, y };
 }
 
-class TextMeasurementHelper {
+class TextHelper {
     static #textCache = {};
     
     static measureTextMemoized(text, ctx) {
         if (!this.#textCache[ctx.font]) this.#textCache[ctx.font] = {};
         if (!this.#textCache[ctx.font][text]) this.#textCache[ctx.font][text] = ctx.measureText(text);
         return this.#textCache[ctx.font][text];
+    }
+
+    static formatNumber(num) {
+        return num.toLocaleString(translate.getCurrentLanguage());
     }
 }

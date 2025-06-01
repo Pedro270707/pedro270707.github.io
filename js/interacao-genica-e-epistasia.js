@@ -190,7 +190,7 @@ class GeneInteractionScene extends Scene {
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.getCtx().font = '4em sans-serif';
-        let breedTextMeasurement = TextMeasurementHelper.measureTextMemoized('x', this.getCtx());
+        let breedTextMeasurement = TextHelper.measureTextMemoized('x', this.getCtx());
         this.breedText = this.addWidget(new TextWidget({x: (widget) => 0, y: (widget) => 0}, new LiteralText('x'), breedTextMeasurement.width + 20, 0, breedTextMeasurement.width + 20, 0, {font: '4em sans-serif', textAlign: 'center', textBaseline: 'middle'}));
         this.thirdAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.fourthAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
@@ -254,7 +254,7 @@ class GeneInteractionScene extends Scene {
         const noIndividualsText = new TranslatableText('interacaogenica.graph.last_individual.none');
         this.lastIndividualText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => this.lastIndividuals.length === 0 ? noIndividualsText : new TranslatableText('interacaogenica.graph.last_individual', this.lastIndividuals[this.lastIndividuals.length - 1]), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
         
-        this.totalText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => new TranslatableText('interacaogenica.graph.total', Object.values(this.graph.items).reduce((accumulator, item) => accumulator + item.value, 0).toLocaleString(translate.getCurrentLanguage())), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
+        this.totalText = this.addWidget(new VariableTextWidget({x: (widget) => 0, y: (widget) => 0}, (widget) => new TranslatableText('interacaogenica.graph.total', TextHelper.formatNumber(Object.values(this.graph.items).reduce((accumulator, item) => accumulator + item.value, 0))), 0, 30, 0, 30, {textAlign: 'center', textBaseline: 'middle'}));
 
         this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText, this.totalText));
 
@@ -647,8 +647,8 @@ class GraphWidget extends Widget {
     }
 
     getHeight() {
-        const titleMeasurement = TextMeasurementHelper.measureTextMemoized(this.title.get(), this.getCtx());
-        const xLabelMeasurement = TextMeasurementHelper.measureTextMemoized(this.xLabel.get(), this.getCtx());
+        const titleMeasurement = TextHelper.measureTextMemoized(this.title.get(), this.getCtx());
+        const xLabelMeasurement = TextHelper.measureTextMemoized(this.xLabel.get(), this.getCtx());
         return titleMeasurement.actualBoundingBoxAscent + titleMeasurement.actualBoundingBoxDescent + this.titleGap + this.height + this.xLabelGap + xLabelMeasurement.actualBoundingBoxAscent + xLabelMeasurement.actualBoundingBoxDescent;
     }
 
@@ -690,7 +690,7 @@ class GraphWidget extends Widget {
         this.getCtx().textBaseline = "top";
 
         this.getCtx().fillText(this.title.get(), x + width / 2, y);
-        const titleMeasurement = TextMeasurementHelper.measureTextMemoized(this.title.get(), this.getCtx());
+        const titleMeasurement = TextHelper.measureTextMemoized(this.title.get(), this.getCtx());
         y += titleMeasurement.actualBoundingBoxAscent + titleMeasurement.actualBoundingBoxDescent + this.titleGap;
 
         this.getCtx().textBaseline = "bottom";
@@ -705,11 +705,11 @@ class GraphWidget extends Widget {
             this.getCtx().fillRect(x + itemX, y + graphHeight - itemHeight, this.itemWidth, itemHeight);
 
             this.getCtx().fillStyle = '#FFFFFF';
-            this.getCtx().fillText(item.value, x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 10);
+            this.getCtx().fillText(TextHelper.formatNumber(item.value), x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 10);
 
             this.getCtx().save();
             this.getCtx().textBaseline = 'middle';
-            const textWidth = TextMeasurementHelper.measureTextMemoized(item.name.get(), this.getCtx()).width;
+            const textWidth = TextHelper.measureTextMemoized(item.name.get(), this.getCtx()).width;
             if (textWidth + 20 >= itemHeight) {
                 this.getCtx().textAlign = "left";
                 this.getCtx().translate(x + itemX + this.itemWidth / 2, y + graphHeight - itemHeight - 40);
@@ -739,7 +739,7 @@ class GraphWidget extends Widget {
             this.getCtx().moveTo(x - 5, y + graphHeight - tickHeight);
             this.getCtx().lineTo(x, y + graphHeight - tickHeight);
             this.getCtx().stroke();
-            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.round(tick) : parseFloat(tick).toFixed(1), x - 10, y + graphHeight - tickHeight);
+            this.getCtx().fillText(Math.abs(Math.round(tick) - tick) < 1e-14 ? TextHelper.formatNumber(Math.ceil(tick)).toString() : TextHelper.formatNumber(parseFloat(tick)), x - 10, y + graphHeight - tickHeight);
         }
 
         this.getCtx().textBaseline = "top";
@@ -758,7 +758,7 @@ class GraphWidget extends Widget {
 
         this.getCtx().textBaseline = "bottom";
 
-        let largestTickWidth = Math.max(0, ...ticks.map(tick => TextMeasurementHelper.measureTextMemoized(Math.abs(Math.round(tick) - tick) < 1e-14 ? Math.ceil(tick).toString() : parseFloat(tick).toFixed(1), this.getCtx()).width));
+        let largestTickWidth = Math.max(0, ...ticks.map(tick => TextHelper.measureTextMemoized(Math.abs(Math.round(tick) - tick) < 1e-14 ? TextHelper.formatNumber(Math.ceil(tick)).toString() : TextHelper.formatNumber(parseFloat(tick)), this.getCtx()).width));
 
         let yLabelText = this.yLabel.get();
         this.getCtx().save();
