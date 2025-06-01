@@ -543,6 +543,7 @@ class Draggable extends Widget {
 }
 
 class HorizontalArrangementWidget extends Widget {
+    // TODO: add justifyContent (better yet: replace with settings)
     constructor(pos, gap, alignItems = 'middle', ...elements) {
         super(pos);
         this.elements = elements;
@@ -553,23 +554,23 @@ class HorizontalArrangementWidget extends Widget {
     getWidth() {
         let width = 0;
         for (let element of this.elements) {
-            width += element.getWidth();
+            width += element.getMaxWidth();
         }
-        return width;
+        return width + (this.elements.length - 1) * this.gap;
     }
 
     getHeight() {
         return Math.max(...this.elements.map(e => e.getHeight()));
     }
 
-    getMaxWidth() {
-        if (this.elements.length === 0) return 0;
-        let width = 0;
-        for (let element of this.elements) {
-            width += element.getMaxWidth();
-        }
-        return width + (this.elements.length - 1) * this.gap;
-    }
+    // getMaxWidth() {
+    //     if (this.elements.length === 0) return 0;
+    //     let width = 0;
+    //     for (let element of this.elements) {
+    //         width += element.getMaxWidth();
+    //     }
+    //     return width + (this.elements.length - 1) * this.gap;
+    // }
 
     getHeight() {
         return Math.max(...this.elements.map(e => e.getMaxHeight()));
@@ -581,20 +582,21 @@ class HorizontalArrangementWidget extends Widget {
             let elementX = x;
             switch (this.alignItems) {
                 case 'top':
-                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + this.getHeight() / 2};
+                    element.pos = {x: (widget) => this.getX() + elementX + (widget.getMaxWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + this.getHeight() / 2};
                     break;
                 case 'middle':
-                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + (this.getHeight() - widget.getHeight()) / 2};
+                    element.pos = {x: (widget) => this.getX() + elementX + (widget.getMaxWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + (this.getHeight() - widget.getHeight()) / 2};
                     break;
                 case 'bottom':
-                    element.pos = {x: (widget) => this.getX() + elementX, y: (widget) => this.getY() + this.getHeight() - widget.getHeight()};
+                    element.pos = {x: (widget) => this.getX() + elementX + (widget.getMaxWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + this.getHeight() - widget.getHeight()};
             }
-            x += element.getMaxWidth();
+            x += element.getMaxWidth() + this.gap;
         }
     }
 }
 
 class VerticalArrangementWidget extends Widget {
+    // TODO: add justifyContent (better yet: replace with settings)
     constructor(pos, gap, alignItems = 'center', ...elements) {
         super(pos);
         this.elements = elements;
@@ -609,23 +611,23 @@ class VerticalArrangementWidget extends Widget {
     getHeight() {
         let height = 0;
         for (let element of this.elements) {
-            height += element.getHeight();
+            height += element.getMaxHeight();
         }
-        return height;
+        return height + (this.elements.length - 1) * this.gap;
     }
 
     getMaxWidth() {
         return Math.max(...this.elements.map(e => e.getMaxWidth()));
     }
 
-    getMaxHeight() {
-        if (this.elements.length === 0) return 0;
-        let height = 0;
-        for (let element of this.elements) {
-            height += element.getMaxHeight();
-        }
-        return height + (this.elements.length - 1) * this.gap;
-    }
+    // getMaxHeight() {
+    //     if (this.elements.length === 0) return 0;
+    //     let height = 0;
+    //     for (let element of this.elements) {
+    //         height += element.getMaxHeight();
+    //     }
+    //     return height + (this.elements.length - 1) * this.gap;
+    // }
 
     draw(tickDelta) {
         let y = 0;
@@ -633,13 +635,13 @@ class VerticalArrangementWidget extends Widget {
             let elementY = y;
             switch (this.alignItems) {
                 case 'left':
-                    element.pos = {x: (widget) => this.getX() + this.getWidth() / 2, y: (widget) => this.getY() + elementY};
+                    element.pos = {x: (widget) => this.getX() + this.getWidth() / 2, y: (widget) => this.getY() + elementY + (widget.getMaxHeight() - widget.getHeight()) / 2};
                     break;
                 case 'center':
-                    element.pos = {x: (widget) => this.getX() + (this.getWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + elementY};
+                    element.pos = {x: (widget) => this.getX() + (this.getWidth() - widget.getWidth()) / 2, y: (widget) => this.getY() + elementY + (widget.getMaxHeight() - widget.getHeight()) / 2};
                     break;
                 case 'right':
-                    element.pos = {x: (widget) => this.getX() + this.getWidth() - widget.getWidth(), y: (widget) => this.getY() + elementY};
+                    element.pos = {x: (widget) => this.getX() + this.getWidth() - widget.getWidth(), y: (widget) => this.getY() + elementY + (widget.getMaxHeight() - widget.getHeight()) / 2};
             }
             y += element.getMaxHeight() + this.gap;
         }

@@ -256,6 +256,8 @@ class GeneInteractionScene extends Scene {
 
         this.vboxRight = this.addWidget(new VerticalArrangementWidget({x: (widget) => this.getCanvas().width * 3/4 - widget.getWidth() / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 20, 'center', this.clearButton, this.graph, this.lastIndividualText));
 
+        this.vbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => (this.getCanvas().width - widget.getWidth()) / 2, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2}, 150, 'middle', this.vboxLeft, this.vboxRight));
+
         const textHeight = 26;
         translate.whenLoaded(() => {
             let index = 0;
@@ -635,6 +637,10 @@ class GraphWidget extends Widget {
 
     getWidth() {
         return this.itemGap + Object.keys(this.#items).length * (this.itemWidth + this.itemGap);
+    }
+
+    getMaxWidth() {
+        return this.itemGap + 5 * (this.itemWidth + this.itemGap);
     }
 
     getHeight() {
