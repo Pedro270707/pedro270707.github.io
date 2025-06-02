@@ -98,11 +98,46 @@ class Genotype {
     }
     
     static #binomialSample(n, p) {
-        let successes = 0;
-        for (let i = 0; i < n; i++) {
-            if (Math.random() < p) successes++;
+        if (n === 0) return 0;
+        if (p === 0) return 0;
+        if (p === 1) return n;
+
+        if (n < 1000000) {
+            let successes = 0;
+            for (let i = 0; i < n; i++) {
+                if (Math.random() < p) successes++;
+            }
+            return successes;
         }
-        return successes;
+
+        const lambda = n * p;
+        if (p <= 0.01 && lambda <= 10) {
+            let L = Math.exp(-lambda);
+            let k = 0;
+            let p = 1;
+        
+            do {
+                k++;
+                p *= Math.random();
+            } while (p > L);
+        
+            return k - 1;
+        }
+    
+        const mean = n * p;
+        const variance = n * p * (1 - p);
+        const stddev = Math.sqrt(variance);
+    
+        let u1 = Math.random();
+        let u2 = Math.random();
+        let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+    
+        let sample = Math.round(mean + stddev * z0);
+    
+        if (sample < 0) sample = 0;
+        if (sample > n) sample = n;
+    
+        return sample;
     }
 
     getGametes() {
