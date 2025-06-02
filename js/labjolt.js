@@ -739,8 +739,8 @@ class LabJolt {
 
     resizeCanvas() {
         const ratio = window.devicePixelRatio || 1;
-        this.getCanvas().width = this.getCanvas().parentElement.clientWidth * ratio;
-        this.getCanvas().height = this.getCanvas().parentElement.clientHeight * ratio;
+        this.getCanvas().width = this.getCanvas().parentElement.clientWidth;
+        this.getCanvas().height = this.getCanvas().parentElement.clientHeight;
         this.getCanvas().style.width = `${window.innerWidth}px`;
         this.getCanvas().style.height = `${window.innerHeight}px`;
         if (this.#scene) this.#scene.resizeCanvas();
