@@ -1,5 +1,94 @@
 let mousePos = {x: 0, y: 0};
 
+class LabJolt {
+    #scene;
+    #canvas;
+    #previousTime;
+    #deltaTime = 0;
+    
+    static #defaultFont = '16px sans-serif';
+    static get DEFAULT_FONT() {
+        return LabJolt.#defaultFont;
+    }
+
+    constructor(canvas) {
+        this.#scene = undefined;
+        this.#canvas = canvas;
+        canvas.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.#scene.click(mousePos.x, mousePos.y);
+        }, false);
+
+        canvas.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+            this.#scene.mouseDown(mousePos.x, mousePos.y);
+        }, false);
+
+        canvas.addEventListener('mouseup', (event) => {
+            event.preventDefault();
+            this.#scene.mouseUp(mousePos.x, mousePos.y);
+        }, false);
+
+        window.addEventListener('resize', () => this.resizeCanvas());
+
+        canvas.addEventListener("mousemove", (event) => {
+            mousePos = getMousePos(event);
+        });
+
+        this.draw();
+    }
+
+    getCanvas() {
+        return this.#canvas;
+    }
+
+    getCtx() {
+        return this.getCanvas().getContext('2d');
+    }
+
+    resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        this.getCanvas().width = this.getCanvas().parentElement.clientWidth * ratio;
+        this.getCanvas().height = this.getCanvas().parentElement.clientHeight * ratio;
+        this.getCanvas().style.width = `${window.innerWidth}px`;
+        this.getCanvas().style.height = `${window.innerHeight}px`;
+        if (this.#scene) this.#scene.resizeCanvas();
+    }
+
+    setScene(scene) {
+        if (!(scene instanceof Scene)) throw new TypeError("Parameter \"scene\" (LabJolt.setScene) is not an instance of Scene");
+        if (this.#scene && this.#scene.labjolt === this) delete this.#scene.labjolt;
+        this.#scene = scene;
+        this.#scene.labjolt = this;
+        this.resizeCanvas();
+        scene.init();
+    }
+
+    getScene() {
+        return this.#scene;
+    }
+
+    draw() {
+        if (!this.getCanvas()) return;
+
+        const currentTime = performance.now();
+    
+        this.#deltaTime = currentTime - (this.#previousTime || currentTime);
+        this.#previousTime = currentTime;
+    
+        const tickDelta = this.#deltaTime / 1000;
+
+        this.getCanvas().style.cursor = "";
+        this.getCtx().fillStyle = "#ffffff";
+        this.getCtx().strokeStyle = "#ffffff";
+        this.getCtx().font = LabJolt.DEFAULT_FONT;
+
+        if (this.#scene) this.#scene.draw(tickDelta);
+    
+        requestAnimationFrame(() => this.draw());
+    }
+}
+
 class Scene {
     constructor() {
         this.widgets = [];
@@ -39,12 +128,11 @@ class Scene {
     }
 
     draw(tickDelta) {
+        this.getCtx().save();
         this.getCtx().fillStyle = "#1f1f1f";
         this.getCtx().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
+        this.getCtx().restore();
 
-        this.getCtx().fillStyle = "#ffffff";
-        this.getCtx().strokeStyle = "#ffffff";
-        this.getCtx().font = "1em sans-serif";
         for (let widget of this.widgets) {
             if (widget.isHoveredOver(mousePos.x, mousePos.y)) {
                 widget.onHover(mousePos.x, mousePos.y);
@@ -148,7 +236,7 @@ class TextWidget extends Widget {
     constructor(pos, text, width, height, maxWidth, maxHeight, settings = {}) {
         super(pos);
         this.text = text;
-        this.font = settings.font || "1em sans-serif";
+        this.font = settings.font || LabJolt.DEFAULT_FONT;
         this.textAlign = settings.textAlign || "left";
         this.textBaseline = settings.textBaseline || "top";
         this.fillStyle = settings.fillStyle || "#ffffff";
@@ -200,7 +288,7 @@ class HoverableTextWidget extends Widget {
         super(pos);
         this.text = text;
         this.hoverText = hoverText;
-        this.font = settings.font || "1em sans-serif";
+        this.font = settings.font || LabJolt.DEFAULT_FONT;
         this.textAlign = settings.textAlign || "left";
         this.textBaseline = settings.textBaseline || "top";
         this.fillStyle = settings.fillStyle || "#ffffff";
@@ -254,7 +342,7 @@ class VariableHoverableTextWidget extends Widget {
         this.textFunction = textFunction;
         this.hoverTextFunction = hoverTextFunction;
         this.settings = settings;
-        this.font = settings.font || "1em sans-serif";
+        this.font = settings.font || LabJolt.DEFAULT_FONT;
         this.textAlign = settings.textAlign || "left";
         this.textBaseline = settings.textBaseline || "top";
         this.fillStyle = settings.fillStyle || "#ffffff";
@@ -306,7 +394,7 @@ class VariableTextWidget extends Widget {
     constructor(pos, textFunction, width, height, maxWidth, maxHeight, settings = {}) {
         super(pos);
         this.textFunction = textFunction;
-        this.font = settings.font || "1em sans-serif";
+        this.font = settings.font || LabJolt.DEFAULT_FONT;
         this.textAlign = settings.textAlign || "left";
         this.textBaseline = settings.textBaseline || "top";
         this.fillStyle = settings.fillStyle || "#ffffff";
@@ -697,81 +785,6 @@ class GridWidget extends Widget {
                     element.pos.y = (widget) => this.getX() + (row + 1) * cellHeight - widget.getHeight();
             }
         }
-    }
-}
-
-class LabJolt {
-    #scene;
-    #canvas;
-    #previousTime;
-    #deltaTime = 0;
-
-    constructor(canvas) {
-        this.#scene = undefined;
-        this.#canvas = canvas;
-        canvas.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.#scene.click(mousePos.x, mousePos.y);
-        }, false);
-
-        canvas.addEventListener('mousedown', (event) => {
-            event.preventDefault();
-            this.#scene.mouseDown(mousePos.x, mousePos.y);
-        }, false);
-
-        canvas.addEventListener('mouseup', (event) => {
-            event.preventDefault();
-            this.#scene.mouseUp(mousePos.x, mousePos.y);
-        }, false);
-
-        window.addEventListener('resize', () => this.resizeCanvas());
-
-        canvas.addEventListener("mousemove", (event) => {
-            mousePos = getMousePos(event);
-        });
-
-        this.draw();
-    }
-
-    getCanvas() {
-        return this.#canvas;
-    }
-
-    resizeCanvas() {
-        const ratio = window.devicePixelRatio || 1;
-        this.getCanvas().width = this.getCanvas().parentElement.clientWidth * ratio;
-        this.getCanvas().height = this.getCanvas().parentElement.clientHeight * ratio;
-        this.getCanvas().style.width = `${window.innerWidth}px`;
-        this.getCanvas().style.height = `${window.innerHeight}px`;
-        if (this.#scene) this.#scene.resizeCanvas();
-    }
-
-    setScene(scene) {
-        if (!(scene instanceof Scene)) throw new TypeError("Parameter \"scene\" (LabJolt.setScene) is not an instance of Scene");
-        if (this.#scene && this.#scene.labjolt === this) delete this.#scene.labjolt;
-        this.#scene = scene;
-        this.#scene.labjolt = this;
-        this.resizeCanvas();
-        scene.init();
-    }
-
-    getScene() {
-        return this.#scene;
-    }
-
-    draw() {
-        const currentTime = performance.now();
-    
-        this.#deltaTime = currentTime - (this.#previousTime || currentTime);
-        this.#previousTime = currentTime;
-    
-        const tickDelta = this.#deltaTime / 1000;
-
-        if (this.getCanvas()) this.getCanvas().style.cursor = "";
-        
-        if (this.#scene) this.#scene.draw(tickDelta);
-    
-        requestAnimationFrame(() => this.draw());
     }
 }
 

@@ -224,9 +224,10 @@ class GeneInteractionScene extends Scene {
     init() {
         this.firstAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.secondAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
-        this.getCtx().font = '4em sans-serif';
-        let breedTextMeasurement = TextHelper.measureTextMemoized('x', this.getCtx());
-        this.breedText = this.addWidget(new TextWidget({x: (widget) => 0, y: (widget) => 0}, new LiteralText('x'), breedTextMeasurement.width + 20, 0, breedTextMeasurement.width + 20, 0, {font: '4em sans-serif', textAlign: 'center', textBaseline: 'middle'}));
+        this.getCtx().font = '40px sans-serif';
+        let breedText = '✕'
+        let breedTextMeasurement = TextHelper.measureTextMemoized(breedText, this.getCtx());
+        this.breedText = this.addWidget(new TextWidget({x: (widget) => 0, y: (widget) => 0}, new LiteralText(breedText), breedTextMeasurement.width + 20, 0, breedTextMeasurement.width + 20, 0, {font: '40px sans-serif', textAlign: 'center', textBaseline: 'middle'}));
         this.thirdAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('AA'), AllelePair.parse('Aa'), AllelePair.parse('aa')]));
         this.fourthAllelePair = this.addWidget(new AllelePairWidget({x: (widget) => this.getCanvas().width / 2 - 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, [AllelePair.parse('BB'), AllelePair.parse('Bb'), AllelePair.parse('bb')]));
         this.hbox = this.addWidget(new HorizontalArrangementWidget({x: (widget) => 200, y: (widget) => (this.getCanvas().height - widget.getHeight()) / 2 - 200}, 0, 'middle', this.firstAllelePair, this.secondAllelePair, this.breedText, this.thirdAllelePair, this.fourthAllelePair));
@@ -565,7 +566,7 @@ class AllelePairWidget extends Widget {
         DrawHelper.drawRoundedRectWithGradient(this.getX(), this.getY() + (this.getHeight() - AllelePairWidget.#boxHeight) / 2, this.getWidth(), AllelePairWidget.#boxHeight, 5, this.getCtx());
         this.getCtx().textAlign = "center";
         this.getCtx().textBaseline = "middle";
-        this.getCtx().font = "1.8em sans-serif";
+        this.getCtx().font = "30px sans-serif";
         this.getCtx().fillText(this.validPairs[this.currentPair].toString(), this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2);
 
         DrawHelper.drawRoundedRectWithGradient(this.getX() + (this.getWidth() - AllelePairWidget.#arrowSide) / 2, this.getY(), AllelePairWidget.#arrowSide, AllelePairWidget.#arrowSide, 5, this.getCtx(), this.isInTopButton(mousePos.x, mousePos.y) ? '#ffffff' : undefined);
@@ -720,7 +721,6 @@ class GraphWidget extends Widget {
         let graphHeight = this.height;
         let largest = this.getLargestValue();
 
-        this.getCtx().font = "1em sans-serif";
         this.getCtx().textAlign = "center";
         this.getCtx().textBaseline = "top";
 

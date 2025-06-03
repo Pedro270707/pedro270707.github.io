@@ -141,7 +141,6 @@ class SolventTapWidget extends TapWidget {
         this.getCtx().fillStyle = "#ffffff";
         this.getCtx().textAlign = "left";
         this.getCtx().textBaseline = "top";
-        this.getCtx().font = "1em sans-serif";
         this.getCtx().textAlign = "right";
         this.getCtx().fillText(SolventTapWidget.name.get(), this.getX() + this.img.width - 70, this.getY() + 20);
         this.getCtx().fillText(translate.translateString("crioscopia.tap.solvent.label", this.container.solventVolumeLiters.toFixed(5)), this.getX() + this.img.width - 70, this.getY() + 50);
@@ -169,10 +168,8 @@ class SoluteTapWidget extends TapWidget {
             this.open = false;
         }
 
-        this.getCtx().fillStyle = "#ffffff";
         this.getCtx().textAlign = "left";
         this.getCtx().textBaseline = "top";
-        this.getCtx().font = "1em sans-serif";
         this.getCtx().fillText(SoluteTapWidget.name.get(), this.getX() + 70, this.getY() + 20);
         this.getCtx().fillText(translate.translateString("crioscopia.tap.solute.label", this.container.soluteMoles.toFixed(5)), this.getX() + 70, this.getY() + 50);
     }
